@@ -12,7 +12,9 @@ const initialData = {
 }
 
 
-const MarketFilter = () => {
+const MarketFilter = (
+    { handleOpen }
+) => {
     const [data, setData] = useState(initialData)
 
     const handleChange = (e) => {
@@ -24,7 +26,7 @@ const MarketFilter = () => {
                 paddingX: 2,
                 paddingY: 4,
                 height: 'calc(100vh - 64px)',
-                width: 350,
+                width: 400,
             }}
         >
             <Typography variant='button' >Tìm kiếm</Typography>
@@ -95,7 +97,15 @@ const MarketFilter = () => {
             </Box>
             <Divider sx={{ marginY: 5 }} />
 
-            <Button variant='contained' fullWidth color='info' startIcon={<AddBusiness />}>Tạo bài viết</Button>
+            <Button
+                variant='contained'
+                fullWidth
+                color='info'
+                startIcon={<AddBusiness />}
+                onClick={handleOpen}
+            >
+                Tạo bài viết
+            </Button>
         </Box>
     )
 }

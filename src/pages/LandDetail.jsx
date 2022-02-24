@@ -1,12 +1,14 @@
-import { Box, Divider, Grid, Typography } from '@mui/material'
+import { Box, Divider, Grid, IconButton, Typography } from '@mui/material'
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import landImg from '../images/gcnqsdđ.jpg'
 import NavBar from '../components/NavBar'
+import { ArrowBack } from '@mui/icons-material'
 
 const LandDetail = () => {
     const params = useParams()
+    const navigate = useNavigate()
     console.log(params.id)
     return (
         <Box
@@ -21,6 +23,9 @@ const LandDetail = () => {
                     paddingY: 5
                 }}
             >
+                <IconButton onClick={() => navigate(-1)} sx={{ marginBottom: 1 }}>
+                    <ArrowBack />
+                </IconButton>
                 <Typography variant='h5' gutterBottom sx={{ textTransform: 'uppercase' }}>Thông tin thửa đất, tài sản gắn liền với đất</Typography>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={8}>
