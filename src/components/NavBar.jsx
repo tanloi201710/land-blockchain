@@ -176,7 +176,7 @@ const NavBar = () => {
     }
 
     return (
-        <AppBar position="static">
+        <AppBar position="sticky">
             <Toolbar sx={{ height: 45 }}>
                 <Link to='/' style={{ textDecoration: 'none' }}>
                     <Typography variant="h6" className="activeHover" sx={{ fontWeight: 'bold', color: '#fff' }} >LAND MANAGEMENT</Typography>
@@ -225,6 +225,9 @@ const NavBar = () => {
                         </MenuItem>
                         <MenuItem onClick={handleCloseRegistersMenu} disableRipple>
                             Chỉnh sửa thông tin đất
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseRegistersMenu} disableRipple>
+                            Tách thửa đất
                         </MenuItem>
 
                     </StyledMenuRegisters>

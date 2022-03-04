@@ -33,11 +33,17 @@ const Market = () => {
     return (
         <Container>
             <NavBar />
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex', position: 'relative' }}>
                 <MarketFilter handleOpen={handleOpenCreateBox} />
                 <Grid container spacing={4} sx={{ paddingY: 5, marginLeft: 3 }}>
                     <Grid item xs={12} sm={6} md={4}>
                         <Post user={user} handleOpenChatBox={handleOpenChatBox} />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Post handleOpenChatBox={handleOpenChatBox} />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Post handleOpenChatBox={handleOpenChatBox} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                         <Post handleOpenChatBox={handleOpenChatBox} />

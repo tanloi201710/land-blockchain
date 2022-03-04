@@ -6,11 +6,11 @@ import Home from "./pages/Home"
 import { AuthContext } from "./contexts/AuthContext"
 import LandDetail from './pages/LandDetail'
 import AddLand from './pages/AddLand'
-import AddLandForUser from './pages/AddLandForUser'
 import Transfering from './pages/Transfering'
 import Received from './pages/Received'
 import Market from './pages/Market'
 import TransferLand from './pages/TransferLand'
+import AddLandForm from './pages/AddLandForm'
 
 function App() {
   const { user } = useContext(AuthContext)
@@ -23,8 +23,8 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/detail/:id' element={<LandDetail />} />
         <Route path='/addLand' element={<AddLand />} />
+        <Route path='/addLand/:type' element={<AddLandForm />} />
         <Route path='/transferLand' element={<TransferLand />} />
-        <Route path='/addForUser' element={<AddLandForUser />} />
         <Route path='/transfering' element={<Transfering />} />
         <Route path='/received' element={<Received />} />
         <Route path='/market' element={<Market />} />

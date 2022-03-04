@@ -7,7 +7,7 @@ const OptionsLandCard = ({ owner, largeTitle, smallTitle }) => {
     const navigate = useNavigate()
 
     const handleRedirect = () => {
-        owner === 'one' ? navigate('/addForUser') : navigate('/addForGroup')
+        owner === 'one' ? navigate('/addLand/one') : navigate('/addLand/group')
     }
     return (
         <Card sx={{ display: 'flex' }}>

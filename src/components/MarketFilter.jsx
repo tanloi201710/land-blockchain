@@ -23,6 +23,9 @@ const MarketFilter = (
     return (
         <Box
             sx={{
+                position: 'sticky',
+                top: 0,
+                left: 0,
                 paddingX: 2,
                 paddingY: 4,
                 height: 'calc(100vh - 64px)',
@@ -69,7 +72,7 @@ const MarketFilter = (
                     </TextField>
                 </Grid>
 
-                <Grid item sx={12} sm={12}>
+                <Grid item xs={12} sm={12}>
                     <TextField
                         select
                         name='landArea'
