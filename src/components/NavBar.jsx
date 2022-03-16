@@ -1,5 +1,5 @@
-import { AccountCircle, ArrowDropDown, Chat, MonetizationOn, MoreVert, Notifications } from '@mui/icons-material';
-import { AppBar, Box, Badge, IconButton, Toolbar, Typography, InputBase, Tooltip, Menu, MenuItem } from '@mui/material';
+import { AccountCircle, ArrowDropDown, Chat, MonetizationOn, MoreVert, Notifications, Logout } from '@mui/icons-material';
+import { AppBar, Box, Badge, IconButton, Toolbar, Typography, InputBase, Tooltip, Menu, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles'
 import React, { useContext } from 'react';
@@ -123,34 +123,21 @@ const items = [
 
 ]
 
-const notItems = [
-    {
-        message: 'Chào mừng bạn đến với hệ thống!',
-        createdAt: Date.now()
-    },
-    {
-        message: 'Bạn vừa chuyển đất thành công!',
-        createdAt: 'Vừa xong'
-    },
-    {
-        message: 'Đăng ký đất thành công!',
-        createdAt: '3 phút trước'
-    },
-
-]
 
 const NavBar = () => {
 
-    const { user } = useContext(AuthContext)
+    const { user, notifyList } = useContext(AuthContext)
     const navigate = useNavigate()
 
     const [anchorRegistersEl, setAnchorRegistersEl] = React.useState(null)
     const [anchorMessagesEl, setAnchorMessagesEl] = React.useState(null)
     const [anchorNotificationsEl, setAnchorNotificationsEl] = React.useState(null)
+    const [anchorProfileEl, setAnchorProfileEl] = React.useState(null)
 
     const open = Boolean(anchorRegistersEl)
     const openMessages = Boolean(anchorMessagesEl)
     const openNotifications = Boolean(anchorNotificationsEl)
+    const openProfile = Boolean(anchorProfileEl)
 
     const handleOpenRegistersMenu = (event) => {
         setAnchorRegistersEl(event.currentTarget)
@@ -175,6 +162,19 @@ const NavBar = () => {
         setAnchorNotificationsEl(null)
     }
 
+    const handleOpenProfileMenu = (event) => {
+        setAnchorProfileEl(event.currentTarget)
+    }
+
+    const handleCloseProfileMenu = () => {
+        setAnchorProfileEl(null)
+    }
+
+    const handleLogout = () => {
+        localStorage.removeItem('user')
+        navigate('/login')
+    }
+
     return (
         <AppBar position="sticky">
             <Toolbar sx={{ height: 45 }}>
@@ -197,58 +197,83 @@ const NavBar = () => {
                     >
                         <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Trang chủ</Typography>
                     </Link>
-                    <Box
-                        id="customized-button"
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        aria-controls={open ? 'customized-menu' : undefined}
-                        sx={{ display: 'flex', alignItems: 'center', color: 'white', cursor: 'pointer' }}
-                        onClick={handleOpenRegistersMenu}
-                    >
-                        <Typography variant="body1" className="activeHover" sx={{ color: 'inherit' }}>Thủ tục</Typography>
-                        <ArrowDropDown color='inherit' />
-                    </Box>
-                    <StyledMenuRegisters
-                        id="customized-menu"
-                        MenuListProps={{
-                            'aria-labelledby': 'customized-button',
-                        }}
-                        anchorEl={anchorRegistersEl}
-                        open={open}
-                        onClose={handleCloseRegistersMenu}
-                    >
-                        <MenuItem onClick={() => navigate('/addLand')} disableRipple>
-                            Đăng ký đất mới
-                        </MenuItem>
-                        <MenuItem onClick={() => navigate('/transferLand')} disableRipple>
-                            Chuyển quyền sử dụng đất
-                        </MenuItem>
-                        <MenuItem onClick={handleCloseRegistersMenu} disableRipple>
-                            Chỉnh sửa thông tin đất
-                        </MenuItem>
-                        <MenuItem onClick={handleCloseRegistersMenu} disableRipple>
-                            Tách thửa đất
-                        </MenuItem>
+                    {user.role === 'user' ?
+                        <>
+                            <Box
+                                id="customized-button"
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                aria-controls={open ? 'customized-menu' : undefined}
+                                sx={{ display: 'flex', alignItems: 'center', color: 'white', cursor: 'pointer' }}
+                                onClick={handleOpenRegistersMenu}
+                            >
+                                <Typography variant="body1" className="activeHover" sx={{ color: 'inherit' }}>Thủ tục</Typography>
+                                <ArrowDropDown color='inherit' />
+                            </Box>
+                            <StyledMenuRegisters
+                                id="customized-menu"
+                                MenuListProps={{
+                                    'aria-labelledby': 'customized-button',
+                                }}
+                                anchorEl={anchorRegistersEl}
+                                open={open}
+                                onClose={handleCloseRegistersMenu}
+                            >
+                                <MenuItem onClick={() => navigate('/addLand')} disableRipple>
+                                    Đăng ký đất mới
+                                </MenuItem>
+                                <MenuItem onClick={() => navigate('/transferLand')} disableRipple>
+                                    Chuyển quyền sử dụng đất
+                                </MenuItem>
+                                <MenuItem onClick={handleCloseRegistersMenu} disableRipple>
+                                    Chỉnh sửa thông tin đất
+                                </MenuItem>
+                                <MenuItem onClick={handleCloseRegistersMenu} disableRipple>
+                                    Tách thửa đất
+                                </MenuItem>
 
-                    </StyledMenuRegisters>
-                    <Link
-                        to={'/transfering'}
-                        style={{ textDecoration: 'none' }}
-                    >
-                        <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Đất chuyển</Typography>
-                    </Link>
-                    <Link
-                        to={'/received'}
-                        style={{ textDecoration: 'none' }}
-                    >
-                        <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Đất nhận</Typography>
-                    </Link>
-                    <Link
-                        to={'/market'}
-                        style={{ textDecoration: 'none' }}
-                    >
-                        <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Mua bán đất</Typography>
-                    </Link>
+                            </StyledMenuRegisters>
+                            <Link
+                                to={'/transfering'}
+                                style={{ textDecoration: 'none' }}
+                            >
+                                <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Đất chuyển</Typography>
+                            </Link>
+                            <Link
+                                to={'/received'}
+                                style={{ textDecoration: 'none' }}
+                            >
+                                <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Đất nhận</Typography>
+                            </Link>
+                            <Link
+                                to={'/market'}
+                                style={{ textDecoration: 'none' }}
+                            >
+                                <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Mua bán đất</Typography>
+                            </Link>
+                        </> :
+                        <>
+                            <Link
+                                to={'/'}
+                                style={{ textDecoration: 'none' }}
+                            >
+                                <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Chờ duyệt</Typography>
+                            </Link>
+                            <Link
+                                to={'/'}
+                                style={{ textDecoration: 'none' }}
+                            >
+                                <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Nạp tiền</Typography>
+                            </Link>
+                            <Link
+                                to={'/'}
+                                style={{ textDecoration: 'none' }}
+                            >
+                                <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Thống kê</Typography>
+                            </Link>
+                        </>
+                    }
+
 
                 </Box>
 
@@ -300,7 +325,7 @@ const NavBar = () => {
                             aria-controls={openNotifications ? 'menu-notifications' : undefined}
                             onClick={handleOpenNotificationsMenu}
                         >
-                            <Badge badgeContent={notItems.length} color="error">
+                            <Badge badgeContent={notifyList.length} color="error">
                                 <Notifications fontSize='inherit' />
                             </Badge>
                         </IconButton>
@@ -322,28 +347,65 @@ const NavBar = () => {
                         open={openNotifications}
                         onClose={handleCloseNotificationsMenu}
                     >
-                        <NotifyList items={notItems} />
+                        <NotifyList items={notifyList} />
                     </Menu>
-                    <Tooltip title='Ví'>
-                        <IconButton
-                            size="large"
-                            aria-label='user wallet'
-                            color='inherit'
-                        >
-                            <MonetizationOn fontSize='inherit' />
-                        </IconButton>
-                    </Tooltip>
+                    {user.role === 'user' &&
+                        <Tooltip title='Ví'>
+                            <IconButton
+
+                                size="large"
+                                aria-label='user wallet'
+                                color='inherit'
+                            >
+                                <MonetizationOn fontSize='inherit' />
+                            </IconButton>
+                        </Tooltip>
+                    }
                     <Tooltip title={user.fullname}>
                         <IconButton
                             size="large"
                             edge="end"
                             aria-label="account of current user"
-                            aria-haspopup="true"
                             color="inherit"
+                            id="button-show-profile"
+                            aria-haspopup="true"
+                            aria-expanded={openProfile ? 'true' : undefined}
+                            aria-controls={openProfile ? 'menu-profile' : undefined}
+                            onClick={handleOpenProfileMenu}
                         >
                             <AccountCircle fontSize='inherit' />
                         </IconButton>
                     </Tooltip>
+                    <Menu
+                        id="menu-profile"
+                        MenuListProps={{
+                            'aria-labelledby': 'button-show-profile',
+                        }}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        anchorEl={anchorProfileEl}
+                        open={openProfile}
+                        onClose={handleCloseProfileMenu}
+                    >
+                        <MenuItem onClick={() => navigate('/')} disableRipple>
+                            <ListItemIcon>
+                                <AccountCircle />
+                            </ListItemIcon>
+                            <ListItemText>Hồ sơ</ListItemText>
+                        </MenuItem>
+                        <MenuItem onClick={handleLogout} disableRipple>
+                            <ListItemIcon>
+                                <Logout />
+                            </ListItemIcon>
+                            <ListItemText>Đăng xuất</ListItemText>
+                        </MenuItem>
+                    </Menu>
                 </Box>
                 <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                     <IconButton

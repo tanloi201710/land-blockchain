@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API = axios.create({ baseURL: 'http://172.29.84.115:5000/api' })
+const API = axios.create({ baseURL: 'http://172.24.238.172:5000/api' })
 
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('user')) {
@@ -16,3 +16,7 @@ export const register = (formData) => API.post('/auth/register', formData)
 export const homePageUser = () => API.get('/user/')
 
 export const homePageManager = () => API.get('/manager/')
+
+export const addLand = (formData) => API.post('/land/add', formData)
+
+export const addLandCo = (formData) => API.post('/land/addCo', formData)

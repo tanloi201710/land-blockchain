@@ -1,15 +1,21 @@
 import { Box, Divider, Grid, IconButton, Typography } from '@mui/material'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
-import landImg from '../images/gcnqsdđ.jpg'
+// import landImg from '../images/gcnqsdđ.jpg'
 import NavBar from '../components/NavBar'
 import { ArrowBack } from '@mui/icons-material'
+import { AuthContext } from '../contexts/AuthContext'
 
 const LandDetail = () => {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const params = useParams()
     const navigate = useNavigate()
-    console.log(params.id)
+
+    const { lands } = useContext(AuthContext)
+    const currentLand = lands.find(land => land.key === params.id)
+    console.log(currentLand)
+
     return (
         <Box
             sx={{
@@ -31,6 +37,8 @@ const LandDetail = () => {
                     <Grid item xs={12} md={8}>
                         <Typography variant='h6' gutterBottom >Chủ sở hữu</Typography>
                         {/* Map for each owner */}
+
+
                         <Box
                             sx={{ marginLeft: 5 }}
                         >
@@ -59,6 +67,7 @@ const LandDetail = () => {
 
                         </Box>
 
+
                         <Typography variant='h6' gutterBottom >Thửa đất</Typography>
                         <Box
                             sx={{ paddingX: 5 }}
@@ -68,7 +77,7 @@ const LandDetail = () => {
                                     <Typography variant='subtitle1'>Thửa đất số</Typography>    {/* Thua dat so */}
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <Typography variant='subtitle1'>{449}</Typography>
+                                    <Typography variant='subtitle1'>{currentLand?.value.ThuaDatSo}</Typography>
                                 </Grid>
                             </Grid>
 
@@ -79,7 +88,7 @@ const LandDetail = () => {
                                     <Typography variant='subtitle1'>Tờ bản đồ số</Typography>   {/* To ban do so */}
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <Typography variant='subtitle1'>{'09'}</Typography>
+                                    <Typography variant='subtitle1'>{currentLand?.value.ToBanDoSo}</Typography>
                                 </Grid>
                             </Grid>
 
@@ -90,7 +99,7 @@ const LandDetail = () => {
                                     <Typography variant='subtitle1'>Địa chỉ</Typography>   {/* Dia chi */}
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <Typography variant='subtitle1'>{'Xuan Khanh, Ninh Kieu, Can Tho'}</Typography>
+                                    <Typography variant='subtitle1'>{currentLand?.value.Address}</Typography>
                                 </Grid>
                             </Grid>
 
@@ -101,7 +110,7 @@ const LandDetail = () => {
                                     <Typography variant='subtitle1'>Diện tich</Typography>   {/* Dien tich */}
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <Typography variant='subtitle1'>{'1505 m2'}</Typography>
+                                    <Typography variant='subtitle1'>{`${currentLand?.value.DienTich} m2`}</Typography>
                                 </Grid>
                             </Grid>
 
@@ -112,7 +121,7 @@ const LandDetail = () => {
                                     <Typography variant='subtitle1'>Hình thức sử dụng</Typography>   {/* Hinh thuc su dung */}
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <Typography variant='subtitle1'>{'Được nhà nước giao đất'}</Typography>
+                                    <Typography variant='subtitle1'>{currentLand?.value.HinhThucSuDung}</Typography>
                                 </Grid>
                             </Grid>
 
@@ -123,7 +132,7 @@ const LandDetail = () => {
                                     <Typography variant='subtitle1'>Mục đích sử dụng</Typography>   {/* Muc dich su dung */}
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <Typography variant='subtitle1'>{'Đất trồng cây lâu năm'}</Typography>
+                                    <Typography variant='subtitle1'>{currentLand?.value.MucDichSuDung}</Typography>
                                 </Grid>
                             </Grid>
 
@@ -134,7 +143,7 @@ const LandDetail = () => {
                                     <Typography variant='subtitle1'>Thời hạn sử dụng</Typography>   {/* Thoi han su dung */}
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <Typography variant='subtitle1'>{'Đến ngày 01/4/2060'}</Typography>
+                                    <Typography variant='subtitle1'>{currentLand?.value.ThoiHanSuDung}</Typography>
                                 </Grid>
                             </Grid>
 
@@ -145,7 +154,7 @@ const LandDetail = () => {
                                     <Typography variant='subtitle1'>Nguồn gốc sử dụng</Typography>   {/* Nguon goc */}
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <Typography variant='subtitle1'>{'Nhà nước giao đất không thu tiền sử dụng đất'}</Typography>
+                                    <Typography variant='subtitle1'>{currentLand?.value.NguonGocSuDung}</Typography>
                                 </Grid>
                             </Grid>
 
@@ -156,7 +165,7 @@ const LandDetail = () => {
                                     <Typography variant='subtitle1'>Thời gian đăng ký</Typography>   {/* Thoi gian dang ky */}
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <Typography variant='subtitle1'>{'19/1/2016'}</Typography>
+                                    <Typography variant='subtitle1'>{currentLand?.value.ThoiGianDangKy}</Typography>
                                 </Grid>
                             </Grid>
 
@@ -259,7 +268,12 @@ const LandDetail = () => {
                     <Grid item xs={12} md={4}>
                         <Box>
 
-                            <img src={landImg} style={{ width: '100%', height: '100%' }} alt='land media' />
+                            <img
+                                src={currentLand?.value.ImageUrl.split(",")[0] || `${PF}images/no-image.png`}
+                                style={{ width: '100%', height: '100%' }}
+                                alt='land media'
+                                loading='lazy'
+                            />
                         </Box>
 
                     </Grid>

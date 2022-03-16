@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
@@ -11,10 +11,35 @@ import Received from './pages/Received'
 import Market from './pages/Market'
 import TransferLand from './pages/TransferLand'
 import AddLandForm from './pages/AddLandForm'
+import { homePageManager, homePageUser } from './api'
 
 function App() {
-  const { user } = useContext(AuthContext)
+  const { user, setLands, setNotifyList } = useContext(AuthContext)
   console.log(user)
+
+  useEffect(() => {
+    const getData = async () => {
+      if (user?.role === 'manager') {
+        const result = await homePageManager()
+        if (result.data.error) {
+          return
+        }
+        setLands(result.data.allLands)
+      } else if (user?.role === 'user') {
+        const result = await homePageUser()
+        if (result.data.error) {
+          return
+        }
+        setLands(result.data.allLands)
+        setNotifyList(result.data.messages)
+      }
+
+      return
+    }
+    getData()
+
+  }, [user, setLands, setNotifyList])
+
   return (
     <Router>
       <Routes>

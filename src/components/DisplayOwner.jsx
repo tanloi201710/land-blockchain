@@ -25,8 +25,8 @@ const DisplayOwner = ({ owner }) => {
             <Box
                 sx={{ marginLeft: 5, display: 'flex', alignItems: 'center', gap: 2 }}
             >
-                <Typography variant='subtitle1'>Địa chỉ:</Typography>                {/* Dia chi chu so huu */}
-                <Typography variant='subtitle1'>{owner?.address || 'Xuan Khanh, Ninh Kieu, Can Tho'}</Typography>
+                <Typography variant='subtitle1'>Số điện thoại:</Typography>                {/* Dia chi chu so huu */}
+                <Typography variant='subtitle1'>{owner.phoneNumber || ''}</Typography>
             </Box>
 
         </Box>

@@ -26,7 +26,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 
-export default function CustomizedTables({ rows }) {
+export default function CustomizedTables({ rows, user }) {
     const navigate = useNavigate()
     return (
         <TableContainer component={Paper}>
@@ -36,25 +36,43 @@ export default function CustomizedTables({ rows }) {
                     <TableRow>
                         <StyledTableCell>Mã đất</StyledTableCell>
                         <StyledTableCell align="right">Thời gian đăng ký</StyledTableCell>
+                        <StyledTableCell align="right">Chủ sở hữu</StyledTableCell>
                         <StyledTableCell align="right">Thông tin chi tiết</StyledTableCell>
-                        <StyledTableCell align="right">Chuyển quyền sỡ hữu</StyledTableCell>
+                        {user?.role === 'user' &&
+                            <StyledTableCell align="right">Chuyển quyền sỡ hữu</StyledTableCell>
+                        }
                         <StyledTableCell align="right">Trạng thái</StyledTableCell>
+                        {user?.role === 'manager' &&
+                            <StyledTableCell align="right">Cập nhật trạng thái</StyledTableCell>
+
+                        }
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
-                        <StyledTableRow key={row.code}>
+                        <StyledTableRow key={row.key}>
                             <StyledTableCell component="th" scope="row">
-                                {row.code}
+                                {row.key}
                             </StyledTableCell>
-                            <StyledTableCell align="right">{row.time}</StyledTableCell>
+                            <StyledTableCell align="right">{row.value.ThoiGianDangKy}</StyledTableCell>
+                            <StyledTableCell align="right">{typeof row.value.Owner === 'object'
+                                ? row.value.Owner.join(',')
+                                : row.value.Owner}
+                            </StyledTableCell>
                             <StyledTableCell align="right">
-                                <Button variant='outlined' onClick={() => navigate('/detail/1234')}>Xem</Button>
+                                <Button variant='outlined' onClick={() => navigate(`/detail/${row.key}`)}>Xem</Button>
                             </StyledTableCell>
-                            <StyledTableCell align="right">
-                                <Button variant='outlined' color='error'>Chuyển</Button>
-                            </StyledTableCell>
-                            <StyledTableCell align="right">{row.status}</StyledTableCell>
+                            {user?.role === 'user' &&
+                                <StyledTableCell align="right">
+                                    <Button variant='outlined' color='error'>Chuyển</Button>
+                                </StyledTableCell>
+                            }
+                            <StyledTableCell align="right">{`${row.value.Status}`}</StyledTableCell>
+                            {user?.role === 'manager' &&
+                                <StyledTableCell align="right">
+                                    <Button variant='outlined' color='success'>Cập nhật</Button>
+                                </StyledTableCell>
+                            }
                         </StyledTableRow>
                     ))}
                 </TableBody>

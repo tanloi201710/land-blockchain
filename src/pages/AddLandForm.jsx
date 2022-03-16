@@ -4,12 +4,14 @@ import { blue } from '@mui/material/colors'
 import React, { useState } from 'react'
 import { useContext } from 'react'
 import { useParams } from 'react-router-dom'
+import { addLand, addLandCo } from '../api'
 import AddOwnerForm from '../components/AddOwnerForm'
 import Container from '../components/Container'
 import DisplayOwner from '../components/DisplayOwner'
 import Input from '../components/Input'
 import NavBar from '../components/NavBar'
 import { AuthContext } from '../contexts/AuthContext'
+import { uploadImage } from '../firebase/images'
 
 const AddLandForm = () => {
 
@@ -25,7 +27,8 @@ const AddLandForm = () => {
         toaDoCacDinh: [],
         doDaiCacCanh: [],
         nhaO: [],
-        congTrinhKhac: []
+        congTrinhKhac: [],
+        url: []
 
     }
 
@@ -89,13 +92,12 @@ const AddLandForm = () => {
     const [sideCount, setSideCount] = useState(0)
     const [isAddFormOpen, setIsAddFormOpen] = useState(false)
 
+    const [fetching, setFetching] = useState(false)
+
     const params = useParams()
     const type = params.type
 
     console.log(values)
-    const handleSubmit = (event) => {
-        event.preventDefault()
-    }
 
     const handleChange = (event) => {
         setValues({ ...values, [event.target.name]: event.target.value })
@@ -117,6 +119,27 @@ const AddLandForm = () => {
         setOwners([...owners, owner])
     }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        const form = { ...values }
+        if (files.length > 0) {
+            for (let i = 0; i < files.length; i++) {
+                const result = await uploadImage(files[i])
+                form.url.push(result)
+            }
+        }
+        form.chuSoHuu = owners
+
+        console.log(form)
+        if (type === 'one') {
+            const result = await addLand(form)
+            console.log(result.data.message)
+        } else {
+            const result = await addLandCo(form)
+            console.log(result.data.message)
+        }
+    }
+
     return (
         <Container>
             <NavBar />
@@ -127,6 +150,7 @@ const AddLandForm = () => {
                     {owners.map((owner, index) => (
                         <Box
                             sx={{ display: 'flex', justifyContent: 'flex-start' }}
+                            key={index}
                         >
                             <Box
                                 sx={{
@@ -136,7 +160,7 @@ const AddLandForm = () => {
                                     gap: 4
                                 }}
                             >
-                                <DisplayOwner owner={owner} key={index} />
+                                <DisplayOwner owner={owner} />
                                 {index >= 1 &&
                                     <Tooltip title='Xóa'>
                                         <IconButton
@@ -300,22 +324,45 @@ const AddLandForm = () => {
                                 </Grid>
 
                                 <Input
-                                    label='Tổng số cạnh'
-                                    name='tongSoCanh'
+                                    label='Tổng số đỉnh'
+                                    name='tongSoDinh'
                                     type='text'
                                     handleChange={(e) => setSideCount(e.target.value)}
                                 />
 
                                 {
                                     [...Array(parseInt(sideCount || '0', 10))].map((side, index) => (
-                                        <Input
-                                            key={index}
-                                            label={`Độ dài cạnh ${index + 1}`}
-                                            name={`canh${index + 1}`}
-                                            type='text'
-                                            handleChange={handleChangeSides}
-                                            half
-                                        />
+                                        <React.Fragment key={index}>
+                                            <Typography sx={{ width: '100%', paddingLeft: '1rem', paddingTop: '1rem' }}>Đỉnh {index + 1}</Typography>
+                                            <Grid item xs={4} sm={4}>
+                                                <TextField
+                                                    required
+                                                    name='DX'
+                                                    label='Tọa độ X'
+                                                    value={values.toaDoCacDinh[index + 1]?.X || ""}
+                                                    onChange={(event) => setValues({ ...values, toaDoCacDinh: { ...values.toaDoCacDinh, [index + 1]: { ...values.toaDoCacDinh[index + 1], X: event.target.value } } })}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={4} sm={4}>
+                                                <TextField
+                                                    required
+                                                    name='DY'
+                                                    label='Tọa độ Y'
+                                                    value={values.toaDoCacDinh[index + 1]?.Y || ""}
+                                                    onChange={(event) => setValues({ ...values, toaDoCacDinh: { ...values.toaDoCacDinh, [index + 1]: { ...values.toaDoCacDinh[index + 1], Y: event.target.value } } })}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={4} sm={4}>
+                                                <Input
+                                                    required
+                                                    label={`Độ dài cạnh ${index + 1}-${index + 2 > sideCount ? 1 : index + 2}`}
+                                                    name={`C${index + 1}`}
+                                                    type='text'
+                                                    handleChange={handleChangeSides}
+                                                />
+                                            </Grid>
+
+                                        </React.Fragment>
                                     ))
                                 }
 
@@ -323,6 +370,8 @@ const AddLandForm = () => {
                                     <Button
                                         variant="contained"
                                         type="submit"
+
+                                        onClick={handleSubmit}
                                     >
                                         Đăng ký
                                     </Button>
@@ -372,7 +421,11 @@ const AddLandForm = () => {
                                             style={{ display: 'none' }}
                                             onChange={((e) => { setFiles(Array.from(e.target.files)); console.log(e.target.files) })}
                                         />
-                                        <IconButton color="primary" aria-label="upload picture" component="span">
+                                        <IconButton
+                                            color="primary"
+                                            aria-label="upload picture"
+                                            component="span"
+                                        >
                                             <PhotoCamera sx={{ color: blue[700] }} />
                                         </IconButton>
                                     </label>
@@ -383,7 +436,7 @@ const AddLandForm = () => {
                 </Box>
             </Box>
 
-            {isAddFormOpen && <AddOwnerForm handleClose={handleCloseAddForm} handleSubmit={handleAddNewOwner} />}
+            {isAddFormOpen && <AddOwnerForm handleClose={handleCloseAddForm} handleSubmit={handleAddNewOwner} fetching={fetching} setFetching={setFetching} />}
         </Container>
     )
 }
