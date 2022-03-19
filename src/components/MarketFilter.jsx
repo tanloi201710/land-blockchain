@@ -2,7 +2,7 @@ import { AddBusiness } from '@mui/icons-material'
 import { Box, Button, Divider, Grid, MenuItem, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
-import provinces from '../data'
+import { provinces } from '../data'
 import CustomizedButton from './CustomizedButton'
 
 const initialData = {

@@ -1,17 +1,20 @@
 import { Add, Autorenew, PhotoCamera, Remove } from '@mui/icons-material'
-import { Box, Button, Grid, IconButton, ImageList, ImageListItem, ListSubheader, MenuItem, Stack, TextField, Tooltip, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Grid, IconButton, ImageList, ImageListItem, ListSubheader, MenuItem, Stack, TextField, Tooltip, Typography } from '@mui/material'
 import { blue } from '@mui/material/colors'
 import React, { useState } from 'react'
 import { useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { addLand, addLandCo } from '../api'
 import AddOwnerForm from '../components/AddOwnerForm'
+import BasicAlerts from '../components/Alert'
 import Container from '../components/Container'
 import DisplayOwner from '../components/DisplayOwner'
 import Input from '../components/Input'
 import NavBar from '../components/NavBar'
 import { AuthContext } from '../contexts/AuthContext'
 import { uploadImage } from '../firebase/images'
+
+import { hinhThucSuDung, hinhThucNhan, datNongNghiep, datPhiNongNghiep, nguonGoc } from '../data'
 
 const AddLandForm = () => {
 
@@ -24,65 +27,13 @@ const AddLandForm = () => {
         mucDichSuDung: '',
         thoiHanSuDung: '',
         nguonGoc: '',
-        toaDoCacDinh: [],
-        doDaiCacCanh: [],
+        toaDoCacDinh: {},
+        doDaiCacCanh: {},
+        cacSoThuaGiapRanh: {},
         nhaO: [],
         congTrinhKhac: [],
         url: []
-
     }
-
-    const hinhThucSuDung = [
-        'Nhận quyền sử dụng đất từ nhà nước',
-        'Được nhà nước giao đất',
-        'Được nhà nước cho thuê đất',
-        'Được nhà nước cho phép chuyển mục đích sử dụng đất',
-        'Được nhà nước công nhận quyền sử dụng đất',
-        'Thuê quyền sử dụng đất từ chủ thể sử dụng đất khác',
-        'Thuê lại quyền sử dụng đất từ chủ thể sử dụng đất khác'
-    ]
-
-    const hinhThucNhan = [
-        'Nhận chuyển đổi',
-        'Nhận chuyển nhượng',
-        'Nhận thừa kế',
-        'Nhận tặng cho',
-        'Nhận góp vốn',
-    ]
-
-    const datNongNghiep = [
-        'Đất trồng cây hàng năm gồm đất trồng lúa và đất trồng cây hàng năm khác',
-        'Đất trồng cây lâu năm',
-        'Đất rừng sản xuất',
-        'Đất rừng phòng hộ',
-        'Đất rừng đặc dụng',
-        'Đất nuôi trồng thủy sản',
-        'Đất làm muối',
-        'Đất nông nghiệp khác'
-    ]
-
-    const datPhiNongNghiep = [
-        'Đất ở gồm đất ở tại nông thôn, đất ở tại đô thị',
-        'Đất sử dụng vào mục đích quốc phòng, an ninh',
-        'Đất xây dựng công trình sự nghiệp',
-        'Đất sản xuất, kinh doanh phi nông nghiệp',
-        'Đất sử dụng vào mục đích công cộng',
-        'Đất cơ sở tôn giáo, tín ngưỡng',
-        'Đất làm nghĩa trang, nghĩa địa, nhà tang lễ, nhà hỏa táng',
-        'Đất sử dụng vào mục đích quốc phòng, an ninh',
-        'Đất phi nông nghiệp khác'
-    ]
-
-    const nguonGoc = [
-        'Nhà nước giao đất không thu tiền sử dụng đất',
-        'Nhà nước giao đất có thu tiền sử dụng đất',
-        'Nhà nước cho thuê đất trả tiền một lần',
-        'Nhà nước cho thuê đất trả tiền hàng năm',
-        'Công nhận QSDĐ như giao đất có thu tiền sử dụng đất',
-        'Công nhận QSDĐ như giao đất không thu tiền sử dụng đất',
-        'Thuê đất trả tiền một lần của doanh nghiệp đầu tư hạ tầng khu công nghiệp',
-        'Thuê đất trả tiền hàng năm của doanh nghiệp đầu tư hạ tầng khu công nghiệp'
-    ]
 
     const { user } = useContext(AuthContext)
 
@@ -90,14 +41,17 @@ const AddLandForm = () => {
     const [owners, setOwners] = useState([user])
     const [files, setFiles] = useState([])
     const [sideCount, setSideCount] = useState(0)
+    const [landCount, setLandCount] = useState(0)
     const [isAddFormOpen, setIsAddFormOpen] = useState(false)
 
+    const [isRegisting, setIsRegisting] = useState(false)
     const [fetching, setFetching] = useState(false)
+    const [info, setInfo] = useState('')
 
     const params = useParams()
     const type = params.type
 
-    console.log(values)
+    console.log(values, info)
 
     const handleChange = (event) => {
         setValues({ ...values, [event.target.name]: event.target.value })
@@ -119,6 +73,25 @@ const AddLandForm = () => {
         setOwners([...owners, owner])
     }
 
+    const checkFormData = () => {
+        return (
+            values.thuaDatSo !== '' && values.toBanDoSo !== '' && values.dienTich !== '' && values.diaChi !== ''
+            && values.hinhThucSuDung !== '' && values.thoiHanSuDung !== '' && values.mucDichSuDung !== ''
+            && values.nguonGoc !== ''
+            && (Object.values(values.toaDoCacDinh).length !== 0 && Object.values(values.toaDoCacDinh).length === parseInt(sideCount, 10))
+            && (Object.values(values.doDaiCacCanh).length !== 0 && Object.values(values.doDaiCacCanh).length === parseInt(sideCount, 10))
+            && (Object.values(values.cacSoThuaGiapRanh).length !== 0 && Object.values(values.cacSoThuaGiapRanh).length === parseInt(landCount, 10))
+        )
+    }
+
+    const resetFormData = () => {
+        setValues(initialValues)
+        setSideCount(0)
+        setLandCount(0)
+        setOwners([user])
+        setFiles([])
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         const form = { ...values }
@@ -132,17 +105,35 @@ const AddLandForm = () => {
 
         console.log(form)
         if (type === 'one') {
+            setIsRegisting(true)
             const result = await addLand(form)
+            if (!result.data.error) {
+                setInfo(result.data.message)
+                resetFormData()
+            }
             console.log(result.data.message)
+            setIsRegisting(false)
         } else {
+            setIsRegisting(true)
             const result = await addLandCo(form)
+            if (!result.data.error) {
+                setInfo(result.data.message)
+                resetFormData()
+            }
             console.log(result.data.message)
+            setIsRegisting(false)
         }
     }
 
     return (
         <Container>
             <NavBar />
+            {info !== ''
+                ?
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <BasicAlerts serverity="success" message={info} onClose={() => setInfo('')} />
+                </Box>
+                : null}
             <Box sx={{ paddingX: 8, paddingY: 5 }}>
                 <Typography variant='h5' gutterBottom>Đăng ký đất mới</Typography>
                 <Typography variant='h6' >Chủ sở hữu</Typography>
@@ -194,7 +185,7 @@ const AddLandForm = () => {
                         </Box>
                     }
                 </Box>
-                <Box sx={{ paddingBottom: 20, display: 'flex', gap: 4 }}>
+                <Box sx={{ paddingBottom: 20, paddingTop: 5, display: 'flex', gap: 4 }}>
                     <Box sx={{ flex: '2' }}>
                         <Box component='form' noValidate onSubmit={handleSubmit}>
                             <Grid container spacing={2} >
@@ -324,9 +315,30 @@ const AddLandForm = () => {
                                 </Grid>
 
                                 <Input
+                                    label='Tổng số thửa giáp ranh'
+                                    name='tongSoThua'
+                                    type='number'
+                                    handleChange={(e) => setLandCount(e.target.value)}
+                                />
+
+                                {
+                                    [...Array(parseInt(landCount || '0', 10))].map((land, index) => (
+                                        <Grid item xs={3} key={index} >
+                                            <TextField
+                                                required
+                                                name={`l${index + 1}`}
+                                                label={`Số thửa thứ ${index + 1}`}
+                                                value={values.cacSoThuaGiapRanh[index] || ''}
+                                                onChange={(event) => setValues({ ...values, cacSoThuaGiapRanh: { ...values.cacSoThuaGiapRanh, [index]: event.target.value } })}
+                                            />
+                                        </Grid>
+                                    ))
+                                }
+
+                                <Input
                                     label='Tổng số đỉnh'
                                     name='tongSoDinh'
-                                    type='text'
+                                    type='number'
                                     handleChange={(e) => setSideCount(e.target.value)}
                                 />
 
@@ -370,10 +382,10 @@ const AddLandForm = () => {
                                     <Button
                                         variant="contained"
                                         type="submit"
-
+                                        disabled={isRegisting || !checkFormData()}
                                         onClick={handleSubmit}
                                     >
-                                        Đăng ký
+                                        {isRegisting ? <CircularProgress size={20} /> : 'Đăng ký'}
                                     </Button>
                                 </Grid>
                             </Grid>
