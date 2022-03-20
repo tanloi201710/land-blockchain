@@ -2,7 +2,8 @@ import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { styled } from '@mui/material/styles'
 import TableCell, { tableCellClasses } from '@mui/material/TableCell'
-import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper } from '@mui/material'
+import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, Tooltip, IconButton } from '@mui/material'
+import { Flip, ModeEdit, Shortcut } from '@mui/icons-material'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -38,14 +39,12 @@ export default function CustomizedTables({ rows, user }) {
                         <StyledTableCell align="right">Thời gian đăng ký</StyledTableCell>
                         <StyledTableCell align="right">Chủ sở hữu</StyledTableCell>
                         <StyledTableCell align="right">Thông tin chi tiết</StyledTableCell>
-                        {user?.role === 'user' &&
-                            <StyledTableCell align="right">Chuyển quyền sỡ hữu</StyledTableCell>
-                        }
                         <StyledTableCell align="right">Trạng thái</StyledTableCell>
                         {user?.role === 'manager' &&
                             <StyledTableCell align="right">Cập nhật trạng thái</StyledTableCell>
 
                         }
+                        <StyledTableCell align="right">Thao tác</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -62,12 +61,27 @@ export default function CustomizedTables({ rows, user }) {
                             <StyledTableCell align="right">
                                 <Button variant='outlined' onClick={() => navigate(`/detail/${row.key}`)}>Xem</Button>
                             </StyledTableCell>
+                            <StyledTableCell align="right">{`${row.value.Status}`}</StyledTableCell>
                             {user?.role === 'user' &&
                                 <StyledTableCell align="right">
-                                    <Button variant='outlined' color='error'>Chuyển</Button>
+                                    <Tooltip title='Chỉnh sửa thông tin'>
+                                        <IconButton>
+                                            <ModeEdit />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title='Tách thửa'>
+                                        <IconButton color='warning'>
+                                            <Flip color='warning' />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title='Chuyển quyền sỡ hữu'>
+                                        <IconButton color='info'>
+                                            <Shortcut color='info' />
+                                        </IconButton>
+                                    </Tooltip>
                                 </StyledTableCell>
                             }
-                            <StyledTableCell align="right">{`${row.value.Status}`}</StyledTableCell>
+
                             {user?.role === 'manager' &&
                                 <StyledTableCell align="right">
                                     <Button variant='outlined' color='success'>Cập nhật</Button>

@@ -1,6 +1,7 @@
 import { Close } from '@mui/icons-material'
 import { Box, Button, CircularProgress, Grid, IconButton, List, ListItemButton, ListItemText, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { AuthContext } from '../contexts/AuthContext'
 import { getAllUser } from '../firebase/search'
 
 const AddOwnerForm = ({ handleClose, handleSubmit, fetching, setFetching }) => {
@@ -12,6 +13,8 @@ const AddOwnerForm = ({ handleClose, handleSubmit, fetching, setFetching }) => {
         phoneNumber: ''
     }
 
+    const { user } = useContext(AuthContext)
+
     const [owner, setOwner] = useState(initialOwner)
     const [users, setUsers] = useState([])
 
@@ -22,7 +25,7 @@ const AddOwnerForm = ({ handleClose, handleSubmit, fetching, setFetching }) => {
             setFetching(true)
             const dataUsers = await getAllUser()
 
-            setUsers(dataUsers.filter(user => user.userId.toLowerCase().includes(event.target.value)))
+            setUsers(dataUsers.filter(u => u.userId.toLowerCase().includes(event.target.value) && u.userId !== user.userId))
             console.log(dataUsers)
             setFetching(false)
         } else {
@@ -43,7 +46,7 @@ const AddOwnerForm = ({ handleClose, handleSubmit, fetching, setFetching }) => {
             fullname: user.fullname,
             birthDate: user?.birthDate || '',
             idCard: user.idCard,
-            phoneNumber: user.numberPhone.replace('+84', '0')
+            phoneNumber: user?.phoneNumber.replace('+84', '0') || ''
         })
     }
 

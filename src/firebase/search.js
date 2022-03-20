@@ -7,11 +7,25 @@ export const getAllUser = async () => {
     const q = query(collection(db, "users"), where("role", "==", "user"));
     const userSnapshot = await getDocs(q);
     if (userSnapshot.docs.length > 0) {
-        const cityList = userSnapshot.docs.map(doc => doc.data());
-        console.log(cityList);
-        return cityList;
+        const userList = userSnapshot.docs.map(doc => doc.data());
+        console.log(userList);
+        return userList;
     } else {
-        console.log("Login Failed")
+        console.log("Get users failed")
+        return [];
+    }
+}
+
+export const getUser = async (userId) => {
+    console.log("Get user")
+    const q = query(collection(db, "users"), where("userId", "==", userId));
+    const userSnapshot = await getDocs(q);
+    if (userSnapshot.docs.length > 0) {
+        const userList = userSnapshot.docs.map(doc => doc.data())
+        console.log(userList);
+        return userList;
+    } else {
+        console.log("Get user failed");
         return [];
     }
 }

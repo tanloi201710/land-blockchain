@@ -14,6 +14,7 @@ const NotifyList = ({ items }) => {
                         <ListItemText
                             primary={item.Message}
                             secondary={item.Date}
+                            sx={{ maxWidth: 250 }}
                         />
                     </ListItem>
                     {index < items.length - 1 && <Divider variant="inset" component="li" />}

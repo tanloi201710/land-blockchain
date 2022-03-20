@@ -47,6 +47,7 @@ const AddLandForm = () => {
     const [isRegisting, setIsRegisting] = useState(false)
     const [fetching, setFetching] = useState(false)
     const [info, setInfo] = useState('')
+    const [error, setError] = useState('')
 
     const params = useParams()
     const type = params.type
@@ -95,6 +96,7 @@ const AddLandForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         const form = { ...values }
+        setIsRegisting(true)
         if (files.length > 0) {
             for (let i = 0; i < files.length; i++) {
                 const result = await uploadImage(files[i])
@@ -105,22 +107,30 @@ const AddLandForm = () => {
 
         console.log(form)
         if (type === 'one') {
-            setIsRegisting(true)
             const result = await addLand(form)
+            console.log(result.data.message)
+
             if (!result.data.error) {
                 setInfo(result.data.message)
                 resetFormData()
+                setIsRegisting(false)
+                return
             }
-            console.log(result.data.message)
+
+            setError(result.data.message)
             setIsRegisting(false)
         } else {
-            setIsRegisting(true)
             const result = await addLandCo(form)
+            console.log(result.data.message)
+
             if (!result.data.error) {
                 setInfo(result.data.message)
                 resetFormData()
+                setIsRegisting(false)
+                return
             }
-            console.log(result.data.message)
+
+            setError(result.data.message)
             setIsRegisting(false)
         }
     }
@@ -133,7 +143,15 @@ const AddLandForm = () => {
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <BasicAlerts serverity="success" message={info} onClose={() => setInfo('')} />
                 </Box>
-                : null}
+                : null
+            }
+            {error !== ''
+                ?
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <BasicAlerts serverity="error" message={error} onClose={() => setError('')} />
+                </Box>
+                : null
+            }
             <Box sx={{ paddingX: 8, paddingY: 5 }}>
                 <Typography variant='h5' gutterBottom>Đăng ký đất mới</Typography>
                 <Typography variant='h6' >Chủ sở hữu</Typography>

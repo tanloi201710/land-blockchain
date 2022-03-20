@@ -12,6 +12,7 @@ import Market from './pages/Market'
 import TransferLand from './pages/TransferLand'
 import AddLandForm from './pages/AddLandForm'
 import { homePageManager, homePageUser } from './api'
+import TransferLandForm from './pages/TransferLandForm'
 
 function App() {
   const { user, setLands, setNotifyList } = useContext(AuthContext)
@@ -50,6 +51,7 @@ function App() {
         <Route path='/addLand' element={<AddLand />} />
         <Route path='/addLand/:type' element={<AddLandForm />} />
         <Route path='/transferLand' element={<TransferLand />} />
+        <Route path='/transferLand/:type' element={<TransferLandForm />} />
         <Route path='/transfering' element={<Transfering />} />
         <Route path='/received' element={<Received />} />
         <Route path='/market' element={<Market />} />
