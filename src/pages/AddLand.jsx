@@ -19,8 +19,8 @@ const AddLand = () => {
                 <Typography variant='button' sx={{ fontSize: 22 }}>Đăng ký đất mới</Typography>
             </Box>
             <Box container sx={{ display: 'flex', justifyContent: 'center', height: 400, alignItems: 'center', gap: 4 }}>
-                <OptionsLandCard owner='one' largeTitle={'Chính tôi sỡ hữu'} smallTitle={'Đăng ký đất mới do chính bạn sỡ hữu'} />
-                <OptionsLandCard owner='group' largeTitle={'Nhóm người sỡ hữu'} smallTitle={'Đăng ký đất mới cho nhóm người cùng sỡ hữu'} />
+                <OptionsLandCard owner='one' largeTitle={'Chính tôi sỡ hữu'} smallTitle={'Đăng ký đất mới do chính bạn sỡ hữu'} route='addLand' />
+                <OptionsLandCard owner='group' largeTitle={'Nhóm người sỡ hữu'} smallTitle={'Đăng ký đất mới cho nhóm người cùng sỡ hữu'} route='addLand' />
             </Box>
         </Box>
     )

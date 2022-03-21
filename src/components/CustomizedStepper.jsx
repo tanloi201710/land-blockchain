@@ -1,40 +1,34 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import StepContent from '@mui/material/StepContent';
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import { Grid, MenuItem, TextField } from '@mui/material';
+import * as React from 'react'
+import {
+    Grid, MenuItem, TextField, Paper,
+    Chip, IconButton, Typography, Button,
+    Box, Stepper, Step, StepLabel, StepContent,
+    Tooltip
+} from '@mui/material';
 import { AuthContext } from '../contexts/AuthContext';
+import { Add } from '@mui/icons-material';
+import AddOwnerForm from './AddOwnerForm';
 
 const steps = [
     {
-        label: 'Chọn mãnh đất',
-        description: `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`,
+        label: 'Chọn mãnh đất'
     },
     {
-        label: 'Chọn người muốn chuyển',
-        description:
-            'An ad group contains one or more ads which target a shared set of keywords.',
+        label: 'Chọn người muốn chuyển'
     },
     {
-        label: 'Nhập số tiền muốn chuyển',
-        description: `Try out different ad text to see what brings in the most customers,
-              and learn how to enhance your ads using features like ad extensions.
-              If you run into any problems with your ads, find out how to tell if
-              they're running and how to resolve approval issues.`,
+        label: 'Nhập số tiền muốn chuyển'
     },
 ];
 
-export default function CustomizedStepper({ values, setValues }) {
+export default function CustomizedStepper({ values, setValues, handleSubmit }) {
     const { lands } = React.useContext(AuthContext)
-    const [currentLand, setCurrentLand] = React.useState({})
-    const [activeStep, setActiveStep] = React.useState(0);
+    const [currentLand, setCurrentLand] = React.useState(values.land)
+    const [activeStep, setActiveStep] = React.useState(0)
+    const [openOwnerForm, setOpenOwnerForm] = React.useState(false)
+
+    console.log(currentLand)
+    console.log(lands.find(land => land.key === currentLand.key))
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -48,6 +42,19 @@ export default function CustomizedStepper({ values, setValues }) {
         setActiveStep(0);
     };
 
+    const handleDelete = (userId) => {
+        const newArr = values.owners.filter(value => value.userId !== userId)
+        setValues({ ...values, owners: newArr })
+    }
+
+    const handleAddOwner = (owner) => {
+        const existingOwner = values.owners.find(value => value.userId === owner.userId)
+        if (!existingOwner) {
+            setValues({ ...values, owners: [...values.owners, owner] })
+        }
+        return
+    }
+
     return (
         <Box sx={{ width: 700 }}>
             <Stepper activeStep={activeStep} orientation="vertical">
@@ -56,7 +63,7 @@ export default function CustomizedStepper({ values, setValues }) {
                         <StepLabel
                             optional={
                                 index === 2 ? (
-                                    <Typography variant="caption">Last step</Typography>
+                                    <Typography variant="caption">Bước cuối</Typography>
                                 ) : null
                             }
                         >
@@ -72,7 +79,7 @@ export default function CustomizedStepper({ values, setValues }) {
                                             required
                                             name='landKey'
                                             label='Chọn mãnh đất'
-                                            value={values?.land || ""}
+                                            value={lands.find(land => land.key === currentLand.key)}
                                             onChange={(e) => {
                                                 const land = e.target.value
                                                 setValues({ ...values, land: land })
@@ -123,7 +130,48 @@ export default function CustomizedStepper({ values, setValues }) {
                                     </>
                                 )
 
-                                : null
+                                : index === 1 ? (
+                                    <><Paper
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'flex-start',
+                                            flexWrap: 'wrap',
+                                            listStyle: 'none',
+                                            p: 0.5,
+                                            m: 0,
+                                        }}
+                                        component="ul"
+                                    >
+                                        {values.owners.map((value, index) => (
+                                            <li key={index} style={{ margin: 2.5 }}>
+                                                <Chip
+                                                    label={value.fullname}
+                                                    onDelete={() => handleDelete(value.userId)}
+                                                />
+                                            </li>
+                                        ))}
+                                    </Paper>
+                                        <Tooltip title='Thêm người muốn chuyển'>
+                                            <IconButton
+                                                disableRipple
+                                                sx={{ backgroundColor: '#424242', marginY: 5 }}
+                                                onClick={() => setOpenOwnerForm(true)}
+                                            >
+                                                <Add sx={{ color: 'white' }} />
+                                            </IconButton>
+                                        </Tooltip>
+
+                                        {openOwnerForm && <AddOwnerForm handleClose={() => setOpenOwnerForm(false)} handleSubmit={handleAddOwner} />}
+                                    </>
+                                ) : <>
+                                    <TextField
+                                        label='Nhập số tiền muốn chuyển(không bắt buộc)'
+                                        type="text"
+                                        fullWidth
+                                        value={values.amount}
+                                        onChange={(event) => setValues({ ...values, amount: event.target.value })}
+                                    />
+                                </>
                             }
 
                             <Box sx={{ mb: 2 }}>
@@ -133,14 +181,14 @@ export default function CustomizedStepper({ values, setValues }) {
                                         onClick={handleNext}
                                         sx={{ mt: 1, mr: 1 }}
                                     >
-                                        {index === steps.length - 1 ? 'Finish' : 'Continue'}
+                                        {index === steps.length - 1 ? 'Hoàn Thành' : 'Tiếp tục'}
                                     </Button>
                                     <Button
                                         disabled={index === 0}
                                         onClick={handleBack}
                                         sx={{ mt: 1, mr: 1 }}
                                     >
-                                        Back
+                                        Quay lại
                                     </Button>
                                 </div>
                             </Box>
@@ -149,11 +197,32 @@ export default function CustomizedStepper({ values, setValues }) {
                 ))}
             </Stepper>
             {activeStep === steps.length && (
-                <Paper square elevation={0} sx={{ p: 3 }}>
-                    <Typography>All steps completed - you&apos;re finished</Typography>
-                    <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-                        Reset
-                    </Button>
+                <Paper square elevation={3} sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}>
+                    <Typography variant="h6">Xác nhận chuyển đất</Typography>
+                    <Box>
+                        <Typography component='span'>Mãnh đất muốn chuyển: </Typography>
+                        <Typography component='span' sx={{ fontWeight: 'bold' }}>{values.land.key}</Typography>
+
+                    </Box>
+                    <Box>
+                        <Typography component='span'>Người thụ hưởng: </Typography>
+                        <Typography component='span' sx={{ fontWeight: 'bold' }}>{values.owners.map(owner => owner.fullname).join(', ')}</Typography>
+
+                    </Box>
+                    <Box>
+                        <Typography component='span'>Số tiền chuyển kèm: </Typography>
+                        <Typography component='span' sx={{ fontWeight: 'bold' }}>{values.amount || 0}</Typography>
+
+                    </Box>
+                    <Box>
+
+                        <Button onClick={handleSubmit} sx={{ mt: 1, mr: 1 }} variant='contained'>
+                            Xác nhận
+                        </Button>
+                        <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }} variant='outlined'>
+                            Nhập lại
+                        </Button>
+                    </Box>
                 </Paper>
             )}
         </Box>

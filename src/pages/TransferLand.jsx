@@ -19,8 +19,8 @@ const TransferLand = () => {
                 <Typography variant='button' sx={{ fontSize: 22 }}>Chuyển quyền sử dụng đất</Typography>
             </Box>
             <Box container sx={{ display: 'flex', justifyContent: 'center', height: 400, alignItems: 'center', gap: 4 }}>
-                <OptionsLandCard owner='one' largeTitle={'Chuyển cho một người'} smallTitle={'Chuyển quyền sử dụng đất cho một người'} />
-                <OptionsLandCard owner='group' largeTitle={'Chuyển cho nhóm người'} smallTitle={'Chuyển quyền sử dụng đất cho một nhóm người'} />
+                <OptionsLandCard owner='one' largeTitle={'Chuyển cho một người'} smallTitle={'Chuyển quyền sử dụng đất cho một người'} route='transferLand' />
+                <OptionsLandCard owner='group' largeTitle={'Chuyển cho nhóm người'} smallTitle={'Chuyển quyền sử dụng đất cho một nhóm người'} route='transferLand' />
             </Box>
         </Box>
     )

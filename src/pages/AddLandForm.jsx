@@ -45,7 +45,6 @@ const AddLandForm = () => {
     const [isAddFormOpen, setIsAddFormOpen] = useState(false)
 
     const [isRegisting, setIsRegisting] = useState(false)
-    const [fetching, setFetching] = useState(false)
     const [info, setInfo] = useState('')
     const [error, setError] = useState('')
 
@@ -466,7 +465,7 @@ const AddLandForm = () => {
                 </Box>
             </Box>
 
-            {isAddFormOpen && <AddOwnerForm handleClose={handleCloseAddForm} handleSubmit={handleAddNewOwner} fetching={fetching} setFetching={setFetching} />}
+            {isAddFormOpen && <AddOwnerForm handleClose={handleCloseAddForm} handleSubmit={handleAddNewOwner} />}
         </Container>
     )
 }

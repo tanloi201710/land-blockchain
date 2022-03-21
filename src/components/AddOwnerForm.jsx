@@ -4,7 +4,7 @@ import React, { useContext, useState } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import { getAllUser } from '../firebase/search'
 
-const AddOwnerForm = ({ handleClose, handleSubmit, fetching, setFetching }) => {
+const AddOwnerForm = ({ handleClose, handleSubmit }) => {
     const initialOwner = {
         userId: '',
         fullname: '',
@@ -17,6 +17,7 @@ const AddOwnerForm = ({ handleClose, handleSubmit, fetching, setFetching }) => {
 
     const [owner, setOwner] = useState(initialOwner)
     const [users, setUsers] = useState([])
+    const [fetching, setFetching] = useState(false)
 
 
     const handleChange = async (event) => {

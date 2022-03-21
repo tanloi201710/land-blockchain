@@ -2,12 +2,12 @@ import { Box, Button, Card, CardContent, CardMedia, Typography } from '@mui/mate
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const OptionsLandCard = ({ owner, largeTitle, smallTitle }) => {
+const OptionsLandCard = ({ owner, largeTitle, smallTitle, route }) => {
 
     const navigate = useNavigate()
 
     const handleRedirect = () => {
-        owner === 'one' ? navigate('/addLand/one') : navigate('/addLand/group')
+        owner === 'one' ? navigate(`/${route}/one`) : navigate(`/${route}/group`)
     }
     return (
         <Card sx={{ display: 'flex' }}>

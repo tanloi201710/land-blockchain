@@ -70,12 +70,12 @@ export default function CustomizedTables({ rows, user }) {
                                         </IconButton>
                                     </Tooltip>
                                     <Tooltip title='Tách thửa'>
-                                        <IconButton color='warning'>
+                                        <IconButton color='warning' disabled>
                                             <Flip color='warning' />
                                         </IconButton>
                                     </Tooltip>
-                                    <Tooltip title='Chuyển quyền sỡ hữu'>
-                                        <IconButton color='info'>
+                                    <Tooltip title='Chuyển quyền sử dụng đất'>
+                                        <IconButton color='info' onClick={() => navigate('/transferLand', { state: row })}>
                                             <Shortcut color='info' />
                                         </IconButton>
                                     </Tooltip>
