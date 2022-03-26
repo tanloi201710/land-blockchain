@@ -3,7 +3,8 @@ import {
     Grid, MenuItem, TextField, Paper,
     Chip, IconButton, Typography, Button,
     Box, Stepper, Step, StepLabel, StepContent,
-    Tooltip
+    Tooltip,
+    CircularProgress
 } from '@mui/material';
 import { AuthContext } from '../contexts/AuthContext';
 import { Add } from '@mui/icons-material';
@@ -21,7 +22,7 @@ const steps = [
     },
 ];
 
-export default function CustomizedStepper({ values, setValues, handleSubmit }) {
+export default function CustomizedStepper({ values, setValues, handleSubmit, processing }) {
     const { lands } = React.useContext(AuthContext)
     const [currentLand, setCurrentLand] = React.useState(values.land)
     const [activeStep, setActiveStep] = React.useState(0)
@@ -217,7 +218,7 @@ export default function CustomizedStepper({ values, setValues, handleSubmit }) {
                     <Box>
 
                         <Button onClick={handleSubmit} sx={{ mt: 1, mr: 1 }} variant='contained'>
-                            Xác nhận
+                            {processing ? <CircularProgress size={20} color='inherit' /> : 'Xác nhận'}
                         </Button>
                         <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }} variant='outlined'>
                             Nhập lại

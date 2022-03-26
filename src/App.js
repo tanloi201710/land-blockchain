@@ -10,8 +10,8 @@ import Transfering from './pages/Transfering'
 import Received from './pages/Received'
 import Market from './pages/Market'
 import AddLandForm from './pages/AddLandForm'
-import { homePageManager, homePageUser } from './api'
 import TransferLandForm from './pages/TransferLandForm'
+import { getHomePageData } from './contexts/actions'
 
 function App() {
   const { user, setLands, setNotifyList } = useContext(AuthContext)
@@ -19,22 +19,7 @@ function App() {
 
   useEffect(() => {
     const getData = async () => {
-      if (user?.role === 'manager') {
-        const result = await homePageManager()
-        if (result.data.error) {
-          return
-        }
-        setLands(result.data.allLands)
-      } else if (user?.role === 'user') {
-        const result = await homePageUser()
-        if (result.data.error) {
-          return
-        }
-        setLands(result.data.allLands)
-        setNotifyList(result.data.messages)
-      }
-
-      return
+      await getHomePageData(user?.role, setLands, setNotifyList)
     }
     getData()
 

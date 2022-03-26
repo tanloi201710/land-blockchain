@@ -3,7 +3,7 @@ import { AppBar, Box, Badge, IconButton, Toolbar, Typography, InputBase, Tooltip
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles'
 import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import MessagesList from './MessagesList';
 import NotifyList from './NotifyList';
 import { AuthContext } from '../contexts/AuthContext';
@@ -128,6 +128,7 @@ const NavBar = () => {
 
     const { user, notifyList } = useContext(AuthContext)
     const navigate = useNavigate()
+    const location = useLocation()
 
     const [anchorRegistersEl, setAnchorRegistersEl] = React.useState(null)
     const [anchorMessagesEl, setAnchorMessagesEl] = React.useState(null)
@@ -193,9 +194,11 @@ const NavBar = () => {
                 <Box sx={{ display: 'flex', gap: 2.5 }}>
                     <Link
                         to={'/'}
-                        style={{ textDecoration: 'none' }}
+                        className="link-a"
                     >
-                        <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Trang chủ</Typography>
+                        <Typography variant="body1" className={location.pathname === '/' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>
+                            Trang chủ
+                        </Typography>
                     </Link>
                     {user.role === 'user' ?
                         <>
@@ -237,19 +240,19 @@ const NavBar = () => {
                                 to={'/transfering'}
                                 style={{ textDecoration: 'none' }}
                             >
-                                <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Đất chuyển</Typography>
+                                <Typography variant="body1" className={location.pathname === '/transfering' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Đất chuyển</Typography>
                             </Link>
                             <Link
                                 to={'/received'}
                                 style={{ textDecoration: 'none' }}
                             >
-                                <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Đất nhận</Typography>
+                                <Typography variant="body1" className={location.pathname === '/received' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Đất nhận</Typography>
                             </Link>
                             <Link
                                 to={'/market'}
                                 style={{ textDecoration: 'none' }}
                             >
-                                <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Mua bán đất</Typography>
+                                <Typography variant="body1" className={location.pathname === '/market' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Mua bán đất</Typography>
                             </Link>
                         </> :
                         <>

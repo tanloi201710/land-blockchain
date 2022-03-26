@@ -4,7 +4,7 @@ import { AuthContext } from '../contexts/AuthContext'
 
 import CustomizedTables from '../components/CustomizedTables'
 import { Box, IconButton, Typography } from '@mui/material'
-import { ArrowBack } from '@mui/icons-material'
+import { Menu } from '@mui/icons-material'
 import SideBar from '../components/SideBar'
 import Container from '../components/Container'
 
@@ -56,7 +56,7 @@ const Home = () => {
                     <SideBar effectOut={effectOut} handleCloseSideBar={handleCloseSideBar} showSideBar={showSideBar} />
                     : <div>
                         <IconButton color="primary" onClick={handleOpenSideBar} >
-                            <ArrowBack />
+                            <Menu />
                         </IconButton>
                     </div>
                 }

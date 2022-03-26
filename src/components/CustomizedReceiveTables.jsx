@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { styled } from '@mui/material/styles'
 import TableCell, { tableCellClasses } from '@mui/material/TableCell'
-import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper } from '@mui/material'
+import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, CircularProgress } from '@mui/material'
 import { ConfirmFromReceiver } from '../api';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -27,16 +27,30 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 export default function CustomizedReceiveTables({ rows }) {
-    const handleReceive = async (row) => {
-        const formData = {
-            key: row.key,
-            userIdFromTransfer: row.value.From,
-            amount: row.value.Money
+
+    const ReceiveButton = ({ row }) => {
+        const [processing, setProcessing] = React.useState(false)
+
+        const handleReceive = async () => {
+            const formData = {
+                key: row.key,
+                userIdFromTransfer: row.value.From,
+                amount: row.value.Money
+            }
+            setProcessing(true)
+
+            const result = await ConfirmFromReceiver(formData)
+            console.log(result.data)
+            setProcessing(false)
         }
 
-        const result = await ConfirmFromReceiver(formData)
-        console.log(result.data)
+        return (
+            <Button variant='contained' color='success' onClick={handleReceive} disabled={row.value.ConfirmFromReceiver}>
+                {processing ? <CircularProgress size={25} color='inherit' /> : 'Nhận'}
+            </Button>
+        )
     }
+
     return (
         <TableContainer component={Paper}>
 
@@ -61,7 +75,7 @@ export default function CustomizedReceiveTables({ rows }) {
                             </StyledTableCell>
                             <StyledTableCell align="right">{row.value.Land}</StyledTableCell>
                             <StyledTableCell align="right">{typeof row.value.From === 'object'
-                                ? row.value.From.join(',')
+                                ? row.value.From.map((value) => Object.keys(value)).join(', ')
                                 : row.value.From}
                             </StyledTableCell>
                             <StyledTableCell align="right">{typeof row.value.To === 'object'
@@ -76,7 +90,10 @@ export default function CustomizedReceiveTables({ rows }) {
                             </StyledTableCell>
 
                             <StyledTableCell align="right">
-                                <Button variant='outlined' color='success' onClick={() => handleReceive(row)}>Nhận</Button>
+                                {/* <Button variant='contained' color='success' onClick={() => handleReceive(row)}>
+                                    {processing ? <CircularProgress size={20} color='inherit' /> : 'Nhận'}
+                                </Button> */}
+                                <ReceiveButton row={row} />
                             </StyledTableCell>
                         </StyledTableRow>
                     ))}

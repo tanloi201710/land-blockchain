@@ -1,9 +1,8 @@
 import { Add, Autorenew, PhotoCamera, Remove } from '@mui/icons-material'
 import { Box, Button, CircularProgress, Grid, IconButton, ImageList, ImageListItem, ListSubheader, MenuItem, Stack, TextField, Tooltip, Typography } from '@mui/material'
 import { blue } from '@mui/material/colors'
-import React, { useState } from 'react'
-import { useContext } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useState, useContext } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { addLand, addLandCo } from '../api'
 import AddOwnerForm from '../components/AddOwnerForm'
 import BasicAlerts from '../components/Alert'
@@ -13,8 +12,10 @@ import Input from '../components/Input'
 import NavBar from '../components/NavBar'
 import { AuthContext } from '../contexts/AuthContext'
 import { uploadImage } from '../firebase/images'
+import { getHomePageData } from '../contexts/actions'
 
 import { hinhThucSuDung, hinhThucNhan, datNongNghiep, datPhiNongNghiep, nguonGoc } from '../data'
+import ConfirmBox from '../components/ConfirmBox'
 
 const AddLandForm = () => {
 
@@ -35,7 +36,7 @@ const AddLandForm = () => {
         url: []
     }
 
-    const { user } = useContext(AuthContext)
+    const { user, setLands, setNotifyList } = useContext(AuthContext)
 
     const [values, setValues] = useState(initialValues)
     const [owners, setOwners] = useState([user])
@@ -50,6 +51,7 @@ const AddLandForm = () => {
 
     const params = useParams()
     const type = params.type
+    const navigate = useNavigate()
 
     console.log(values, info)
 
@@ -110,9 +112,9 @@ const AddLandForm = () => {
             console.log(result.data.message)
 
             if (!result.data.error) {
-                setInfo(result.data.message)
                 resetFormData()
                 setIsRegisting(false)
+                setInfo(result.data.message)
                 return
             }
 
@@ -123,9 +125,9 @@ const AddLandForm = () => {
             console.log(result.data.message)
 
             if (!result.data.error) {
-                setInfo(result.data.message)
                 resetFormData()
                 setIsRegisting(false)
+                setInfo(result.data.message)
                 return
             }
 
@@ -134,16 +136,21 @@ const AddLandForm = () => {
         }
     }
 
+    const handleConfirm = async () => {
+        await getHomePageData(user?.role, setLands, setNotifyList)
+        setInfo('')
+        navigate('/')
+    }
+
     return (
         <Container>
             <NavBar />
             {info !== ''
                 ?
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <BasicAlerts serverity="success" message={info} onClose={() => setInfo('')} />
-                </Box>
+                <ConfirmBox message={info} handleConfirm={handleConfirm} />
                 : null
             }
+
             {error !== ''
                 ?
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
