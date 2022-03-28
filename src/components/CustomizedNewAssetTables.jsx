@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { useNavigate } from 'react-router-dom'
 import { styled } from '@mui/material/styles'
 import TableCell, { tableCellClasses } from '@mui/material/TableCell'
-import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, Tooltip, IconButton } from '@mui/material'
-import { Flip, ModeEdit, Shortcut } from '@mui/icons-material'
+import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, CircularProgress } from '@mui/material'
+import { confirmNewAsset } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -27,8 +27,37 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 
-export default function CustomizedTables({ rows, user }) {
+export default function CustomizedNewAssetTables({ rows, setMessage, setError }) {
     const navigate = useNavigate()
+
+    const ConfirmButton = ({ row }) => {
+        const [processing, setProcessing] = React.useState(false)
+
+        const handleConfirm = async () => {
+            const formData = {
+                key: row.key,
+                status: 'Đã duyệt',
+                userId: row.value.UserId
+            }
+            setProcessing(true)
+
+            const result = await confirmNewAsset(formData)
+            console.log(result.data)
+            if (!result.data.error) {
+                setMessage(result.data.message)
+            } else {
+                setError(result.data.message)
+            }
+            setProcessing(false)
+        }
+
+        return (
+            <Button variant='contained' color='success' onClick={handleConfirm}>
+                {processing ? <CircularProgress size={25} color='inherit' /> : 'Xác nhận'}
+            </Button>
+        )
+    }
+
     return (
         <TableContainer component={Paper}>
 
@@ -40,9 +69,7 @@ export default function CustomizedTables({ rows, user }) {
                         <StyledTableCell align="right">Chủ sở hữu</StyledTableCell>
                         <StyledTableCell align="right">Thông tin chi tiết</StyledTableCell>
                         <StyledTableCell align="right">Trạng thái</StyledTableCell>
-                        {user?.role === 'user' &&
-                            <StyledTableCell align="right">Thao tác</StyledTableCell>
-                        }
+                        <StyledTableCell align="right">Thao tác</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -53,42 +80,20 @@ export default function CustomizedTables({ rows, user }) {
                             </StyledTableCell>
                             <StyledTableCell align="right">{row.value.ThoiGianDangKy}</StyledTableCell>
                             <StyledTableCell align="right">{typeof row.value.Owner === 'object'
-                                ? row.value.Owner.join(',')
+                                ? row.value.Owner.join(', ')
                                 : row.value.Owner}
                             </StyledTableCell>
                             <StyledTableCell align="right">
                                 <Button variant='outlined' onClick={() => navigate(`/detail/${row.key}`)}>Xem</Button>
                             </StyledTableCell>
                             <StyledTableCell align="right">{`${row.value.Status}`}</StyledTableCell>
-                            {user?.role === 'user' &&
-                                <StyledTableCell align="right">
-                                    <Tooltip title='Chỉnh sửa thông tin'>
-                                        <IconButton>
-                                            <ModeEdit />
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title='Tách thửa'>
-                                        <IconButton color='warning'>
-                                            <Flip color='warning' />
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title='Chuyển quyền sử dụng đất'>
-                                        <span>
-                                            <IconButton color='info' disabled={row.value.Status === 'Chưa duyệt'} onClick={() => navigate('/transferLand', { state: row })}>
-                                                <Shortcut color={row.value.Status === 'Chưa duyệt' ? 'inherit' : 'info'} />
-                                            </IconButton>
-                                        </span>
-                                    </Tooltip>
-                                </StyledTableCell>
-                            }
 
-                            {/* {user?.role === 'manager' &&
-                                <StyledTableCell align="right">
-                                    <Button variant='outlined' color='success' disabled={row.value.Status === 'Đang chuyển'}>
-                                        Cập nhật
-                                    </Button>
-                                </StyledTableCell>
-                            } */}
+                            <StyledTableCell align="right">
+                                {/* <Button variant='contained' color='success' onClick={() => handleReceive(row)}>
+                                    {processing ? <CircularProgress size={20} color='inherit' /> : 'Nhận'}
+                                </Button> */}
+                                <ConfirmButton row={row} />
+                            </StyledTableCell>
                         </StyledTableRow>
                     ))}
                 </TableBody>

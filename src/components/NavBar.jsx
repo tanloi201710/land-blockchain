@@ -257,10 +257,10 @@ const NavBar = () => {
                         </> :
                         <>
                             <Link
-                                to={'/'}
+                                to={'/waiting'}
                                 style={{ textDecoration: 'none' }}
                             >
-                                <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Chờ duyệt</Typography>
+                                <Typography variant="body1" className={location.pathname === '/waiting' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Chờ duyệt</Typography>
                             </Link>
                             <Link
                                 to={'/'}

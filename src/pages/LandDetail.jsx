@@ -18,22 +18,41 @@ const LandDetail = () => {
     const currentLand = lands.find(land => land.key === params.id)
     const currentUsers = currentLand?.value.UserId
 
-    const [owners, setOwners] = useState([user])
+    const initialOwners = () => {
+        if (typeof currentLand?.value.UserId === 'object') {
+            return currentLand?.value.UserId.includes(user.userId) ? [user] : []
+        }
+
+        return currentLand?.value.UserId === user.userId ? [user] : []
+    }
+
+    const [owners, setOwners] = useState(initialOwners)
 
 
     useEffect(() => {
         if (typeof currentUsers === 'object') {
-            currentUsers.forEach(async (u) => {
-                if (u !== user.userId) {
-                    const resultUser = await getUser(u)
-                    if (resultUser.length > 0 && owners.length < currentUsers.length) {
-                        setOwners(prev => [...prev, resultUser[0]])
-                    }
+            for (let i = 0; i < currentUsers.length; i++) {
+                if (currentUsers[i] !== user.userId) {
+                    (async () => {
+                        const resultUser = await getUser(currentUsers[i])
+                        if (resultUser.length > 0) {
+                            setOwners(prev => [...prev, resultUser[0]])
+                        }
+                    })()
                 }
-            })
+            }
+
+        } else {
+            (async () => {
+                console.log('Gọi chỗ này')
+                const resultUser = await getUser(currentUsers)
+                if (resultUser.length > 0) {
+                    setOwners([resultUser[0]])
+                }
+            })()
         }
-    }, [currentUsers, user.userId, owners.length])
-    console.log(currentLand, owners)
+    }, [currentUsers, user.userId])
+    console.log(currentLand, owners, currentUsers)
 
     return (
         <Box

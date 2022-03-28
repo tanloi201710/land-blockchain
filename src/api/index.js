@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API = axios.create({ baseURL: 'http://172.26.154.9:5000/api' })
+const API = axios.create({ baseURL: 'http://172.26.154.179:5000/api' })
 
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('user')) {
@@ -26,5 +26,7 @@ export const transferLand = (formData) => API.post('/land/transferOne', formData
 export const transferLandCo = (formData) => API.post('/land/transferGroup', formData)
 
 export const getReceiveLand = () => API.get('/land/receive')
+
+export const confirmNewAsset = (formData) => API.post('/manager/updateStatusLand', formData)
 
 export const ConfirmFromReceiver = (formData) => API.post('/user/confirmReceiveOne', formData)

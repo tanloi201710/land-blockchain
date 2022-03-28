@@ -26,7 +26,7 @@ const DisplayOwner = ({ owner }) => {
                 sx={{ marginLeft: 5, display: 'flex', alignItems: 'center', gap: 2 }}
             >
                 <Typography variant='subtitle1'>Số điện thoại:</Typography>                {/* Dia chi chu so huu */}
-                <Typography variant='subtitle1'>{owner.phoneNumber.replace('+84', '0') || ''}</Typography>
+                <Typography variant='subtitle1'>{owner.phoneNumber?.replace('+84', '0') || ''}</Typography>
             </Box>
 
         </Box>
