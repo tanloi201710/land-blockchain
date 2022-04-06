@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API = axios.create({ baseURL: 'http://172.26.154.179:5000/api' })
+const API = axios.create({ baseURL: 'http://172.25.134.153:5000/api' })
 
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('user')) {

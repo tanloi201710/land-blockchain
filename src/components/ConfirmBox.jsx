@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Divider, Typography } from '@mui/material'
 
 const ConfirmBox = ({ message, handleConfirm }) => {
     return (
@@ -25,8 +25,13 @@ const ConfirmBox = ({ message, handleConfirm }) => {
                     backgroundColor: 'white'
                 }}
             >
-                <Typography variant='subtitle1'>{message}</Typography>
-                <Button variant='contained' sx={{ marginTop: 2 }} color='info' fullWidth onClick={handleConfirm} >OK</Button>
+                <Typography variant='button' color='text.secondary'>Thông báo</Typography>
+                <Divider />
+                <Typography variant='subtitle1' sx={{ marginTop: 2 }}>{message}</Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}>
+                    <Button variant='contained' color='info' onClick={handleConfirm} >OK</Button>
+
+                </Box>
             </Box>
         </Box>
     )

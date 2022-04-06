@@ -11,7 +11,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
         color: theme.palette.common.white,
     },
     [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
+        fontSize: 14
     },
 }));
 
@@ -29,6 +29,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function CustomizedTables({ rows, user }) {
     const navigate = useNavigate()
+    const disabledAction = (row) => row.value.Status === 'Chưa duyệt' || row.value.Status === 'Đang chuyển'
     return (
         <TableContainer component={Paper}>
 
@@ -48,7 +49,7 @@ export default function CustomizedTables({ rows, user }) {
                 <TableBody>
                     {rows.map((row) => (
                         <StyledTableRow key={row.key}>
-                            <StyledTableCell component="th" scope="row">
+                            <StyledTableCell component="th" scope="row" sx={{ fontWeight: 500 }}>
                                 {row.key}
                             </StyledTableCell>
                             <StyledTableCell align="right">{row.value.ThoiGianDangKy}</StyledTableCell>
@@ -57,25 +58,31 @@ export default function CustomizedTables({ rows, user }) {
                                 : row.value.Owner}
                             </StyledTableCell>
                             <StyledTableCell align="right">
-                                <Button variant='outlined' onClick={() => navigate(`/detail/${row.key}`)}>Xem</Button>
+                                <Button variant='outlined' color='info' onClick={() => navigate(`/detail/${row.key}`)}>Xem</Button>
                             </StyledTableCell>
                             <StyledTableCell align="right">{`${row.value.Status}`}</StyledTableCell>
                             {user?.role === 'user' &&
                                 <StyledTableCell align="right">
                                     <Tooltip title='Chỉnh sửa thông tin'>
-                                        <IconButton>
-                                            <ModeEdit />
-                                        </IconButton>
+                                        <span>
+                                            <IconButton disabled={disabledAction(row)}>
+                                                <ModeEdit />
+                                            </IconButton>
+
+                                        </span>
                                     </Tooltip>
                                     <Tooltip title='Tách thửa'>
-                                        <IconButton color='warning'>
-                                            <Flip color='warning' />
-                                        </IconButton>
+                                        <span>
+                                            <IconButton color='warning' disabled={disabledAction(row)}>
+                                                <Flip color={disabledAction(row) ? 'inherit' : 'warning'} />
+                                            </IconButton>
+
+                                        </span>
                                     </Tooltip>
                                     <Tooltip title='Chuyển quyền sử dụng đất'>
                                         <span>
-                                            <IconButton color='info' disabled={row.value.Status === 'Chưa duyệt'} onClick={() => navigate('/transferLand', { state: row })}>
-                                                <Shortcut color={row.value.Status === 'Chưa duyệt' ? 'inherit' : 'info'} />
+                                            <IconButton color='info' disabled={disabledAction(row)} onClick={() => navigate('/transferLand', { state: row })}>
+                                                <Shortcut color={disabledAction(row) ? 'inherit' : 'info'} />
                                             </IconButton>
                                         </span>
                                     </Tooltip>
