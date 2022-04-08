@@ -190,9 +190,23 @@ const LandDetail = () => {
                                     <Typography variant='subtitle1'>Lịch sử chuyển nhượng</Typography>  {/* Lich su chuyen nhuong */}
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <Typography variant='subtitle1'>
-                                        {currentLand?.value.Transactions || "-/-"}
-                                    </Typography>
+                                    {currentLand?.value.Transactions ?
+                                        currentLand.value.Transactions.map((transaction, index) => (
+                                            <Grid container key={index}>
+                                                <Grid item xs={4}>
+                                                    <Typography variant='subtitle1' sx={{ fontWeight: '500' }} component='span'>
+                                                        {Object.keys(transaction).toString()}
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs={8}>
+                                                    <Typography variant='subtitle1' component='span'>
+                                                        {transaction[Object.keys(transaction)]}
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                        ))
+                                        : <Typography variant='subtitle1'>{'-/-'}</Typography>
+                                    }
                                 </Grid>
                             </Grid>
 

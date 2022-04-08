@@ -3,9 +3,13 @@ import React from 'react';
 
 const NotifyList = ({ items }) => {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
+
+    const sortedItems = items.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds)
+    console.log(sortedItems)
+
     return (
         <List sx={{ width: '100%', minWidth: 240, maxHeight: 400 }}>
-            {items.map((item, index) => (
+            {sortedItems.map((item, index) => (
                 <React.Fragment key={index}>
                     <ListItem alignItems="flex-start" >
                         <ListItemAvatar>
@@ -13,7 +17,7 @@ const NotifyList = ({ items }) => {
                         </ListItemAvatar>
                         <ListItemText
                             primary={item.Message}
-                            secondary={item.Date}
+                            secondary={`${item.Time} - ${item.Date}`}
                             sx={{ maxWidth: 250 }}
                         />
                     </ListItem>

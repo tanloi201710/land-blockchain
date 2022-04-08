@@ -1,28 +1,29 @@
 import * as React from 'react'
-import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, CircularProgress, Box } from '@mui/material'
-import { confirmFromTransfer } from '../api';
-import { AuthContext } from '../contexts/AuthContext';
+import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, CircularProgress } from '@mui/material'
+import { confirmTransferFromAdmin } from '../api';
 import StyledTableRow from './StyledTableRow';
 import StyledTableCell from './StyledTableCell';
 
 
-export default function CustomizedTransferTables({ rows, setMessage, setError }) {
+export default function TransferRequests({ rows, setMessage, setError }) {
 
-    const { user } = React.useContext(AuthContext)
-    console.log(user.userId)
+    const unConfirmTransfer = rows.filter(row => !row.value.ConfirmFromAdmin)
+    console.log(unConfirmTransfer)
 
-    // Disable action or make out the status of transfer
-    const disabled = (row) => {
+    // make out the status of transfer
+    const getStatus = (row) => {
         if (typeof row.value.From === 'object') {
             for (let i = 0; i < row.value.From.length; i++) {
-                if (Object.keys(row.value.From[i]).toString() === user.userId) {
-                    console.log(row.value.From[i][user.userId])
-                    return row.value.From[i][user.userId]
-
-                }
+                if (!row.value.From[i][Object.keys(row.value.From[i])])
+                    return 'Chưa xác nhận'
             }
         }
-        return true
+
+        if (!row.value.ConfirmFromReceiver) {
+            return 'Chưa nhận đất'
+        }
+
+        return 'Đã xác nhận'
     }
 
     const ConfirmButton = ({ row }) => {
@@ -34,7 +35,7 @@ export default function CustomizedTransferTables({ rows, setMessage, setError })
             }
             setProcessing(true)
 
-            const result = await confirmFromTransfer(formData)
+            const result = await confirmTransferFromAdmin(formData)
             console.log(result.data)
 
             setProcessing(false)
@@ -47,26 +48,12 @@ export default function CustomizedTransferTables({ rows, setMessage, setError })
 
 
         return (
-            <Button variant='contained' color='success' onClick={handleReceive} disabled={disabled(row)}>
-                {processing ? <CircularProgress size={25} color='inherit' /> : 'Xác nhận'}
+            <Button variant='contained' color='success' onClick={handleReceive} disabled={!row.value.ConfirmFromReceiver || !row.value.ConfirmFromAdmin}>
+                {processing ? <CircularProgress size={25} color='inherit' /> : 'Duyệt'}
             </Button>
         )
     }
 
-    const CancelButton = ({ row }) => {
-        const [processing, setProcessing] = React.useState(false)
-
-        const handleCancel = () => {
-            setProcessing(true)
-            setProcessing(false)
-        }
-
-        return (
-            <Button variant='contained' color='error' onClick={handleCancel} >
-                {processing ? <CircularProgress size={25} color='inherit' /> : 'Hủy chuyển'}
-            </Button>
-        )
-    }
 
     return (
         <TableContainer component={Paper}>
@@ -85,7 +72,7 @@ export default function CustomizedTransferTables({ rows, setMessage, setError })
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {unConfirmTransfer.map((row) => (
                         <StyledTableRow key={row.key}>
                             <StyledTableCell component="th" scope="row">
                                 {row.key}
@@ -95,22 +82,17 @@ export default function CustomizedTransferTables({ rows, setMessage, setError })
                                 ? row.value.From.map((value) => Object.keys(value)).join(', ')
                                 : row.value.From}
                             </StyledTableCell>
-                            <StyledTableCell align="right">{typeof row.value.To === 'object'
+                            <StyledTableCell sx={!row.value.ConfirmFromReceiver && { color: 'text.secondary' }} align="right">{typeof row.value.To === 'object'
                                 ? row.value.To.join(',')
                                 : row.value.To}
                             </StyledTableCell>
                             <StyledTableCell align="right">{`${row.value.TimeStart}`}</StyledTableCell>
                             <StyledTableCell align="right">{`${row.value.Money}`}</StyledTableCell>
-                            <StyledTableCell align="right">{`${disabled(row)
-                                ? 'Đã xác nhận'
-                                : 'Chưa xác nhận'}`}
+                            <StyledTableCell align="right">{getStatus(row)}
                             </StyledTableCell>
 
                             <StyledTableCell align="right">
-                                <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-                                    <ConfirmButton row={row} />
-                                    <CancelButton row={row} />
-                                </Box>
+                                <ConfirmButton row={row} />
                             </StyledTableCell>
                         </StyledTableRow>
                     ))}

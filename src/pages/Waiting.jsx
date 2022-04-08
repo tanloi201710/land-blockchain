@@ -8,6 +8,8 @@ import NavBar from '../components/NavBar'
 import { AuthContext } from '../contexts/AuthContext'
 import { getHomePageData } from '../contexts/actions'
 import BasicAlerts from '../components/Alert'
+import TransferRequests from '../components/TransferRequests'
+import { getTransfersAdmin } from '../api'
 
 const Waiting = () => {
     const { lands, user, setLands, setNotifyList } = React.useContext(AuthContext)
@@ -16,6 +18,19 @@ const Waiting = () => {
     const [selectedTab, setselectedTab] = React.useState(0)
     const [message, setMessage] = React.useState('')
     const [error, setError] = React.useState('')
+    const [allTransfer, setAllTransfer] = React.useState([])
+
+    React.useEffect(() => {
+        (async () => {
+            const result = await getTransfersAdmin()
+            // console.log(result.data)
+            if (!result.data.error) {
+                setAllTransfer(result.data.allTransfer)
+            }
+        })()
+    }, [])
+
+    console.log(allTransfer)
 
     const handleSelectTab = (event, index) => {
         setselectedTab(index)
@@ -24,6 +39,19 @@ const Waiting = () => {
     const handleClose = async () => {
         await getHomePageData(user?.role, setLands, setNotifyList)
         setMessage('')
+    }
+
+    const getTabContent = () => {
+        switch (selectedTab) {
+            case 0:
+                return <CustomizedNewAssetTables rows={rows} setMessage={setMessage} setError={setError} />
+
+            case 1:
+                return <TransferRequests rows={allTransfer} setMessage={setMessage} setError={setError} />
+
+            default:
+                return null
+        }
     }
     return (
         <Container>
@@ -75,7 +103,7 @@ const Waiting = () => {
                 <Box
                     sx={{ flex: 4 }}
                 >
-                    <CustomizedNewAssetTables rows={rows} setMessage={setMessage} setError={setError} />
+                    {getTabContent()}
                 </Box>
             </Box>
         </Container>

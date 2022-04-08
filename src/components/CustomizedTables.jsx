@@ -1,31 +1,9 @@
 import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { styled } from '@mui/material/styles'
-import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, Tooltip, IconButton } from '@mui/material'
 import { Flip, ModeEdit, Shortcut } from '@mui/icons-material'
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-        fontSize: 14
-    },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-        border: 0,
-    },
-}));
-
-
+import StyledTableRow from './StyledTableRow'
+import StyledTableCell from './StyledTableCell'
 
 export default function CustomizedTables({ rows, user }) {
     const navigate = useNavigate()
@@ -54,7 +32,7 @@ export default function CustomizedTables({ rows, user }) {
                             </StyledTableCell>
                             <StyledTableCell align="right">{row.value.ThoiGianDangKy}</StyledTableCell>
                             <StyledTableCell align="right">{typeof row.value.Owner === 'object'
-                                ? row.value.Owner.join(',')
+                                ? row.value.Owner.join(', ')
                                 : row.value.Owner}
                             </StyledTableCell>
                             <StyledTableCell align="right">

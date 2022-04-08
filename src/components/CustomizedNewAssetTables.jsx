@@ -1,31 +1,9 @@
 import * as React from 'react'
-import { styled } from '@mui/material/styles'
-import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, CircularProgress } from '@mui/material'
 import { confirmNewAsset } from '../api';
 import { useNavigate } from 'react-router-dom';
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-    },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-        border: 0,
-    },
-}));
-
-
+import StyledTableRow from './StyledTableRow';
+import StyledTableCell from './StyledTableCell';
 
 export default function CustomizedNewAssetTables({ rows, setMessage, setError }) {
     const navigate = useNavigate()
@@ -53,7 +31,7 @@ export default function CustomizedNewAssetTables({ rows, setMessage, setError })
 
         return (
             <Button variant='contained' color='success' onClick={handleConfirm}>
-                {processing ? <CircularProgress size={25} color='inherit' /> : 'Xác nhận'}
+                {processing ? <CircularProgress size={25} color='inherit' /> : 'Duyệt'}
             </Button>
         )
     }
@@ -89,9 +67,6 @@ export default function CustomizedNewAssetTables({ rows, setMessage, setError })
                             <StyledTableCell align="right">{`${row.value.Status}`}</StyledTableCell>
 
                             <StyledTableCell align="right">
-                                {/* <Button variant='contained' color='success' onClick={() => handleReceive(row)}>
-                                    {processing ? <CircularProgress size={20} color='inherit' /> : 'Nhận'}
-                                </Button> */}
                                 <ConfirmButton row={row} />
                             </StyledTableCell>
                         </StyledTableRow>

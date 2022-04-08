@@ -196,7 +196,7 @@ const NavBar = () => {
                         to={'/'}
                         className="link-a"
                     >
-                        <Typography variant="body1" className={location.pathname === '/' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>
+                        <Typography variant="button" className={location.pathname === '/' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>
                             Trang chủ
                         </Typography>
                     </Link>
@@ -210,7 +210,7 @@ const NavBar = () => {
                                 sx={{ display: 'flex', alignItems: 'center', color: 'white', cursor: 'pointer' }}
                                 onClick={handleOpenRegistersMenu}
                             >
-                                <Typography variant="body1" className="activeHover" sx={{ color: 'inherit' }}>Thủ tục</Typography>
+                                <Typography variant="button" className="activeHover" sx={{ color: 'inherit' }}>Thủ tục</Typography>
                                 <ArrowDropDown color='inherit' />
                             </Box>
                             <StyledMenuRegisters
@@ -240,19 +240,19 @@ const NavBar = () => {
                                 to={'/transfering'}
                                 style={{ textDecoration: 'none' }}
                             >
-                                <Typography variant="body1" className={location.pathname === '/transfering' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Đất chuyển</Typography>
+                                <Typography variant="button" className={location.pathname === '/transfering' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Đất chuyển</Typography>
                             </Link>
                             <Link
                                 to={'/received'}
                                 style={{ textDecoration: 'none' }}
                             >
-                                <Typography variant="body1" className={location.pathname === '/received' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Đất nhận</Typography>
+                                <Typography variant="button" className={location.pathname === '/received' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Đất nhận</Typography>
                             </Link>
                             <Link
                                 to={'/market'}
                                 style={{ textDecoration: 'none' }}
                             >
-                                <Typography variant="body1" className={location.pathname === '/market' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Mua bán đất</Typography>
+                                <Typography variant="button" className={location.pathname === '/market' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Mua bán đất</Typography>
                             </Link>
                         </> :
                         <>
@@ -260,19 +260,19 @@ const NavBar = () => {
                                 to={'/waiting'}
                                 style={{ textDecoration: 'none' }}
                             >
-                                <Typography variant="body1" className={location.pathname === '/waiting' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Chờ duyệt</Typography>
+                                <Typography variant="button" className={location.pathname === '/waiting' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Chờ duyệt</Typography>
                             </Link>
                             <Link
                                 to={'/'}
                                 style={{ textDecoration: 'none' }}
                             >
-                                <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Nạp tiền</Typography>
+                                <Typography variant="button" className="activeHover" sx={{ color: 'white' }}>Nạp tiền</Typography>
                             </Link>
                             <Link
                                 to={'/'}
                                 style={{ textDecoration: 'none' }}
                             >
-                                <Typography variant="body1" className="activeHover" sx={{ color: 'white' }}>Thống kê</Typography>
+                                <Typography variant="button" className="activeHover" sx={{ color: 'white' }}>Thống kê</Typography>
                             </Link>
                         </>
                     }
