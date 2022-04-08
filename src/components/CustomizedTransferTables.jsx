@@ -57,6 +57,13 @@ export default function CustomizedTransferTables({ rows, setMessage, setError })
         const [processing, setProcessing] = React.useState(false)
 
         const handleCancel = () => {
+            const formData = {
+                keyLand: row.Land,
+                keyTransfer: row.key,
+                receiver: row.value.To,
+                receiverConfirm: row.value.confirmFromReceiver
+            }
+            console.log(formData)
             setProcessing(true)
             setProcessing(false)
         }
