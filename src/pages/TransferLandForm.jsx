@@ -17,7 +17,7 @@ const TransferLandForm = () => {
     const initialValues = {
         owners: [],
         land: location?.state || {},
-        amount: ''
+        amount: 0
     }
 
     const [values, setValues] = React.useState(initialValues)

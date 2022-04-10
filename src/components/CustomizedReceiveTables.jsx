@@ -6,6 +6,21 @@ import StyledTableCell from './StyledTableCell';
 
 export default function CustomizedReceiveTables({ rows }) {
 
+    const getStatus = (row) => {
+        if (typeof row.value.From === 'object') {
+            for (let i = 0; i < row.value.From.length; i++) {
+                if (!row.value.From[i][Object.keys(row.value.From[i])])
+                    return 'Chưa xác nhận'
+            }
+        }
+
+        if (!row.value.ConfirmFromReceiver) {
+            return 'Chưa nhận đất'
+        }
+
+        return 'Đã nhận đất'
+    }
+
     const ReceiveButton = ({ row }) => {
         const [processing, setProcessing] = React.useState(false)
 
@@ -23,7 +38,7 @@ export default function CustomizedReceiveTables({ rows }) {
         }
 
         return (
-            <Button variant='contained' color='success' onClick={handleReceive} disabled={row.value.ConfirmFromReceiver}>
+            <Button variant='contained' color='success' onClick={handleReceive} disabled={getStatus(row) !== 'Chưa nhận đất' ? true : false}>
                 {processing ? <CircularProgress size={25} color='inherit' /> : 'Nhận'}
             </Button>
         )
@@ -62,9 +77,7 @@ export default function CustomizedReceiveTables({ rows }) {
                             </StyledTableCell>
                             <StyledTableCell align="right">{`${row.value.TimeStart}`}</StyledTableCell>
                             <StyledTableCell align="right">{`${row.value.Money}`}</StyledTableCell>
-                            <StyledTableCell align="right">{`${row.value.ConfirmFromReceiver
-                                ? 'Đã nhận đất'
-                                : 'Chưa nhận đất'}`}
+                            <StyledTableCell align="right">{getStatus(row)}
                             </StyledTableCell>
 
                             <StyledTableCell align="right">

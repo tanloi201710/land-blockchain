@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, CircularProgress, Box } from '@mui/material'
-import { confirmFromTransfer } from '../api';
+import { confirmFromTransfer, cancelTransfer } from '../api';
 import { AuthContext } from '../contexts/AuthContext';
 import StyledTableRow from './StyledTableRow';
 import StyledTableCell from './StyledTableCell';
@@ -56,16 +56,28 @@ export default function CustomizedTransferTables({ rows, setMessage, setError })
     const CancelButton = ({ row }) => {
         const [processing, setProcessing] = React.useState(false)
 
-        const handleCancel = () => {
+        const handleCancel = async () => {
+            const anyReceiverConfirmed = typeof row.value.To === 'object' && row.value.To.some(item => Object.values(item).toString() === 'true')
             const formData = {
                 keyLand: row.Land,
                 keyTransfer: row.key,
                 receiver: row.value.To,
-                receiverConfirm: row.value.confirmFromReceiver
+                receiverConfirm: typeof row.value.To === 'object' ? anyReceiverConfirmed : row.value.ConfirmFromReceiver
             }
             console.log(formData)
+
             setProcessing(true)
+
+            const result = await cancelTransfer(formData)
+            console.log(result.data)
+
             setProcessing(false)
+
+            if (!result.data.error) {
+                setMessage(result.data.message)
+            } else {
+                setError(result.data.message)
+            }
         }
 
         return (
