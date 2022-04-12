@@ -59,10 +59,15 @@ export default function CustomizedTransferTables({ rows, setMessage, setError })
         const handleCancel = async () => {
             const anyReceiverConfirmed = typeof row.value.To === 'object' && row.value.To.some(item => Object.values(item).toString() === 'true')
             const formData = {
-                keyLand: row.Land,
+                keyLand: row.value.Land,
                 keyTransfer: row.key,
+                otherSenders: typeof row.value.From === 'object'
+                    ? row.value.From.filter(item => Object.keys(item).toString() !== user.userId)
+                    : [],
                 receiver: row.value.To,
-                receiverConfirm: typeof row.value.To === 'object' ? anyReceiverConfirmed : row.value.ConfirmFromReceiver
+                receiverConfirm: typeof row.value.To === 'object'
+                    ? anyReceiverConfirmed
+                    : row.value.ConfirmFromReceiver
             }
             console.log(formData)
 

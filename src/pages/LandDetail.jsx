@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, IconButton, Typography } from '@mui/material'
+import { Box, Divider, Grid, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
@@ -84,7 +84,7 @@ const LandDetail = () => {
 
                         <Typography variant='h6' gutterBottom >Thửa đất</Typography>
                         <Box
-                            sx={{ paddingX: 5 }}
+                            sx={{ paddingX: 5, display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: 1 }}
                         >
                             <Grid container>
                                 <Grid item xs={4}>
@@ -190,21 +190,31 @@ const LandDetail = () => {
                                     <Typography variant='subtitle1'>Lịch sử chuyển nhượng</Typography>  {/* Lich su chuyen nhuong */}
                                 </Grid>
                                 <Grid item xs={8}>
-                                    {currentLand?.value.Transactions ?
-                                        currentLand.value.Transactions.map((transaction, index) => (
-                                            <Grid container key={index}>
-                                                <Grid item xs={4}>
-                                                    <Typography variant='subtitle1' sx={{ fontWeight: '500' }} component='span'>
-                                                        {Object.keys(transaction).toString()}
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid item xs={8}>
-                                                    <Typography variant='subtitle1' component='span'>
-                                                        {transaction[Object.keys(transaction)]}
-                                                    </Typography>
-                                                </Grid>
-                                            </Grid>
-                                        ))
+                                    {currentLand?.value.Transactions.length > 0 ?
+                                        <Table aria-label="simple table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell>Thời gian</TableCell>
+                                                    <TableCell>Nội dung</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {currentLand.value.Transactions.map((transaction, index) => (
+                                                    <TableRow key={index}>
+                                                        <TableCell component="th" scope="row">
+                                                            <Typography variant='subtitle1' sx={{ fontWeight: '500' }} component='span'>
+                                                                {Object.keys(transaction).toString()}
+                                                            </Typography>
+                                                        </TableCell>
+                                                        <TableCell >
+                                                            <Typography variant='subtitle1' component='span'>
+                                                                {transaction[Object.keys(transaction)]}
+                                                            </Typography>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
                                         : <Typography variant='subtitle1'>{'-/-'}</Typography>
                                     }
                                 </Grid>

@@ -25,7 +25,7 @@ const steps = [
 ];
 
 
-export default function CustomizedStepper({ values, setValues, handleSubmit, processing }) {
+export default function CustomizedTransferStepper({ values, setValues, handleSubmit, processing }) {
     const { lands } = React.useContext(AuthContext)
     const [currentLand, setCurrentLand] = React.useState(values.land)
     const [activeStep, setActiveStep] = React.useState(0)

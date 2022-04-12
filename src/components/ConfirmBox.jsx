@@ -27,8 +27,8 @@ const ConfirmBox = ({ message, handleConfirm }) => {
             >
                 <Typography variant='button' color='text.secondary'>Thông báo</Typography>
                 <Divider />
-                <Typography variant='subtitle1' sx={{ marginTop: 2 }}>{message}</Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}>
+                <Typography variant='subtitle1' sx={{ marginTop: 2, fontSize: 18 }}>{message}</Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 8 }}>
                     <Button variant='contained' color='info' onClick={handleConfirm} >OK</Button>
 
                 </Box>

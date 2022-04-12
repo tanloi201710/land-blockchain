@@ -7,6 +7,7 @@ import { Box, IconButton, Typography } from '@mui/material'
 import { Menu } from '@mui/icons-material'
 import SideBar from '../components/SideBar'
 import Container from '../components/Container'
+import Footer from '../components/Footer'
 
 const Home = () => {
     const { lands, user } = useContext(AuthContext)
@@ -61,6 +62,7 @@ const Home = () => {
                     </div>
                 }
             </Box>
+            <Footer />
         </Container>
     )
 }

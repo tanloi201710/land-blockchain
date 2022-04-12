@@ -1,13 +1,14 @@
 import React from 'react'
 import Container from '../components/Container'
 import NavBar from '../components/NavBar'
-import CustomizedStepper from '../components/CustomizedStepper'
-import { Box } from '@mui/material'
+import CustomizedTransferStepper from '../components/CustomizedTransferStepper'
+import { Box, Typography } from '@mui/material'
 import { transferLand, transferLandCo } from '../api'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../contexts/AuthContext'
 import { getHomePageData } from '../contexts/actions'
 import ConfirmBox from '../components/ConfirmBox'
+import Footer from '../components/Footer'
 
 const TransferLandForm = () => {
     const location = useLocation()
@@ -55,10 +56,11 @@ const TransferLandForm = () => {
             <NavBar />
             {message !== '' && <ConfirmBox message={message} handleConfirm={handleConfirm} />}
             <Box
-                sx={{ paddingX: 8, paddingY: 5, display: 'flex', justifyContent: 'center' }}
+                sx={{ paddingX: 8, paddingY: 5, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}
             >
-                <CustomizedStepper values={values} setValues={setValues} handleSubmit={handleSubmit} processing={processing} />
-
+                <Typography variant='h6' gutterBottom>Chuyển quyền sử dụng đất</Typography>
+                <CustomizedTransferStepper values={values} setValues={setValues} handleSubmit={handleSubmit} processing={processing} />
+                <Footer />
             </Box>
         </Container>
     )

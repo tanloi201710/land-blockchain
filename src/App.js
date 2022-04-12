@@ -13,6 +13,7 @@ import AddLandForm from './pages/AddLandForm'
 import TransferLandForm from './pages/TransferLandForm'
 import { getHomePageData } from './contexts/actions'
 import Waiting from './pages/Waiting'
+import UpdateLand from './pages/UpdateLand'
 
 function App() {
   const { user, setLands, setNotifyList } = useContext(AuthContext)
@@ -40,6 +41,8 @@ function App() {
         <Route path='/received' element={<Received />} />
         <Route path='/market' element={<Market />} />
         <Route path='/waiting' element={<Waiting />} />
+        <Route path='/updateLand/:id' element={<UpdateLand />} />
+
       </Routes>
     </Router>
   );

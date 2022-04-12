@@ -28,7 +28,8 @@ export default function CustomizedReceiveTables({ rows }) {
             const formData = {
                 key: row.key,
                 userIdFromTransfer: row.value.From,
-                amount: row.value.Money
+                amount: row.value.Money,
+                landKey: row.value.Land
             }
             setProcessing(true)
 
