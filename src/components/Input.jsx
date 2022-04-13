@@ -6,7 +6,7 @@ const Input = ({
     half, name, handleChange,
     label, autoFocus, autoComplete,
     type, handleShowPassword,
-    error, helperText, onBlur
+    error, helperText, onBlur, value
 }) => {
 
     return (
@@ -14,6 +14,7 @@ const Input = ({
             <TextField
                 name={name}
                 onChange={handleChange}
+                defaultValue={value}
                 variant="outlined"
                 required
                 fullWidth

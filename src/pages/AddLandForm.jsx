@@ -16,6 +16,7 @@ import { getHomePageData } from '../contexts/actions'
 
 import { hinhThucSuDung, hinhThucNhan, datNongNghiep, datPhiNongNghiep, nguonGoc } from '../data'
 import ConfirmBox from '../components/ConfirmBox'
+import AddLandCustom from '../components/AddLandCustom'
 
 const AddLandForm = () => {
 
@@ -55,17 +56,17 @@ const AddLandForm = () => {
 
     console.log(values, info)
 
-    const handleChange = (event) => {
-        setValues({ ...values, [event.target.name]: event.target.value })
-    }
+    // const handleChange = (event) => {
+    //     setValues({ ...values, [event.target.name]: event.target.value })
+    // }
 
-    const handleChangeSides = (event) => {
-        setValues({ ...values, doDaiCacCanh: { ...values.doDaiCacCanh, [event.target.name]: event.target.value } })
-    }
+    // const handleChangeSides = (event) => {
+    //     setValues({ ...values, doDaiCacCanh: { ...values.doDaiCacCanh, [event.target.name]: event.target.value } })
+    // }
 
-    const handleOpenAddForm = () => {
-        setIsAddFormOpen(true)
-    }
+    // const handleOpenAddForm = () => {
+    //     setIsAddFormOpen(true)
+    // }
 
     const handleCloseAddForm = () => {
         setIsAddFormOpen(false)
@@ -159,6 +160,10 @@ const AddLandForm = () => {
                 : null
             }
             <Box sx={{ paddingX: 8, paddingY: 5 }}>
+                <Typography variant='h5' gutterBottom>Đăng ký đất mới</Typography>
+                <AddLandCustom setIsAddFormOpen={setIsAddFormOpen} type={type} owners={owners} setOwners={setOwners} values={values} setValues={setValues} />
+            </Box>
+            {/* <Box sx={{ paddingX: 8, paddingY: 5 }}>
                 <Typography variant='h5' gutterBottom>Đăng ký đất mới</Typography>
                 <Typography variant='h6' >Chủ sở hữu</Typography>
                 <Box>
@@ -447,8 +452,8 @@ const AddLandForm = () => {
                                     </Stack>
                                 </>
                                 : <Stack direction="row" alignItems="center" spacing={2}>
-                                    <Typography variant="button" sx={{ color: blue[700] }}>Tải ảnh lên</Typography>
-                                    <label htmlFor="icon-button-file">
+                                    <label htmlFor="icon-button-file" >
+                                        <Typography variant="button" sx={{ color: blue[700] }}>Tải ảnh lên</Typography>
                                         <input
                                             type='file'
                                             accept="image/*"
@@ -470,7 +475,7 @@ const AddLandForm = () => {
 
                     </Box>
                 </Box>
-            </Box>
+            </Box> */}
 
             {isAddFormOpen && <AddOwnerForm handleClose={handleCloseAddForm} handleSubmit={handleAddNewOwner} />}
         </Container>
