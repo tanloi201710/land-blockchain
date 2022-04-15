@@ -1,11 +1,11 @@
 import { Close } from '@mui/icons-material'
-import { Box, Grid, IconButton, TextField } from '@mui/material'
+import { Box, Button, Grid, IconButton, MenuItem, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
+import { cap, congTrinh, hinhThucNhan } from '../data'
 
-const AddConstructionBox = ({ handleClose }) => {
+const AddConstructionBox = ({ handleClose, handleSubmit }) => {
     const initialConstruction = {
         loaiCongTrinh: '',
-        hangMuc: '',
         dienTichXayDung: '',
         dienTichSan: '',
         hinhThucSoHuu: '',
@@ -16,8 +16,15 @@ const AddConstructionBox = ({ handleClose }) => {
     const [construction, setConstruction] = useState(initialConstruction)
 
     const handleChange = (event) => {
-        setValues({ ...values, [event.target.name]: event.target.value })
+        setConstruction({ ...construction, [event.target.name]: event.target.value })
     }
+
+    const checkEmpty = (object) => {
+        return Object.values(object).some(value => value === '')
+    }
+
+    // console.log(checkEmpty(construction))
+
     return (
         <Box
             sx={{
@@ -35,7 +42,7 @@ const AddConstructionBox = ({ handleClose }) => {
         >
             <Box
                 sx={{
-                    width: 500,
+                    width: 600,
                     height: 450,
                     padding: 3,
                     borderRadius: 1,
@@ -59,26 +66,26 @@ const AddConstructionBox = ({ handleClose }) => {
                     <Grid item xs={12} >
                         <TextField
                             required
+                            select
+                            fullWidth
                             name='loaiCongTrinh'
-                            label='Loại(tên) công trình'
+                            label='Loại công trình'
                             value={construction.loaiCongTrinh}
                             onChange={handleChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            required
-                            name='hangMuc'
-                            label='Hạng mục công trình'
-                            value={construction.hangMuc}
-                            onChange={handleChange}
-                        />
+                        >
+                            {congTrinh.map((value, index) => (
+                                <MenuItem key={index} value={value}>
+                                    {value}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </Grid>
                     <Grid item xs={6}>
                         <TextField
                             required
+                            fullWidth
                             name='dienTichXayDung'
-                            label='Diện tích xây dựng'
+                            label='Diện tích xây dựng (m&#178;)'
                             value={construction.dienTichXayDung}
                             onChange={handleChange}
                         />
@@ -86,8 +93,9 @@ const AddConstructionBox = ({ handleClose }) => {
                     <Grid item xs={6}>
                         <TextField
                             required
+                            fullWidth
                             name='dienTichSan'
-                            label='Diện tích sàn'
+                            label='Diện tích sàn (m&#178;)'
                             value={construction.dienTichSan}
                             onChange={handleChange}
                         />
@@ -95,30 +103,54 @@ const AddConstructionBox = ({ handleClose }) => {
                     <Grid item xs={12}>
                         <TextField
                             required
+                            select
+                            fullWidth
                             name='hinhThucSoHuu'
                             label='Hình thức sỡ hữu'
                             value={construction.hinhThucSoHuu}
                             onChange={handleChange}
-                        />
+                        >
+                            {hinhThucNhan.map((value, index) => (
+                                <MenuItem key={index} value={value}>
+                                    {value}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </Grid>
                     <Grid item xs={6}>
                         <TextField
                             required
+                            select
+                            fullWidth
                             name='capCongTrinh'
                             label='Cấp công trình'
                             value={construction.capCongTrinh}
                             onChange={handleChange}
-                        />
+                        >
+                            {cap.map((value, index) => (
+                                <MenuItem key={index} value={value}>
+                                    {value}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </Grid>
                     <Grid item xs={6}>
                         <TextField
                             required
+                            fullWidth
+                            type='date'
                             name='thoiHanSoHuu'
                             label='Thời hạn sỡ hữu'
-                            value={construction.thoiHanSoHuu}
+                            InputLabelProps={{ shrink: true, required: true }}
+                            defaultValue={construction.thoiHanSoHuu}
                             onChange={handleChange}
                         />
 
+                    </Grid>
+                    <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button variant='contained' onClick={() => handleSubmit(construction)} disabled={checkEmpty(construction)}>
+                            Thêm
+                        </Button>
                     </Grid>
                 </Grid>
             </Box>

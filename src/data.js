@@ -65,3 +65,24 @@ export const nguonGoc = [
     'Thuê đất trả tiền một lần của doanh nghiệp đầu tư hạ tầng khu công nghiệp',
     'Thuê đất trả tiền hàng năm của doanh nghiệp đầu tư hạ tầng khu công nghiệp'
 ]
+
+export const nhaO = [
+    'Nhà ở riêng lẻ',
+    'Nhà ở chung cư'
+]
+
+export const cap = [
+    'Cấp I',
+    'Cấp II',
+    'Cấp III',
+    'Cấp IV',
+]
+
+export const congTrinh = [
+    'Công trình dân dụng',
+    'Công trình công nghiệp',
+    'Công trình giao thông',
+    'Công trình nông nghiệp và phát triển nông thôn',
+    'Công trình hạ tầng kỹ thuật',
+    'Công trình quốc phòng, an ninh'
+]

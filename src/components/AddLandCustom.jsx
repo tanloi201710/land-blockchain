@@ -3,10 +3,10 @@ import {
     Box, Stepper, Step, Typography,
     Tooltip, IconButton, Grid, TextField,
     ListSubheader, MenuItem, ImageList,
-    ImageListItem, Stack, Button, StepLabel, TableContainer, Paper, Table, TableHead, TableRow, TableBody
+    ImageListItem, Stack, Button, StepLabel, TableContainer, Paper, Table, TableHead, TableRow, TableBody, CircularProgress
 } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { Add, ArrowBack, ArrowForward, Autorenew, CheckCircle, PhotoCamera, Remove } from '@mui/icons-material'
+import { Add, ArrowBack, ArrowForward, Autorenew, CheckCircle, Clear, PhotoCamera, Remove } from '@mui/icons-material'
 import { blue } from '@mui/material/colors'
 
 
@@ -228,10 +228,7 @@ const BasicInfo = ({ handleChange, values }) => {
     )
 }
 
-const InfoLocate = ({ values, setValues, handleChangeSides }) => {
-
-    const [landCount, setLandCount] = useState(Object.values(values.cacSoThuaGiapRanh).length || 0)
-    const [sideCount, setSideCount] = useState(Object.values(values.toaDoCacDinh).length || 0)
+const InfoLocate = ({ values, setValues, handleChangeSides, landCount, setLandCount, sideCount, setSideCount }) => {
 
     return (
         <Box sx={{ width: 1000 }}>
@@ -307,7 +304,7 @@ const InfoLocate = ({ values, setValues, handleChangeSides }) => {
     )
 }
 
-const HouseAndConstruction = ({ values }) => {
+const HouseAndConstruction = ({ values, setValues, setIsAddConstructionBox, setIsAddHouseBox }) => {
     return (
         <Box sx={{ width: 1000 }}>
             <Box>
@@ -319,10 +316,12 @@ const HouseAndConstruction = ({ values }) => {
                                 <TableRow>
                                     <StyledTableCell>STT</StyledTableCell>
                                     <StyledTableCell>Loại nhà ở</StyledTableCell>
+                                    <StyledTableCell>Diện tích xây dựng</StyledTableCell>
                                     <StyledTableCell>Diện tích sàn</StyledTableCell>
                                     <StyledTableCell>Hình thức sỡ hữu</StyledTableCell>
                                     <StyledTableCell>Cấp(hạng) nhà ở</StyledTableCell>
                                     <StyledTableCell>Thời hạn sỡ hữu</StyledTableCell>
+                                    <StyledTableCell></StyledTableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -332,10 +331,16 @@ const HouseAndConstruction = ({ values }) => {
                                             {index + 1}
                                         </StyledTableCell>
                                         <StyledTableCell align="right">{value.loaiNhaO}</StyledTableCell>
+                                        <StyledTableCell align="right">{value.dienTichXayDung}</StyledTableCell>
                                         <StyledTableCell align="right">{value.dienTichSan}</StyledTableCell>
                                         <StyledTableCell align="right">{value.hinhThucSoHuu}</StyledTableCell>
                                         <StyledTableCell align="right">{value.capNhaO}</StyledTableCell>
                                         <StyledTableCell align="right">{value.thoiHanSoHuu}</StyledTableCell>
+                                        <StyledTableCell align="center">
+                                            <IconButton onClick={() => setValues({ ...values, nhaO: values.nhaO.filter((value, id) => id !== index) })}>
+                                                <Clear color='error' />
+                                            </IconButton>
+                                        </StyledTableCell>
                                     </StyledTableRow>
                                 ))}
                             </TableBody>
@@ -352,7 +357,7 @@ const HouseAndConstruction = ({ values }) => {
                         <IconButton
                             disableRipple
                             sx={{ backgroundColor: '#424242' }}
-                        // onClick={() => setIsAddFormOpen(true)}
+                            onClick={() => setIsAddHouseBox(true)}
                         >
                             <Add sx={{ color: 'white' }} />
                         </IconButton>
@@ -368,12 +373,12 @@ const HouseAndConstruction = ({ values }) => {
                                 <TableRow>
                                     <StyledTableCell>STT</StyledTableCell>
                                     <StyledTableCell>Loại công trình</StyledTableCell>
-                                    <StyledTableCell>Hạng mục công trình</StyledTableCell>
                                     <StyledTableCell>Diện tích xây dựng(m2)</StyledTableCell>
                                     <StyledTableCell>Diện tích sàn(m2)</StyledTableCell>
                                     <StyledTableCell>Hình thức sỡ hữu</StyledTableCell>
                                     <StyledTableCell>Cấp công trình</StyledTableCell>
                                     <StyledTableCell>Thời hạn sỡ hữu</StyledTableCell>
+                                    <StyledTableCell></StyledTableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -383,12 +388,16 @@ const HouseAndConstruction = ({ values }) => {
                                             {index + 1}
                                         </StyledTableCell>
                                         <StyledTableCell align="right">{value.loaiCongTrinh}</StyledTableCell>
-                                        <StyledTableCell align="right">{value.hangMuc}</StyledTableCell>
                                         <StyledTableCell align="right">{value.dienTichXayDung}</StyledTableCell>
                                         <StyledTableCell align="right">{value.dienTichSan}</StyledTableCell>
                                         <StyledTableCell align="right">{value.hinhThucSoHuu}</StyledTableCell>
                                         <StyledTableCell align="right">{value.capCongTrinh}</StyledTableCell>
                                         <StyledTableCell align="right">{value.thoiHanSoHuu}</StyledTableCell>
+                                        <StyledTableCell align="center">
+                                            <IconButton onClick={() => setValues({ ...values, congTrinhKhac: values.congTrinhKhac.filter((value, id) => id !== index) })}>
+                                                <Clear color='error' />
+                                            </IconButton>
+                                        </StyledTableCell>
                                     </StyledTableRow>
                                 ))}
                             </TableBody>
@@ -405,7 +414,7 @@ const HouseAndConstruction = ({ values }) => {
                         <IconButton
                             disableRipple
                             sx={{ backgroundColor: '#424242' }}
-                        // onClick={() => setIsAddFormOpen(true)}
+                            onClick={() => setIsAddConstructionBox(true)}
                         >
                             <Add sx={{ color: 'white' }} />
                         </IconButton>
@@ -475,7 +484,13 @@ const GetImage = ({ files, setFiles }) => {
     )
 }
 
-const getDisplayComponent = (index, values, setValues, files, setFiles, owners, setOwners, setIsAddFormOpen, type, handleChange, handleChangeSides) => {
+const getDisplayComponent = (
+    index, values, setValues, files,
+    setFiles, owners, setOwners,
+    setIsAddFormOpen, setIsAddConstructionBox,
+    setIsAddHouseBox, type, handleChange, handleChangeSides,
+    landCount, setLandCount, sideCount, setSideCount
+) => {
     switch (index) {
         case 0:
             return <Owners owners={owners} setOwners={setOwners} type={type} setIsAddFormOpen={setIsAddFormOpen} />
@@ -484,10 +499,10 @@ const getDisplayComponent = (index, values, setValues, files, setFiles, owners, 
             return <BasicInfo values={values} handleChange={handleChange} />
 
         case 2:
-            return <InfoLocate values={values} setValues={setValues} handleChangeSides={handleChangeSides} />
+            return <InfoLocate values={values} setValues={setValues} landCount={landCount} setLandCount={setLandCount} sideCount={sideCount} setSideCount={setSideCount} handleChangeSides={handleChangeSides} />
 
         case 3:
-            return <HouseAndConstruction values={values} />
+            return <HouseAndConstruction values={values} setValues={setValues} setIsAddConstructionBox={setIsAddConstructionBox} setIsAddHouseBox={setIsAddHouseBox} />
 
         case 4:
             return <GetImage files={files} setFiles={setFiles} />
@@ -497,19 +512,27 @@ const getDisplayComponent = (index, values, setValues, files, setFiles, owners, 
     }
 }
 
-const AddLandCustom = ({ setIsAddFormOpen, type, owners, setOwners, values, setValues }) => {
+const AddLandCustom = ({
+    setIsAddFormOpen,
+    setIsAddConstructionBox,
+    setIsAddHouseBox,
+    type,
+    owners,
+    setOwners,
+    values,
+    setValues,
+    files,
+    setFiles,
+    handleSubmit,
+    isRegisting
+}) => {
 
-    // const { user } = useContext(AuthContext)
     const theme = createTheme();
 
-    const [files, setFiles] = useState([])
-
-    // const [isRegisting, setIsRegisting] = useState(false)
-
-    // const [info, setInfo] = useState('')
-    // const [error, setError] = useState('')
-
     const [activeStep, setActiveStep] = React.useState(0)
+
+    const [landCount, setLandCount] = useState(Object.values(values.cacSoThuaGiapRanh).length || 0)
+    const [sideCount, setSideCount] = useState(Object.values(values.toaDoCacDinh).length || 0)
 
     const handleChange = (event) => {
         setValues({ ...values, [event.target.name]: event.target.value })
@@ -519,10 +542,6 @@ const AddLandCustom = ({ setIsAddFormOpen, type, owners, setOwners, values, setV
         setValues({ ...values, doDaiCacCanh: { ...values.doDaiCacCanh, [event.target.name]: event.target.value } })
     }
 
-    // const handleAddNewOwner = (owner) => {
-    //     setOwners([...owners, owner])
-    // }
-
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1)
     }
@@ -531,9 +550,24 @@ const AddLandCustom = ({ setIsAddFormOpen, type, owners, setOwners, values, setV
         setActiveStep((prevActiveStep) => prevActiveStep - 1)
     }
 
-    // const handleReset = () => {
-    //     setActiveStep(0);
-    // }
+    const handleReset = () => {
+        setActiveStep(0)
+    }
+
+    const checkToNextStep = () => {
+        switch (activeStep) {
+            case 1:
+                return values.thuaDatSo !== '' && values.toBanDoSo !== '' && values.dienTich !== '' && values.diaChi !== ''
+                    && values.hinhThucSuDung !== '' && values.thoiHanSuDung !== '' && values.mucDichSuDung !== ''
+                    && values.nguonGoc !== ''
+            case 2:
+                return (Object.values(values.toaDoCacDinh).length !== 0 && Object.values(values.toaDoCacDinh).length === parseInt(sideCount, 10))
+                    && (Object.values(values.doDaiCacCanh).length !== 0 && Object.values(values.doDaiCacCanh).length === parseInt(sideCount, 10))
+                    && (Object.values(values.cacSoThuaGiapRanh).length !== 0 && Object.values(values.cacSoThuaGiapRanh).length === parseInt(landCount, 10))
+            default:
+                return true
+        }
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -554,28 +588,47 @@ const AddLandCustom = ({ setIsAddFormOpen, type, owners, setOwners, values, setV
                             </Step>
                         ))}
                     </Stepper>
-                    <Box>
-                        {getDisplayComponent(activeStep, values, setValues, files, setFiles, owners, setOwners, setIsAddFormOpen, type, handleChange, handleChangeSides)}
-                        <Box sx={{ mb: 2, mt: 4, display: 'flex', justifyContent: 'flex-end' }}>
-                            <div>
-                                <Button
-                                    disabled={activeStep === 0}
-                                    onClick={handleBack}
-                                    sx={{ mt: 1, mr: 1 }}
-                                >
-                                    Quay lại
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    onClick={handleNext}
-                                    sx={{ mt: 1, mr: 1 }}
-                                >
-                                    {activeStep === steps.length - 1 ? 'Hoàn Thành' : 'Tiếp tục'}
-                                </Button>
+                    {activeStep < steps.length ?
+                        <Box>
+                            {getDisplayComponent(activeStep, values, setValues,
+                                files, setFiles, owners, setOwners, landCount, setLandCount,
+                                sideCount, setSideCount, setIsAddFormOpen,
+                                setIsAddConstructionBox, setIsAddHouseBox, type,
+                                handleChange, handleChangeSides
+                            )}
+                            <Box sx={{ mb: 2, mt: 4, display: 'flex', justifyContent: 'flex-end' }}>
+                                <div>
+                                    <Button
+                                        disabled={activeStep === 0}
+                                        onClick={handleBack}
+                                        sx={{ mt: 1, mr: 1 }}
+                                    >
+                                        Quay lại
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={handleNext}
+                                        sx={{ mt: 1, mr: 1 }}
+                                    >
+                                        {activeStep === steps.length - 1 ? 'Hoàn Thành' : 'Tiếp tục'}
+                                    </Button>
 
-                            </div>
+                                </div>
+                            </Box>
                         </Box>
-                    </Box>
+                        :
+                        <Paper elevation={3} sx={{ p: 3 }}>
+                            <Typography variant='button'>Xác nhận đăng ký đất mới</Typography>
+                            <Box sx={{ mt: 2 }}>
+                                <Button onClick={handleSubmit} sx={{ mt: 1, mr: 1 }} variant='contained' disabled={!checkToNextStep}>
+                                    {isRegisting ? <CircularProgress size={20} color='inherit' /> : 'Xác nhận'}
+                                </Button>
+                                <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }} variant='outlined'>
+                                    Nhập lại
+                                </Button>
+                            </Box>
+                        </Paper>
+                    }
                 </Box>
             </Box>
         </ThemeProvider>

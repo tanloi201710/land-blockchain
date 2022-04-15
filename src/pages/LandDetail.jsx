@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { Box, Divider, Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
@@ -8,6 +8,8 @@ import { ArrowBack } from '@mui/icons-material'
 import { AuthContext } from '../contexts/AuthContext'
 import { getUser } from '../firebase/search'
 import DisplayOwner from '../components/DisplayOwner'
+import StyledTableCell from '../components/StyledTableCell'
+import StyledTableRow from '../components/StyledTableRow'
 
 const LandDetail = () => {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
@@ -247,77 +249,75 @@ const LandDetail = () => {
 
                         </Box>
                         <Typography variant='h6' gutterBottom>Nhà ở</Typography>
-                        {currentLand?.value.NhaO !== "" ?
+                        {currentLand?.value.NhaO.length > 0 ?
+                            <TableContainer component={Paper}>
+                                <Table sx={{ minWidth: 1000 }}>
+                                    <TableHead>
+                                        <TableRow>
+                                            <StyledTableCell>STT</StyledTableCell>
+                                            <StyledTableCell>Loại nhà ở</StyledTableCell>
+                                            <StyledTableCell>Diện tích xây dựng</StyledTableCell>
+                                            <StyledTableCell>Diện tích sàn</StyledTableCell>
+                                            <StyledTableCell>Hình thức sỡ hữu</StyledTableCell>
+                                            <StyledTableCell>Cấp(hạng) nhà ở</StyledTableCell>
+                                            <StyledTableCell>Thời hạn sỡ hữu</StyledTableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {currentLand?.value.NhaO.map((value, index) => (
+                                            <StyledTableRow key={index}>
+                                                <StyledTableCell component='th' scope='row'>
+                                                    {index + 1}
+                                                </StyledTableCell>
+                                                <StyledTableCell align="right">{value.loaiNhaO}</StyledTableCell>
+                                                <StyledTableCell align="right">{value.dienTichXayDung}</StyledTableCell>
+                                                <StyledTableCell align="right">{value.dienTichSan}</StyledTableCell>
+                                                <StyledTableCell align="right">{value.hinhThucSoHuu}</StyledTableCell>
+                                                <StyledTableCell align="right">{value.capNhaO}</StyledTableCell>
+                                                <StyledTableCell align="right">{value.thoiHanSoHuu}</StyledTableCell>
 
-                            <Box sx={{ paddingX: 5 }}>
-                                <Grid container>
-                                    <Grid item xs={4}>
-                                        <Typography variant='subtitle1'>Loại nhà ở</Typography>   {/* Loai nha o */}
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        <Typography variant='subtitle1'>{'Nhà ở riêng lẻ'}</Typography>
-                                    </Grid>
-                                </Grid>
+                                            </StyledTableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
 
-                                <Divider />
 
-                                <Grid container>
-                                    <Grid item xs={4}>
-                                        <Typography variant='subtitle1'>Diện tích xây dựng</Typography>   {/* Dien tich xay dung */}
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        <Typography variant='subtitle1'>{'1000 m2'}</Typography>
-                                    </Grid>
-                                </Grid>
-
-                                <Divider />
-
-                                <Grid container>
-                                    <Grid item xs={4}>
-                                        <Typography variant='subtitle1'>Hình thức sở hữu</Typography>   {/* Hinh thuc so huu */}
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        <Typography variant='subtitle1'>{'Sỡ hữu riêng'}</Typography>
-                                    </Grid>
-                                </Grid>
-                            </Box>
                             : "-/-"
                         }
 
                         <Typography variant='h6' gutterBottom>Công trình xây dựng khác</Typography>
-                        {currentLand?.value.CongTrinhKhac !== "" ?
-                            <Box sx={{ paddingX: 5 }}>
-                                <Grid container>
-                                    <Grid item xs={4}>
-                                        <Typography variant='subtitle1'>Loại công trình</Typography>   {/* Loai nha o */}
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        <Typography variant='subtitle1'>{'-'}</Typography>
-                                    </Grid>
-                                </Grid>
-
-                                <Divider />
-
-                                <Grid container>
-                                    <Grid item xs={4}>
-                                        <Typography variant='subtitle1'>Diện tích xây dựng</Typography>   {/* Dien tich xay dung */}
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        <Typography variant='subtitle1'>{'-'}</Typography>
-                                    </Grid>
-                                </Grid>
-
-                                <Divider />
-
-                                <Grid container>
-                                    <Grid item xs={4}>
-                                        <Typography variant='subtitle1'>Hình thức sở hữu</Typography>   {/* Hinh thuc so huu */}
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        <Typography variant='subtitle1'>{'-'}</Typography>
-                                    </Grid>
-                                </Grid>
-                            </Box>
+                        {currentLand?.value.CongTrinhKhac.length > 0 ?
+                            <TableContainer component={Paper}>
+                                <Table sx={{ minWidth: 1000 }}>
+                                    <TableHead>
+                                        <TableRow>
+                                            <StyledTableCell>STT</StyledTableCell>
+                                            <StyledTableCell>Loại công trình</StyledTableCell>
+                                            <StyledTableCell>Diện tích xây dựng(m2)</StyledTableCell>
+                                            <StyledTableCell>Diện tích sàn(m2)</StyledTableCell>
+                                            <StyledTableCell>Hình thức sỡ hữu</StyledTableCell>
+                                            <StyledTableCell>Cấp công trình</StyledTableCell>
+                                            <StyledTableCell>Thời hạn sỡ hữu</StyledTableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {currentLand?.value.CongTrinhKhac.map((value, index) => (
+                                            <StyledTableRow key={index}>
+                                                <StyledTableCell component='th' scope='row'>
+                                                    {index + 1}
+                                                </StyledTableCell>
+                                                <StyledTableCell align="right">{value.loaiCongTrinh}</StyledTableCell>
+                                                <StyledTableCell align="right">{value.dienTichXayDung}</StyledTableCell>
+                                                <StyledTableCell align="right">{value.dienTichSan}</StyledTableCell>
+                                                <StyledTableCell align="right">{value.hinhThucSoHuu}</StyledTableCell>
+                                                <StyledTableCell align="right">{value.capCongTrinh}</StyledTableCell>
+                                                <StyledTableCell align="right">{value.thoiHanSoHuu}</StyledTableCell>
+                                            </StyledTableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                             : "-/-"
                         }
                     </Grid>
