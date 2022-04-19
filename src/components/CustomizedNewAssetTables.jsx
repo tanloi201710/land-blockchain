@@ -53,7 +53,7 @@ export default function CustomizedNewAssetTables({ rows, setMessage, setError })
                 <TableBody>
                     {rows.map((row) => (
                         <StyledTableRow key={row.key}>
-                            <StyledTableCell component="th" scope="row">
+                            <StyledTableCell component="th" scope="row" sx={{ fontWeight: 500 }}>
                                 {row.key}
                             </StyledTableCell>
                             <StyledTableCell align="right">{row.value.ThoiGianDangKy}</StyledTableCell>

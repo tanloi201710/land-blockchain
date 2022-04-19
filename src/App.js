@@ -14,6 +14,8 @@ import TransferLandForm from './pages/TransferLandForm'
 import { getHomePageData } from './contexts/actions'
 import Waiting from './pages/Waiting'
 import UpdateLand from './pages/UpdateLand'
+import SplitLand from './pages/SplitLand'
+import SplitRequest from './pages/SplitRequest'
 
 function App() {
   const { user, setLands, setNotifyList } = useContext(AuthContext)
@@ -42,6 +44,8 @@ function App() {
         <Route path='/market' element={<Market />} />
         <Route path='/waiting' element={<Waiting />} />
         <Route path='/updateLand/:id' element={<UpdateLand />} />
+        <Route path='/splitLand' element={<SplitLand />} />
+        <Route path='/splitRequest' element={<SplitRequest />} />
 
       </Routes>
     </Router>

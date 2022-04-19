@@ -56,7 +56,21 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
 
         return (
             <Button variant='contained' color='success' onClick={handleConfirm} disabled={() => handleDisableConfirm(row)}>
-                {processing ? <CircularProgress size={25} color='inherit' /> : 'Nhận'}
+                {processing ? <CircularProgress size={25} color='inherit' /> : 'Xác Nhận'}
+            </Button>
+        )
+    }
+
+    const ProcessButton = ({ row }) => {
+
+        const handleClick = () => {
+            handleOpenDataProcesed(row.value.Land, row.value.DataProcessed, row.value)
+        }
+
+
+        return (
+            <Button variant='contained' color='info' onClick={handleClick} disabled={row.value.ConfirmFromAdmin}>
+                Xử lý
             </Button>
         )
     }
@@ -80,7 +94,7 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
                 <TableBody>
                     {rows.map((row) => (
                         <StyledTableRow key={row.key}>
-                            <StyledTableCell component="th" scope="row">
+                            <StyledTableCell component="th" scope="row" sx={{ fontWeight: 500 }}>
                                 {row.key}
                             </StyledTableCell>
 
@@ -93,7 +107,7 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
                             </StyledTableCell>
 
                             <StyledTableCell align="right">
-                                {`[${row.value.AreaOfLands.join(', ')}]`}
+                                {`[${row.value.AreaOfLands}]`}
                             </StyledTableCell>
 
                             <StyledTableCell align="right">
@@ -101,7 +115,7 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
                             </StyledTableCell>
 
                             <StyledTableCell align="right">
-                                <Button variant='outlined' onClick={() => handleOpenDataProcesed(row.value.DataProcesed)}>Xem</Button>
+                                <Button variant='outlined' disabled={getStatus(row.value) !== 'Chưa xử lý' ? false : true} onClick={() => handleOpenDataProcesed(row.value.DataProcesed)}>Xem</Button>
                             </StyledTableCell>
 
                             <StyledTableCell align="right">
@@ -109,7 +123,11 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
                             </StyledTableCell>
 
                             <StyledTableCell align="right">
-                                <ConfirmButton row={row} />
+                                {user.role === 'user' ?
+                                    <ConfirmButton row={row} />
+                                    :
+                                    <ProcessButton row={row} />
+                                }
                                 {/* <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
                                 
                             </Box> */}

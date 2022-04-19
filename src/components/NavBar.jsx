@@ -231,7 +231,7 @@ const NavBar = () => {
                                 <MenuItem onClick={handleCloseRegistersMenu} disableRipple>
                                     Chỉnh sửa thông tin đất
                                 </MenuItem>
-                                <MenuItem onClick={handleCloseRegistersMenu} disableRipple>
+                                <MenuItem onClick={() => navigate('/splitLand')} disableRipple>
                                     Tách thửa đất
                                 </MenuItem>
 
@@ -247,6 +247,12 @@ const NavBar = () => {
                                 style={{ textDecoration: 'none' }}
                             >
                                 <Typography variant="button" className={location.pathname === '/received' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Đất nhận</Typography>
+                            </Link>
+                            <Link
+                                to={'/splitRequest'}
+                                style={{ textDecoration: 'none' }}
+                            >
+                                <Typography variant="button" className={location.pathname === '/splitRequest' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Tách thửa</Typography>
                             </Link>
                             <Link
                                 to={'/market'}

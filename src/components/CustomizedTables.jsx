@@ -51,7 +51,7 @@ export default function CustomizedTables({ rows, user }) {
                                     </Tooltip>
                                     <Tooltip title='Tách thửa'>
                                         <span>
-                                            <IconButton color='warning' disabled={disabledAction(row)}>
+                                            <IconButton color='warning' disabled={disabledAction(row)} onClick={() => navigate('/splitLand', { state: row })}>
                                                 <Flip color={disabledAction(row) ? 'inherit' : 'warning'} />
                                             </IconButton>
 

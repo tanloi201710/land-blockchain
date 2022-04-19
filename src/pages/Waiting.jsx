@@ -9,7 +9,9 @@ import { AuthContext } from '../contexts/AuthContext'
 import { getHomePageData } from '../contexts/actions'
 import BasicAlerts from '../components/Alert'
 import TransferRequests from '../components/TransferRequests'
-import { getTransfersAdmin } from '../api'
+import { getSplitRequestAdmin, getTransfersAdmin } from '../api'
+import CustomizedSplitRequestTables from '../components/CustomizedSplitRequestTables'
+import ProcessedDataBox from '../components/ProcessedDataBox'
 
 const Waiting = () => {
     const { lands, user, setLands, setNotifyList } = React.useContext(AuthContext)
@@ -19,6 +21,12 @@ const Waiting = () => {
     const [message, setMessage] = React.useState('')
     const [error, setError] = React.useState('')
     const [allTransfer, setAllTransfer] = React.useState([])
+    const [allSplitRequest, setAllSplitRequest] = React.useState([])
+    const [processedData, setProcessedData] = React.useState([])
+
+    const [splitKeyLand, setSplitKeyLand] = React.useState('')
+    const [splitRequestUsed, setSplitRequestUsed] = React.useState({})
+    const [openProcessBox, setOpenProcessBox] = React.useState(false)
 
     React.useEffect(() => {
         (async () => {
@@ -27,10 +35,17 @@ const Waiting = () => {
             if (!result.data.error) {
                 setAllTransfer(result.data.allTransfer)
             }
+
+            const result1 = await getSplitRequestAdmin()
+
+            if (!result1.data.error) {
+                setAllSplitRequest(result1.data.splitRequest)
+            }
         })()
     }, [])
 
     console.log(allTransfer)
+    console.log(processedData)
 
     const handleSelectTab = (event, index) => {
         setselectedTab(index)
@@ -41,6 +56,13 @@ const Waiting = () => {
         setMessage('')
     }
 
+    const handleOpenDataProcesed = (keyLand, data, row) => {
+        setOpenProcessBox(true)
+        setSplitKeyLand(keyLand)
+        setProcessedData(data)
+        setSplitRequestUsed(row)
+    }
+
     const getTabContent = () => {
         switch (selectedTab) {
             case 0:
@@ -48,6 +70,9 @@ const Waiting = () => {
 
             case 1:
                 return <TransferRequests rows={allTransfer} setMessage={setMessage} setError={setError} />
+
+            case 2:
+                return <CustomizedSplitRequestTables rows={allSplitRequest} setMessage={setMessage} setError={setError} handleOpenDataProcesed={handleOpenDataProcesed} />
 
             default:
                 return null
@@ -106,6 +131,15 @@ const Waiting = () => {
                     {getTabContent()}
                 </Box>
             </Box>
+
+            {openProcessBox
+                && <ProcessedDataBox
+                    keyLand={splitKeyLand}
+                    data={processedData}
+                    requestData={splitRequestUsed}
+                    handleClose={() => setOpenProcessBox(false)}
+                />
+            }
         </Container>
     )
 }

@@ -226,6 +226,17 @@ const LandDetail = () => {
 
                             <Grid container>
                                 <Grid item xs={4}>
+                                    <Typography variant='subtitle1'>Các thửa giáp ranh</Typography>   {/* Cac so thua giap ranh */}
+                                </Grid>
+                                <Grid item xs={8}>
+                                    <Typography variant='subtitle1'>{currentLand?.value.CacSoThuaGiapRanh.split(',').join(', ')}</Typography>
+                                </Grid>
+                            </Grid>
+
+                            <Divider />
+
+                            <Grid container>
+                                <Grid item xs={4}>
                                     <Typography variant='subtitle1'>Thông số đỉnh - cạnh</Typography>         {/* Toa do cac dinh */}
                                 </Grid>
                                 <Grid item xs={8}>

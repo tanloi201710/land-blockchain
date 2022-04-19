@@ -14,7 +14,7 @@ const SplitRequest = () => {
     const [error, setError] = React.useState('')
     const [processedData, setProcessedData] = React.useState([])
 
-    useEffect(() => {
+    React.useEffect(() => {
         (async () => {
             const result = await getSplitRequest()
             if (result.data.error) {
@@ -47,7 +47,7 @@ const SplitRequest = () => {
             >
                 <CustomizedSplitRequestTables rows={rows} setMessage={setMessage} setError={setError} handleOpenDataProcesed={handleOpenDataProcesed} />
             </Box>
-            {processedData.length > 0 && <ProcessedDataBox />}
+            {processedData.length > 0 && <ProcessedDataBox data={processedData} />}
         </Container>
     )
 }
