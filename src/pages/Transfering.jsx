@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { getSendLand } from '../api'
 import Container from '../components/Container'
 import CustomizedTransferTables from '../components/CustomizedTransferTables'
@@ -7,8 +7,12 @@ import ConfirmBox from '../components/ConfirmBox'
 // import CustomizedTables from '../components/CustomizedTables'
 import NavBar from '../components/NavBar'
 import BasicAlerts from '../components/Alert'
+import { getHomePageData } from '../contexts/actions'
+import { AuthContext } from '../contexts/AuthContext'
 
 const Transfering = () => {
+
+    const { user, setLands, setNotifyList } = useContext(AuthContext)
 
     const [rows, setRows] = useState([])
     const [message, setMessage] = useState('')
@@ -27,19 +31,19 @@ const Transfering = () => {
     }, [])
 
     console.log(rows)
-    const handleCloseConfirm = () => {
+    const handleCloseConfirm = async () => {
         // refetch data before closing the confirm box
-        (async () => {
-            const result = await getSendLand()
-            if (result.data.error) {
-                console.log(result.data.error)
-                setError(result.data.message)
-                return
-            }
-            setRows(result.data.trans)
-        })()
+        const result = await getSendLand()
+        if (result.data.error) {
+            console.log(result.data.error)
+            setError(result.data.message)
+            return
+        }
+        setRows(result.data.trans)
 
         setMessage('')
+
+        await getHomePageData(user?.role, setLands, setNotifyList)
     }
 
     return (

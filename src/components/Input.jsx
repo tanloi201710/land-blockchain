@@ -6,7 +6,8 @@ const Input = ({
     half, name, handleChange,
     label, autoFocus, autoComplete,
     type, handleShowPassword,
-    error, helperText, onBlur, value
+    error, helperText, onBlur, value,
+    disabled
 }) => {
 
     return (
@@ -18,6 +19,7 @@ const Input = ({
                 variant="outlined"
                 required
                 fullWidth
+                disabled={disabled}
                 label={label}
                 autoFocus={autoFocus}
                 autoComplete={autoComplete}

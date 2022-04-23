@@ -1,10 +1,160 @@
 import { Close } from '@mui/icons-material'
-import { Box, Grid, IconButton, TextField, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Grid, IconButton, TextField, Typography } from '@mui/material'
 import React from 'react'
+import { confirmSplitAdmin } from '../api'
 import { AuthContext } from '../contexts/AuthContext'
 import Input from './Input'
 
-const ProcessedDataBox = ({ keyLand, data, requestData = {}, handleClose }) => {
+
+const ContiguousLand = ({ isUser, data, index, item, dataEdit, setDataEdit, setCheckContiguous }) => {
+    const [landCount, setLandCount] = React.useState(data[index]?.ChieuDaiCacCanh ? Object.values(data[index].ChieuDaiCacCanh).length : 0)
+
+    React.useEffect(() => {
+
+        setCheckContiguous(
+            Object.values(dataEdit[index].CacSoThuaGiapRanh).length !== 0
+            && Object.values(dataEdit[index].CacSoThuaGiapRanh).length === parseInt(landCount, 10)
+            && Object.values(dataEdit[index].CacSoThuaGiapRanh).every(item => item !== '')
+        )
+
+    }, [landCount, dataEdit, index, setCheckContiguous])
+
+    // console.log(
+    //     Object.values(dataEdit[index].CacSoThuaGiapRanh).length !== 0
+    //     , Object.values(dataEdit[index].CacSoThuaGiapRanh).length === parseInt(landCount, 10)
+    //     , Object.values(dataEdit[index].CacSoThuaGiapRanh).every(item => item !== '')
+    // )
+
+    return (
+        <React.Fragment>
+            <Input
+                disabled={isUser()}
+                label='Tổng số thửa giáp ranh'
+                name='tongSoThua'
+                type='number'
+                value={landCount}
+                handleChange={(e) => setLandCount(e.target.value)}
+            />
+
+            {
+                [...Array(parseInt(landCount || '0', 10))].map((land, id) => (
+                    <Grid item xs={6} key={id} >
+                        <TextField
+                            required
+                            disabled={isUser()}
+                            name={`l${id + 1}`}
+                            label={`Số thửa thứ ${id + 1}`}
+                            value={item?.CacSoThuaGiapRanh[id] || ''}
+                            onChange={(event) => setDataEdit(dataEdit.map((item, idx) => {
+                                if (idx === index) {
+                                    const currentCpy = item
+                                    currentCpy.CacSoThuaGiapRanh[id] = event.target.value
+                                    return currentCpy
+                                }
+                                return item
+                            }))}
+                        />
+                    </Grid>
+                ))
+            }
+        </React.Fragment>
+    )
+}
+
+
+const Coordinates = ({ isUser, dataEdit, setDataEdit, data, index, item, setCheckCoordinates }) => {
+
+    const [sideCount, setSideCount] = React.useState(data[index]?.ChieuDaiCacCanh ? Object.values(data[index].ChieuDaiCacCanh).length : 0)
+
+    React.useEffect(() => {
+        setCheckCoordinates(
+            ((Object.values(dataEdit[index].ToaDoCacDinh).length !== 0 && Object.values(dataEdit[index].ToaDoCacDinh).length === parseInt(sideCount, 10))
+                && (Object.values(dataEdit[index].ChieuDaiCacCanh).length !== 0 && Object.values(dataEdit[index].ChieuDaiCacCanh).length === parseInt(sideCount, 10)))
+        )
+    }, [sideCount, dataEdit, index, setCheckCoordinates])
+
+    return (
+        <React.Fragment>
+            <Input
+                disabled={isUser()}
+                label='Tổng số đỉnh'
+                name='tongSoDinh'
+                type='number'
+                value={sideCount}
+                handleChange={(e) => setSideCount(e.target.value)}
+            />
+
+            {
+                [...Array(parseInt(sideCount || '0', 10))].map((side, id) => (
+                    <React.Fragment key={id}>
+                        <Typography sx={{ width: '100%', paddingLeft: '1rem', paddingTop: '1rem' }}>Đỉnh {id + 1}</Typography>
+                        <Grid item xs={6} sm={6}>
+                            <TextField
+                                required
+                                fullWidth
+                                disabled={isUser()}
+                                name='DX'
+                                label='Tọa độ X'
+                                value={item?.ToaDoCacDinh[id + 1]?.X || ""}
+                                onChange={(event) => setDataEdit(dataEdit.map((item, idx) => {
+                                    if (idx === index) {
+                                        const currentCpy = item
+                                        currentCpy.ToaDoCacDinh[id + 1] = { ...currentCpy.ToaDoCacDinh[id + 1], X: event.target.value }
+                                        return currentCpy
+                                    }
+
+                                    return item
+                                }))}
+                            />
+                        </Grid>
+                        <Grid item xs={6} sm={6}>
+                            <TextField
+                                required
+                                fullWidth
+                                disabled={isUser()}
+                                name='DY'
+                                label='Tọa độ Y'
+                                value={item?.ToaDoCacDinh[id + 1]?.Y || ""}
+                                onChange={(event) => setDataEdit(dataEdit.map((item, idx) => {
+                                    if (idx === index) {
+                                        const currentCpy = item
+                                        currentCpy.ToaDoCacDinh[id + 1] = { ...currentCpy.ToaDoCacDinh[id + 1], Y: event.target.value }
+                                        return currentCpy
+                                    }
+
+                                    return item
+                                }))}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={12}>
+                            <Input
+                                required
+                                disabled={isUser()}
+                                label={`Độ dài cạnh ${id + 1}-${id + 2 > Object.values(item.ToaDoCacDinh).length ? 1 : id + 2}`}
+                                name={`C${id + 1}`}
+                                type='text'
+                                value={Object.values(item?.ChieuDaiCacCanh)[id]}
+                                handleChange={(event) => setDataEdit(dataEdit.map((item, idx) => {
+                                    if (idx === index) {
+                                        const currentCpy = item
+                                        currentCpy.ChieuDaiCacCanh[event.target.name] = event.target.value
+                                        return currentCpy
+                                    }
+
+                                    return item
+                                }))}
+                            />
+                        </Grid>
+
+                    </React.Fragment>
+                ))
+            }
+        </React.Fragment>
+    )
+}
+
+
+const ProcessedDataBox = ({ keyLand, keySplit, data, requestData = {}, handleClose, setError, setMessage }) => {
     const { user, lands } = React.useContext(AuthContext)
 
     const currentLand = lands.find(land => land.key === keyLand)
@@ -23,18 +173,70 @@ const ProcessedDataBox = ({ keyLand, data, requestData = {}, handleClose }) => {
 
                 initialData.push(oldData)
             }
+        } else {
+            initialData = data
         }
 
         return initialData
     }
 
     const [dataEdit, setDataEdit] = React.useState(initData())
-    const [sideCount, setSideCount] = React.useState(data[0]?.ChieuDaiCacCanh ? Object.values(data[0].ChieuDaiCacCanh).length : 0)
-    const [landCount, setLandCount] = React.useState(data[0]?.CacSoThuaGiapRanh ? Object.values(data[0].CacSoThuaGiapRanh).length : 0)
+    const [checkContiguous, setCheckContiguous] = React.useState(false)
+    const [checkCoordinates, setCheckCoordinates] = React.useState(false)
+
+    // const [sideCount, setSideCount] = React.useState(data[0]?.ChieuDaiCacCanh ? Object.values(data[0].ChieuDaiCacCanh).length : 0)
+    // const [landCount, setLandCount] = React.useState(data[0]?.CacSoThuaGiapRanh ? Object.values(data[0].CacSoThuaGiapRanh).length : 0)
 
     const isUser = () => user.role === 'user'
 
     console.log(dataEdit)
+
+    const displayOwner = (owner) => {
+        if (typeof owner === 'object') {
+            return owner.join(', ')
+        }
+        return owner
+    }
+
+
+    const SubmitButton = () => {
+
+        const [processing, setProcessing] = React.useState(false)
+
+        const disabledAction = () => {
+            return checkCoordinates && checkContiguous && dataEdit.every(item => item.ThuaDatSo !== '')
+                && dataEdit.every(item => Object.values(item.CacSoThuaGiapRanh).every(it => it !== ''))
+        }
+
+        const handleSubmitSplitLand = async () => {
+            const formData = {
+                key: keySplit,
+                dataProcessed: dataEdit
+            }
+
+            setProcessing(true)
+            const result = await confirmSplitAdmin(formData)
+            if (!result.data.error) {
+                setMessage(result.data.message)
+            } else {
+                setError(result.data.message)
+            }
+
+            setProcessing(false)
+            handleClose()
+
+        }
+
+        return (
+            <Button
+                variant='contained'
+                disabled={!disabledAction()}
+                onClick={handleSubmitSplitLand}
+            >
+                {processing ? <CircularProgress size={25} color='inherit' /> : 'Hoàn tất'}
+            </Button>
+        )
+    }
 
     return (
         <Box
@@ -53,8 +255,8 @@ const ProcessedDataBox = ({ keyLand, data, requestData = {}, handleClose }) => {
         >
             <Box
                 sx={{
-                    width: 700,
-                    maxHeight: 600,
+                    width: 1000,
+                    maxHeight: 650,
                     padding: 3,
                     borderRadius: 1,
                     backgroundColor: 'white',
@@ -82,7 +284,7 @@ const ProcessedDataBox = ({ keyLand, data, requestData = {}, handleClose }) => {
                 <Typography variant="subtitle1" gutterBottom color="text.secondary" sx={{ fontWeight: 'bold', textAlign: 'center' }}>Thông tin chung</Typography>
                 <Box>
                     <Typography variant="subtitle1" component="span">Chủ sở hữu: </Typography>
-                    <Typography variant="subtitle1" component="span" color="text.secondary">{isUser() ? data[0].Owner.join(', ') : dataEdit[0].Owner.join(', ')}</Typography>
+                    <Typography variant="subtitle1" component="span" color="text.secondary">{isUser() ? displayOwner(data[0].Owner) : displayOwner(dataEdit[0].Owner)}</Typography>
                 </Box>
                 <Box>
                     <Typography variant="subtitle1" component="span">Tờ bản đồ số: </Typography>
@@ -90,7 +292,7 @@ const ProcessedDataBox = ({ keyLand, data, requestData = {}, handleClose }) => {
                 </Box>
                 <Box>
                     <Typography variant="subtitle1" component="span">Địa chỉ: </Typography>
-                    <Typography variant="subtitle1" component="span" color="text.secondary">{isUser() ? [0].Address : dataEdit[0].Address}</Typography>
+                    <Typography variant="subtitle1" component="span" color="text.secondary">{isUser() ? data[0].Address : dataEdit[0].Address}</Typography>
                 </Box>
                 <Box>
                     <Typography variant="subtitle1" component="span">Hình thức sử dụng: </Typography>
@@ -111,9 +313,9 @@ const ProcessedDataBox = ({ keyLand, data, requestData = {}, handleClose }) => {
 
                 <Typography variant="subtitle1" color="text.secondary" sx={{ fontWeight: 'bold', textAlign: 'center' }}>Thông tin được xử lý</Typography>
 
-                <Grid container spacing={2} sx={{ mt: 1, maxHeight: 250, overflowY: 'auto' }}>
+                <Grid container spacing={4} sx={{ mt: 1, maxHeight: 250, overflowY: 'auto' }}>
                     {(isUser() ? data : dataEdit).map((item, index) => (
-                        <Grid item xs={6}>
+                        <Grid item xs={6} key={index}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <Typography variant="subtitle1" color="text.secondary">Mảnh số {index + 1}</Typography>
@@ -123,6 +325,7 @@ const ProcessedDataBox = ({ keyLand, data, requestData = {}, handleClose }) => {
                                         required
                                         disabled={isUser()}
                                         fullWidth
+                                        InputProps={{ inputProps: { min: 0 } }}
                                         label="Thửa đất số"
                                         type="number"
                                         name="ThuaDatSo"
@@ -148,108 +351,36 @@ const ProcessedDataBox = ({ keyLand, data, requestData = {}, handleClose }) => {
                                         value={item?.DienTich || ''}
                                     />
                                 </Grid>
-                                <Input
-                                    disabled={isUser()}
-                                    fullWidth
-                                    label='Tổng số thửa giáp ranh'
-                                    name='tongSoThua'
-                                    type='number'
-                                    value={landCount}
-                                    handleChange={(e) => setLandCount(e.target.value)}
+
+                                <ContiguousLand
+                                    isUser={isUser}
+                                    data={data}
+                                    dataEdit={dataEdit}
+                                    setDataEdit={setDataEdit}
+                                    item={item}
+                                    index={index}
+                                    setCheckContiguous={setCheckContiguous}
                                 />
 
-                                {
-                                    [...Array(parseInt(landCount || '0', 10))].map((land, id) => (
-                                        <Grid item xs={3} key={id} >
-                                            <TextField
-                                                required
-                                                name={`l${id + 1}`}
-                                                label={`Số thửa thứ ${id + 1}`}
-                                                value={item.CacSoThuaGiapRanh[id] || ''}
-                                                onChange={(event) => setDataEdit(dataEdit.map((item, idx) => {
-                                                    if (idx === index) {
-                                                        const currentCpy = item
-                                                        currentCpy.CacSoThuaGiapRanh.fill(event.target.value, id, id + 1)
-                                                        return currentCpy
-                                                    }
-                                                    return item
-                                                }))}
-                                            />
-                                        </Grid>
-                                    ))
-                                }
-
-                                <Input
-                                    label='Tổng số đỉnh'
-                                    name='tongSoDinh'
-                                    type='number'
-                                    value={sideCount}
-                                    handleChange={(e) => setSideCount(e.target.value)}
+                                <Coordinates
+                                    isUser={isUser}
+                                    data={data}
+                                    dataEdit={dataEdit}
+                                    setDataEdit={setDataEdit}
+                                    item={item}
+                                    index={index}
+                                    setCheckCoordinates={setCheckCoordinates}
                                 />
 
-                                {
-                                    [...Array(parseInt(sideCount || '0', 10))].map((side, id) => (
-                                        <React.Fragment key={id}>
-                                            <Typography sx={{ width: '100%', paddingLeft: '1rem', paddingTop: '1rem' }}>Đỉnh {id + 1}</Typography>
-                                            <Grid item xs={4} sm={4}>
-                                                <TextField
-                                                    required
-                                                    name='DX'
-                                                    label='Tọa độ X'
-                                                    value={item.ToaDoCacDinh[id + 1]?.X || ""}
-                                                    onChange={(event) => setDataEdit(dataEdit.map((item, idx) => {
-                                                        if (idx === index) {
-                                                            const currentCpy = item
-                                                            currentCpy.ToaDoCacDinh[id + 1].X = event.target.value
-                                                            return currentCpy
-                                                        }
 
-                                                        return item
-                                                    }))}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={4} sm={4}>
-                                                <TextField
-                                                    required
-                                                    name='DY'
-                                                    label='Tọa độ Y'
-                                                    value={item.ToaDoCacDinh[id + 1]?.Y || ""}
-                                                    onChange={(event) => setDataEdit(dataEdit.map((item, idx) => {
-                                                        if (idx === index) {
-                                                            const currentCpy = item
-                                                            currentCpy.ToaDoCacDinh[id + 1].Y = event.target.value
-                                                            return currentCpy
-                                                        }
-
-                                                        return item
-                                                    }))}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={4} sm={4}>
-                                                <Input
-                                                    required
-                                                    label={`Độ dài cạnh ${id + 1}-${id + 2 > Object.values(item.ToaDoCacDinh).length ? 1 : id + 2}`}
-                                                    name={`C${id + 1}`}
-                                                    type='text'
-                                                    value={Object.values(item.ChieuDaiCacCanh)[id]}
-                                                    handleChange={(event) => setDataEdit(dataEdit.map((item, idx) => {
-                                                        if (idx === index) {
-                                                            const currentCpy = item
-                                                            currentCpy.ChieuDaiCacCanh[event.target.name] = event.target.value
-                                                            return currentCpy
-                                                        }
-
-                                                        return item
-                                                    }))}
-                                                />
-                                            </Grid>
-
-                                        </React.Fragment>
-                                    ))
-                                }
                             </Grid>
                         </Grid>
                     ))}
+                    {!isUser() &&
+                        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <SubmitButton />
+                        </Grid>
+                    }
                 </Grid>
             </Box>
         </Box>

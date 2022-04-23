@@ -7,7 +7,7 @@ import StyledTableCell from './StyledTableCell'
 
 export default function CustomizedTables({ rows, user }) {
     const navigate = useNavigate()
-    const disabledAction = (row) => row.value.Status === 'Chưa duyệt' || row.value.Status === 'Đang chuyển'
+    const disabledAction = (row) => row.value.Status !== 'Đã duyệt'
     return (
         <TableContainer component={Paper}>
 

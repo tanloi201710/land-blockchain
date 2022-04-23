@@ -9,6 +9,10 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
 
     const { user } = React.useContext(AuthContext)
 
+    const unConfirmSplitRequest = rows.filter(row => row.value.TimeEnd === "-/-/-")
+
+    console.log(unConfirmSplitRequest)
+
     const getStatus = (value) => {
         if (value.ConfirmFromAdmin === false) {
             return 'Chưa xử lý'
@@ -21,10 +25,14 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
             }
         }
 
-        return 'Đã xác nhận'
+        return 'Chưa xác nhận'
     }
 
     const handleDisableConfirm = (row) => {
+        if (!row.value.ConfirmFromAdmin) {
+            return true
+        }
+
         if (typeof row.value.UserRequest === 'object') {
             for (let i = 0; i < row.value.UserRequest.length; i++) {
                 if (Object.keys(row.value.UserRequest[i]).toString() === user.userId) {
@@ -32,7 +40,7 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
                 }
             }
         }
-        return true
+        return row.value.ConfirmFromUser
     }
 
     const ConfirmButton = ({ row }) => {
@@ -54,8 +62,9 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
             }
         }
 
+
         return (
-            <Button variant='contained' color='success' onClick={handleConfirm} disabled={() => handleDisableConfirm(row)}>
+            <Button variant='contained' color='success' onClick={handleConfirm} disabled={handleDisableConfirm(row)}>
                 {processing ? <CircularProgress size={25} color='inherit' /> : 'Xác Nhận'}
             </Button>
         )
@@ -64,7 +73,7 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
     const ProcessButton = ({ row }) => {
 
         const handleClick = () => {
-            handleOpenDataProcesed(row.value.Land, row.value.DataProcessed, row.value)
+            handleOpenDataProcesed(row.value.Land, row.value.DataProcessed, row.value, row.key)
         }
 
 
@@ -92,7 +101,7 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {unConfirmSplitRequest.map((row) => (
                         <StyledTableRow key={row.key}>
                             <StyledTableCell component="th" scope="row" sx={{ fontWeight: 500 }}>
                                 {row.key}
@@ -115,7 +124,7 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
                             </StyledTableCell>
 
                             <StyledTableCell align="right">
-                                <Button variant='outlined' disabled={getStatus(row.value) !== 'Chưa xử lý' ? false : true} onClick={() => handleOpenDataProcesed(row.value.DataProcesed)}>Xem</Button>
+                                <Button variant='outlined' disabled={getStatus(row.value) !== 'Chưa xử lý' ? false : true} onClick={() => handleOpenDataProcesed(row.value.Land, row.key, row.value.DataProcessed)}>Xem</Button>
                             </StyledTableCell>
 
                             <StyledTableCell align="right">

@@ -27,6 +27,7 @@ const Waiting = () => {
     const [splitKeyLand, setSplitKeyLand] = React.useState('')
     const [splitRequestUsed, setSplitRequestUsed] = React.useState({})
     const [openProcessBox, setOpenProcessBox] = React.useState(false)
+    const [keySplit, setKeySplit] = React.useState('')
 
     React.useEffect(() => {
         (async () => {
@@ -53,14 +54,30 @@ const Waiting = () => {
 
     const handleClose = async () => {
         await getHomePageData(user?.role, setLands, setNotifyList)
+
         setMessage('')
+
+        // get transfer and split requests
+        const result = await getTransfersAdmin()
+        // console.log(result.data)
+        if (!result.data.error) {
+            setAllTransfer(result.data.allTransfer)
+        }
+
+        const result1 = await getSplitRequestAdmin()
+
+        if (!result1.data.error) {
+            setAllSplitRequest(result1.data.splitRequest)
+        }
+
     }
 
-    const handleOpenDataProcesed = (keyLand, data, row) => {
+    const handleOpenDataProcesed = (keyLand, data, row, keySplit) => {
         setOpenProcessBox(true)
         setSplitKeyLand(keyLand)
         setProcessedData(data)
         setSplitRequestUsed(row)
+        setKeySplit(keySplit)
     }
 
     const getTabContent = () => {
@@ -135,9 +152,12 @@ const Waiting = () => {
             {openProcessBox
                 && <ProcessedDataBox
                     keyLand={splitKeyLand}
+                    keySplit={keySplit}
                     data={processedData}
                     requestData={splitRequestUsed}
                     handleClose={() => setOpenProcessBox(false)}
+                    setError={setError}
+                    setMessage={setMessage}
                 />
             }
         </Container>

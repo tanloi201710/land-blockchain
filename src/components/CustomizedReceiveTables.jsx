@@ -4,7 +4,7 @@ import { ConfirmFromReceiver } from '../api';
 import StyledTableRow from './StyledTableRow';
 import StyledTableCell from './StyledTableCell';
 
-export default function CustomizedReceiveTables({ rows }) {
+export default function CustomizedReceiveTables({ rows, setMessage, setError }) {
 
     const getStatus = (row) => {
         if (typeof row.value.From === 'object') {
@@ -35,6 +35,11 @@ export default function CustomizedReceiveTables({ rows }) {
 
             const result = await ConfirmFromReceiver(formData)
             console.log(result.data)
+            if (!result.data.error) {
+                setMessage(result.data.message)
+            } else {
+                setError(result.data.message)
+            }
             setProcessing(false)
         }
 

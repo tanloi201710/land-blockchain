@@ -262,7 +262,7 @@ const LandDetail = () => {
                         <Typography variant='h6' gutterBottom>Nhà ở</Typography>
                         {currentLand?.value.NhaO.length > 0 ?
                             <TableContainer component={Paper}>
-                                <Table sx={{ minWidth: 1000 }}>
+                                <Table sx={{ minWidth: 900 }}>
                                     <TableHead>
                                         <TableRow>
                                             <StyledTableCell>STT</StyledTableCell>

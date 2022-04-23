@@ -1,20 +1,15 @@
-import { Add, Autorenew, PhotoCamera, Remove } from '@mui/icons-material'
-import { Box, Button, CircularProgress, Grid, IconButton, ImageList, ImageListItem, ListSubheader, MenuItem, Stack, TextField, Tooltip, Typography } from '@mui/material'
-import { blue } from '@mui/material/colors'
+import { Box, Typography } from '@mui/material'
 import React, { useState, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { addLand, addLandCo } from '../api'
 import AddOwnerForm from '../components/AddOwnerForm'
 import BasicAlerts from '../components/Alert'
 import Container from '../components/Container'
-import DisplayOwner from '../components/DisplayOwner'
-import Input from '../components/Input'
 import NavBar from '../components/NavBar'
 import { AuthContext } from '../contexts/AuthContext'
 import { uploadImage } from '../firebase/images'
 import { getHomePageData } from '../contexts/actions'
 
-import { hinhThucSuDung, hinhThucNhan, datNongNghiep, datPhiNongNghiep, nguonGoc } from '../data'
 import ConfirmBox from '../components/ConfirmBox'
 import AddLandCustom from '../components/AddLandCustom'
 import AddConstructionBox from '../components/AddConstructionBox'
@@ -56,7 +51,11 @@ const AddLandForm = () => {
     const type = params.type
     const navigate = useNavigate()
 
-    console.log(values, info)
+    console.log(values, info, type)
+
+    const handleOpenAddForm = () => {
+        setIsAddFormOpen(true)
+    }
 
     const handleCloseAddForm = () => {
         setIsAddFormOpen(false)
@@ -154,7 +153,7 @@ const AddLandForm = () => {
             <Box sx={{ paddingX: 8, paddingY: 5 }}>
                 <Typography variant='h5' gutterBottom>Đăng ký đất mới</Typography>
                 <AddLandCustom
-                    setIsAddFormOpen={setIsAddFormOpen}
+                    handleOpenAddForm={handleOpenAddForm}
                     setIsAddConstructionBox={setIsAddConstructionBox}
                     setIsAddHouseBox={setIsAddHouseBox}
                     type={type}
