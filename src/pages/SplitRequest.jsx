@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getSplitRequest } from '../api'
@@ -7,6 +7,7 @@ import ConfirmBox from '../components/ConfirmBox'
 import Container from '../components/Container'
 import CustomizedSplitRequestTables from '../components/CustomizedSplitRequestTables'
 import NavBar from '../components/NavBar'
+import NoData from '../components/NoData'
 import ProcessedDataBox from '../components/ProcessedDataBox'
 import { getHomePageData } from '../contexts/actions'
 import { AuthContext } from '../contexts/AuthContext'
@@ -32,7 +33,7 @@ const SplitRequest = () => {
                 setError(result.data.message)
                 return
             }
-            setRows(result.data.splitRequest)
+            setRows(result.data.splitRequest.filter(item => item.TimeEnd === "-/-/-"))
         })()
     }, [])
 
@@ -61,8 +62,13 @@ const SplitRequest = () => {
                     paddingX: 8,
                     paddingY: 5,
                 }}
+
             >
-                <CustomizedSplitRequestTables rows={rows} setMessage={setMessage} setError={setError} handleOpenDataProcesed={handleOpenDataProcesed} />
+                <Typography variant="h6" gutterBottom >DANH SÁCH YÊU CẦU TÁCH THỬA</Typography>
+                {rows.length > 0
+                    ? <CustomizedSplitRequestTables rows={rows} setMessage={setMessage} setError={setError} handleOpenDataProcesed={handleOpenDataProcesed} />
+                    : <NoData />
+                }
             </Box>
             {processedData.length > 0
                 && <ProcessedDataBox

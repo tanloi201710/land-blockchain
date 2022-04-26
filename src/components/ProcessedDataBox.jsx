@@ -6,8 +6,8 @@ import { AuthContext } from '../contexts/AuthContext'
 import Input from './Input'
 
 
-const ContiguousLand = ({ isUser, data, index, item, dataEdit, setDataEdit, setCheckContiguous }) => {
-    const [landCount, setLandCount] = React.useState(data[index]?.ChieuDaiCacCanh ? Object.values(data[index].ChieuDaiCacCanh).length : 0)
+const ContiguousLand = ({ viewMode, data, index, item, dataEdit, setDataEdit, setCheckContiguous }) => {
+    const [landCount, setLandCount] = React.useState(data[index]?.CacSoThuaGiapRanh ? Object.values(data[index].CacSoThuaGiapRanh).length : 0)
 
     React.useEffect(() => {
 
@@ -28,7 +28,7 @@ const ContiguousLand = ({ isUser, data, index, item, dataEdit, setDataEdit, setC
     return (
         <React.Fragment>
             <Input
-                disabled={isUser()}
+                disabled={viewMode}
                 label='Tổng số thửa giáp ranh'
                 name='tongSoThua'
                 type='number'
@@ -41,7 +41,7 @@ const ContiguousLand = ({ isUser, data, index, item, dataEdit, setDataEdit, setC
                     <Grid item xs={6} key={id} >
                         <TextField
                             required
-                            disabled={isUser()}
+                            disabled={viewMode}
                             name={`l${id + 1}`}
                             label={`Số thửa thứ ${id + 1}`}
                             value={item?.CacSoThuaGiapRanh[id] || ''}
@@ -62,7 +62,7 @@ const ContiguousLand = ({ isUser, data, index, item, dataEdit, setDataEdit, setC
 }
 
 
-const Coordinates = ({ isUser, dataEdit, setDataEdit, data, index, item, setCheckCoordinates }) => {
+const Coordinates = ({ viewMode, dataEdit, setDataEdit, data, index, item, setCheckCoordinates }) => {
 
     const [sideCount, setSideCount] = React.useState(data[index]?.ChieuDaiCacCanh ? Object.values(data[index].ChieuDaiCacCanh).length : 0)
 
@@ -76,7 +76,7 @@ const Coordinates = ({ isUser, dataEdit, setDataEdit, data, index, item, setChec
     return (
         <React.Fragment>
             <Input
-                disabled={isUser()}
+                disabled={viewMode}
                 label='Tổng số đỉnh'
                 name='tongSoDinh'
                 type='number'
@@ -92,7 +92,7 @@ const Coordinates = ({ isUser, dataEdit, setDataEdit, data, index, item, setChec
                             <TextField
                                 required
                                 fullWidth
-                                disabled={isUser()}
+                                disabled={viewMode}
                                 name='DX'
                                 label='Tọa độ X'
                                 value={item?.ToaDoCacDinh[id + 1]?.X || ""}
@@ -111,7 +111,7 @@ const Coordinates = ({ isUser, dataEdit, setDataEdit, data, index, item, setChec
                             <TextField
                                 required
                                 fullWidth
-                                disabled={isUser()}
+                                disabled={viewMode}
                                 name='DY'
                                 label='Tọa độ Y'
                                 value={item?.ToaDoCacDinh[id + 1]?.Y || ""}
@@ -129,8 +129,8 @@ const Coordinates = ({ isUser, dataEdit, setDataEdit, data, index, item, setChec
                         <Grid item xs={12} sm={12}>
                             <Input
                                 required
-                                disabled={isUser()}
-                                label={`Độ dài cạnh ${id + 1}-${id + 2 > Object.values(item.ToaDoCacDinh).length ? 1 : id + 2}`}
+                                disabled={viewMode}
+                                label={`Độ dài cạnh ${id + 1}-${id + 2 > sideCount ? 1 : id + 2}`}
                                 name={`C${id + 1}`}
                                 type='text'
                                 value={Object.values(item?.ChieuDaiCacCanh)[id]}
@@ -154,7 +154,7 @@ const Coordinates = ({ isUser, dataEdit, setDataEdit, data, index, item, setChec
 }
 
 
-const ProcessedDataBox = ({ keyLand, keySplit, data, requestData = {}, handleClose, setError, setMessage }) => {
+const ProcessedDataBox = ({ keyLand, keySplit, data, requestData = {}, handleClose, setError, setMessage, viewMode = true }) => {
     const { user, lands } = React.useContext(AuthContext)
 
     const currentLand = lands.find(land => land.key === keyLand)
@@ -190,6 +190,7 @@ const ProcessedDataBox = ({ keyLand, keySplit, data, requestData = {}, handleClo
     const isUser = () => user.role === 'user'
 
     console.log(dataEdit)
+    console.log(data)
 
     const displayOwner = (owner) => {
         if (typeof owner === 'object') {
@@ -323,7 +324,7 @@ const ProcessedDataBox = ({ keyLand, keySplit, data, requestData = {}, handleClo
                                 <Grid item xs={12}>
                                     <TextField
                                         required
-                                        disabled={isUser()}
+                                        disabled={viewMode}
                                         fullWidth
                                         InputProps={{ inputProps: { min: 0 } }}
                                         label="Thửa đất số"
@@ -353,7 +354,7 @@ const ProcessedDataBox = ({ keyLand, keySplit, data, requestData = {}, handleClo
                                 </Grid>
 
                                 <ContiguousLand
-                                    isUser={isUser}
+                                    viewMode={viewMode}
                                     data={data}
                                     dataEdit={dataEdit}
                                     setDataEdit={setDataEdit}
@@ -363,7 +364,7 @@ const ProcessedDataBox = ({ keyLand, keySplit, data, requestData = {}, handleClo
                                 />
 
                                 <Coordinates
-                                    isUser={isUser}
+                                    viewMode={viewMode}
                                     data={data}
                                     dataEdit={dataEdit}
                                     setDataEdit={setDataEdit}
@@ -376,7 +377,7 @@ const ProcessedDataBox = ({ keyLand, keySplit, data, requestData = {}, handleClo
                             </Grid>
                         </Grid>
                     ))}
-                    {!isUser() &&
+                    {(!isUser() && !viewMode) &&
                         <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <SubmitButton />
                         </Grid>

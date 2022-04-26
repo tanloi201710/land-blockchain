@@ -3,12 +3,11 @@ import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, C
 import { confirmTransferFromAdmin } from '../api';
 import StyledTableRow from './StyledTableRow';
 import StyledTableCell from './StyledTableCell';
+import { Link } from 'react-router-dom';
 
 
 export default function TransferRequests({ rows, setMessage, setError }) {
 
-    const unConfirmTransfer = rows.filter(row => !row.value.ConfirmFromAdmin)
-    console.log(unConfirmTransfer)
 
     // make out the status of transfer
     const getStatus = (row) => {
@@ -72,12 +71,16 @@ export default function TransferRequests({ rows, setMessage, setError }) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {unConfirmTransfer.map((row) => (
+                    {rows.map((row) => (
                         <StyledTableRow key={row.key}>
                             <StyledTableCell component="th" scope="row" sx={{ fontWeight: 500 }}>
                                 {row.key}
                             </StyledTableCell>
-                            <StyledTableCell align="right">{row.value.Land}</StyledTableCell>
+                            <StyledTableCell align="right">
+                                <Link to={`/detail/${row.value.Land}`} style={{ color: '#0288d1', fontWeight: 500 }}>
+                                    {row.value.Land}
+                                </Link>
+                            </StyledTableCell>
                             <StyledTableCell align="right">{typeof row.value.From === 'object'
                                 ? row.value.From.map((value) => Object.keys(value)).join(', ')
                                 : row.value.From}

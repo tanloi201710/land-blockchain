@@ -7,6 +7,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import MessagesList from './MessagesList';
 import NotifyList from './NotifyList';
 import { AuthContext } from '../contexts/AuthContext';
+import { readNotifications } from '../api';
+import { getHomePageData } from '../contexts/actions';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -126,7 +128,7 @@ const items = [
 
 const NavBar = () => {
 
-    const { user, notifyList } = useContext(AuthContext)
+    const { user, notifyList, setNotifyList, setLands } = useContext(AuthContext)
     const navigate = useNavigate()
     const location = useLocation()
 
@@ -155,8 +157,14 @@ const NavBar = () => {
         setAnchorMessagesEl(null)
     }
 
-    const handleOpenNotificationsMenu = (event) => {
+    const handleOpenNotificationsMenu = async (event) => {
         setAnchorNotificationsEl(event.currentTarget)
+        // Read the notifications
+        const result = await readNotifications()
+
+        if (!result.data.error) {
+            await getHomePageData(user?.role, setLands, setNotifyList)
+        }
     }
 
     const handleCloseNotificationsMenu = () => {

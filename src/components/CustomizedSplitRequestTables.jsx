@@ -1,17 +1,14 @@
 import * as React from 'react'
-import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, CircularProgress } from '@mui/material'
+import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, CircularProgress, Typography } from '@mui/material'
 import { confirmSplit } from '../api';
 import StyledTableRow from './StyledTableRow';
 import StyledTableCell from './StyledTableCell';
 import { AuthContext } from '../contexts/AuthContext';
+import { Link } from 'react-router-dom';
 
 export default function CustomizedSplitRequestTables({ rows, setMessage, setError, handleOpenDataProcesed }) {
 
     const { user } = React.useContext(AuthContext)
-
-    const unConfirmSplitRequest = rows.filter(row => row.value.TimeEnd === "-/-/-")
-
-    console.log(unConfirmSplitRequest)
 
     const getStatus = (value) => {
         if (value.ConfirmFromAdmin === false) {
@@ -25,7 +22,7 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
             }
         }
 
-        return 'Chưa xác nhận'
+        return 'Chờ xác nhận'
     }
 
     const handleDisableConfirm = (row) => {
@@ -73,7 +70,7 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
     const ProcessButton = ({ row }) => {
 
         const handleClick = () => {
-            handleOpenDataProcesed(row.value.Land, row.value.DataProcessed, row.value, row.key)
+            handleOpenDataProcesed(row.value.Land, row.key, row.value.DataProcessed, row.value, false)
         }
 
 
@@ -101,14 +98,16 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {unConfirmSplitRequest.map((row) => (
+                    {rows.map((row) => (
                         <StyledTableRow key={row.key}>
                             <StyledTableCell component="th" scope="row" sx={{ fontWeight: 500 }}>
                                 {row.key}
                             </StyledTableCell>
 
                             <StyledTableCell align="right">
-                                {row.value.Land}
+                                <Link to={`/detail/${row.value.Land}`} style={{ color: '#0288d1', fontWeight: 500 }}>
+                                    {row.value.Land}
+                                </Link>
                             </StyledTableCell>
 
                             <StyledTableCell align="right">
@@ -124,11 +123,23 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
                             </StyledTableCell>
 
                             <StyledTableCell align="right">
-                                <Button variant='outlined' disabled={getStatus(row.value) !== 'Chưa xử lý' ? false : true} onClick={() => handleOpenDataProcesed(row.value.Land, row.key, row.value.DataProcessed)}>Xem</Button>
+                                <Button
+                                    variant='outlined'
+                                    disabled={getStatus(row.value) !== 'Chưa xử lý' ? false : true}
+                                    onClick={() => handleOpenDataProcesed(row.value.Land, row.key, row.value.DataProcessed)}
+                                >
+                                    Xem
+                                </Button>
                             </StyledTableCell>
 
                             <StyledTableCell align="right">
                                 {getStatus(row.value)}
+                                {getStatus(row.value) === 'Chờ xác nhận'
+                                    && <Typography color='text.secondary'>
+                                        {typeof row.value.UserRequest === 'object'
+                                            && row.value.UserRequest.find(item => Object.keys(item).toString() !== user.userId)}
+                                    </Typography>
+                                }
                             </StyledTableCell>
 
                             <StyledTableCell align="right">

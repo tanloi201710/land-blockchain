@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import { getSendLand } from '../api'
 import Container from '../components/Container'
@@ -9,6 +9,7 @@ import NavBar from '../components/NavBar'
 import BasicAlerts from '../components/Alert'
 import { getHomePageData } from '../contexts/actions'
 import { AuthContext } from '../contexts/AuthContext'
+import NoData from '../components/NoData'
 
 const Transfering = () => {
 
@@ -26,7 +27,7 @@ const Transfering = () => {
                 setError(result.data.message)
                 return
             }
-            setRows(result.data.trans)
+            setRows(result.data.trans.filter(item => item.TimeEnd === "-/-/-"))
         })()
     }, [])
 
@@ -39,7 +40,7 @@ const Transfering = () => {
             setError(result.data.message)
             return
         }
-        setRows(result.data.trans)
+        setRows(result.data.trans.filter(item => item.TimeEnd === "-/-/-"))
 
         setMessage('')
 
@@ -57,7 +58,11 @@ const Transfering = () => {
                     paddingY: 5,
                 }}
             >
-                <CustomizedTransferTables rows={rows} setMessage={setMessage} setError={setError} />
+                <Typography variant="h6" gutterBottom>DANH SÁCH ĐẤT ĐANG CHUYỂN</Typography>
+                {rows.length > 0
+                    ? <CustomizedTransferTables rows={rows} setMessage={setMessage} setError={setError} />
+                    : <NoData />
+                }
             </Box>
         </Container>
     )

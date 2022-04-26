@@ -16,6 +16,7 @@ import Waiting from './pages/Waiting'
 import UpdateLand from './pages/UpdateLand'
 import SplitLand from './pages/SplitLand'
 import SplitRequest from './pages/SplitRequest'
+import AdminHome from './pages/admin/AdminHome'
 
 function App() {
   const { user, setLands, setNotifyList } = useContext(AuthContext)
@@ -46,6 +47,7 @@ function App() {
         <Route path='/updateLand/:id' element={<UpdateLand />} />
         <Route path='/splitLand' element={<SplitLand />} />
         <Route path='/splitRequest' element={<SplitRequest />} />
+        <Route path='/admin' element={<AdminHome />} />
 
       </Routes>
     </Router>

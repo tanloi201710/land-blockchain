@@ -28,13 +28,14 @@ const Waiting = () => {
     const [splitRequestUsed, setSplitRequestUsed] = React.useState({})
     const [openProcessBox, setOpenProcessBox] = React.useState(false)
     const [keySplit, setKeySplit] = React.useState('')
+    const [viewMode, setViewMode] = React.useState(true)
 
     React.useEffect(() => {
         (async () => {
             const result = await getTransfersAdmin()
             // console.log(result.data)
             if (!result.data.error) {
-                setAllTransfer(result.data.allTransfer)
+                setAllTransfer(result.data.allTransfer.filter(item => item.TimeEnd === "-/-/-"))
             }
 
             const result1 = await getSplitRequestAdmin()
@@ -72,12 +73,13 @@ const Waiting = () => {
 
     }
 
-    const handleOpenDataProcesed = (keyLand, data, row, keySplit) => {
+    const handleOpenDataProcesed = (keyLand, keySplit, data, row, viewMode) => {
         setOpenProcessBox(true)
         setSplitKeyLand(keyLand)
         setProcessedData(data)
         setSplitRequestUsed(row)
         setKeySplit(keySplit)
+        setViewMode(viewMode)
     }
 
     const getTabContent = () => {
@@ -158,6 +160,7 @@ const Waiting = () => {
                     handleClose={() => setOpenProcessBox(false)}
                     setError={setError}
                     setMessage={setMessage}
+                    viewMode={viewMode}
                 />
             }
         </Container>
