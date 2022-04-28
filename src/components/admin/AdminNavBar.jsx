@@ -3,10 +3,12 @@ import { useTheme } from '@mui/material/styles'
 import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem } from '@mui/material'
 import { AccountCircle } from '@mui/icons-material'
 import MenuIcon from '@mui/icons-material/Menu'
+import { useNavigate } from 'react-router-dom'
 
 const AdminNavBar = ({ curentLabel, auth, sideBarWidth, toogleSideBar, open }) => {
 
     const theme = useTheme()
+    const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = React.useState(null)
 
     const handleMenu = (event) => {
@@ -18,6 +20,11 @@ const AdminNavBar = ({ curentLabel, auth, sideBarWidth, toogleSideBar, open }) =
     }
 
     console.log(sideBarWidth)
+
+    const handleLogout = () => {
+        localStorage.removeItem('user')
+        navigate('/login')
+    }
     return (
         <AppBar
             position="static"
@@ -73,7 +80,7 @@ const AdminNavBar = ({ curentLabel, auth, sideBarWidth, toogleSideBar, open }) =
                             onClose={handleClose}
                         >
                             <MenuItem onClick={handleClose}>Tài khoản</MenuItem>
-                            <MenuItem onClick={handleClose}>Đăng xuất</MenuItem>
+                            <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
                         </Menu>
                     </div>
                 )}

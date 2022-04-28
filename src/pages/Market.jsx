@@ -1,18 +1,32 @@
 import { Box, Grid } from '@mui/material'
 import React, { useContext, useState } from 'react'
+
+import BasicAlerts from '../components/Alert'
 import ChatBox from '../components/ChatBox'
+import ConfirmBox from '../components/ConfirmBox'
 import Container from '../components/Container'
 import MarketFilter from '../components/MarketFilter'
 import NavBar from '../components/NavBar'
+import NoData from '../components/NoData'
 import Post from '../components/Post'
 import { AuthContext } from '../contexts/AuthContext'
 import CreatePost from './CreatePost'
+import { getPostsData } from '../contexts/actions'
+import PostDetail from '../components/PostDetail'
 
 const Market = () => {
-    const { user } = useContext(AuthContext)
+    const { user, posts, setPosts } = useContext(AuthContext)
 
     const [isCreatePost, setIsCreatePost] = useState(false)
     const [chatBox, setChatBox] = useState(false)
+    const [isPostDetail, setIsPostDetail] = useState({
+        isOpen: false,
+        user: {},
+        post: {},
+        land: {}
+    })
+    const [message, setMessage] = useState('')
+    const [error, setError] = useState('')
 
     const handleCloseCreateBox = () => {
         setIsCreatePost(false)
@@ -30,41 +44,45 @@ const Market = () => {
         setChatBox(true)
     }
 
+    const handleCloseConfirm = async () => {
+        setMessage('')
+        // refetch data
+        await getPostsData(setPosts)
+    }
+
+    const handleOpenPostDetails = (user, post, land) => {
+        setIsPostDetail({ ...isPostDetail, isOpen: true, user, post, land })
+    }
+
     return (
         <Container>
             <NavBar />
+            {message !== '' && <ConfirmBox message={message} handleConfirm={handleCloseConfirm} />}
+            {error !== ''
+                && <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <BasicAlerts serverity="error" message={error} onClose={() => setError('')} />
+                </Box>
+            }
             <Box sx={{ display: 'flex', position: 'relative' }}>
                 <MarketFilter handleOpen={handleOpenCreateBox} />
                 <Grid container spacing={4} sx={{ paddingY: 5, marginLeft: 3 }}>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Post user={user} handleOpenChatBox={handleOpenChatBox} />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Post handleOpenChatBox={handleOpenChatBox} />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Post handleOpenChatBox={handleOpenChatBox} />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Post handleOpenChatBox={handleOpenChatBox} />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Post handleOpenChatBox={handleOpenChatBox} />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Post handleOpenChatBox={handleOpenChatBox} />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Post handleOpenChatBox={handleOpenChatBox} />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Post handleOpenChatBox={handleOpenChatBox} />
-                    </Grid>
+                    {
+                        posts.length > 0
+                            ? posts.map((post, index) => (
+                                <Grid item xs={12} sm={6} md={4} key={index}>
+                                    <Post user={user} handleOpenChatBox={handleOpenChatBox} post={post} handleOpenPostDetails={handleOpenPostDetails} />
+                                </Grid>
+                            ))
+                            : <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <NoData />
+                            </Grid>
+                    }
                 </Grid>
             </Box>
 
-            {isCreatePost && <CreatePost handleClose={handleCloseCreateBox} />}
+            {isCreatePost && <CreatePost handleClose={handleCloseCreateBox} setMessage={setMessage} setError={setError} />}
             {chatBox && <ChatBox handleCloseChatBox={handleCloseChatBox} />}
+            {isPostDetail.isOpen && <PostDetail handleClose={() => setIsPostDetail({ ...isPostDetail, isOpen: false })} {...isPostDetail} />}
         </Container>
     )
 }

@@ -160,10 +160,12 @@ const NavBar = () => {
     const handleOpenNotificationsMenu = async (event) => {
         setAnchorNotificationsEl(event.currentTarget)
         // Read the notifications
-        const result = await readNotifications()
+        if (notifyList.filter(notify => notify.Seen === false).length > 0) {
+            const result = await readNotifications()
 
-        if (!result.data.error) {
-            await getHomePageData(user?.role, setLands, setNotifyList)
+            if (!result.data.error) {
+                await getHomePageData(user?.role, setLands, setNotifyList)
+            }
         }
     }
 
@@ -342,7 +344,7 @@ const NavBar = () => {
                             aria-controls={openNotifications ? 'menu-notifications' : undefined}
                             onClick={handleOpenNotificationsMenu}
                         >
-                            <Badge badgeContent={notifyList.length} color="error">
+                            <Badge badgeContent={notifyList.filter(notify => notify.Seen === false).length} color="error">
                                 <Notifications fontSize='inherit' />
                             </Badge>
                         </IconButton>

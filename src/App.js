@@ -11,7 +11,7 @@ import Received from './pages/Received'
 import Market from './pages/Market'
 import AddLandForm from './pages/AddLandForm'
 import TransferLandForm from './pages/TransferLandForm'
-import { getHomePageData } from './contexts/actions'
+import { getHomePageData, getPostsData } from './contexts/actions'
 import Waiting from './pages/Waiting'
 import UpdateLand from './pages/UpdateLand'
 import SplitLand from './pages/SplitLand'
@@ -19,16 +19,17 @@ import SplitRequest from './pages/SplitRequest'
 import AdminHome from './pages/admin/AdminHome'
 
 function App() {
-  const { user, setLands, setNotifyList } = useContext(AuthContext)
+  const { user, setLands, setNotifyList, setPosts } = useContext(AuthContext)
   console.log(user)
 
   useEffect(() => {
     const getData = async () => {
       await getHomePageData(user?.role, setLands, setNotifyList)
+      await getPostsData(setPosts)
     }
     getData()
 
-  }, [user, setLands, setNotifyList])
+  }, [user, setLands, setNotifyList, setPosts])
 
   return (
     <Router>

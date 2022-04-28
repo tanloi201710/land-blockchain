@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API = axios.create({ baseURL: 'http://172.21.108.229:5000/api' })
+const API = axios.create({ baseURL: 'http://172.21.96.76:5000/api' })
 
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('user')) {
@@ -20,6 +20,8 @@ export const homePageUser = () => API.get('/user/')
 
 export const getSplitRequest = () => API.get('/user/split')
 
+export const getPosts = () => API.get('/user/posts')
+
 export const ConfirmFromReceiver = (formData) => API.post('/user/confirmReceiveOne', formData)
 
 export const confirmFromTransfer = (formData) => API.post('/user/confirmTransfer', formData)
@@ -30,7 +32,11 @@ export const confirmSplit = (formData) => API.post('/user/confirmSplit', formDat
 
 export const readNotifications = () => API.put('/user/readNotifications')
 
+export const createPost = (formData) => API.post('/user/createPost', formData)
+
 // land request
+export const getLand = (key) => API.get(`/land/${key}`)
+
 export const getReceiveLand = () => API.get('/land/receive')
 
 export const getSendLand = () => API.get('/land/send')

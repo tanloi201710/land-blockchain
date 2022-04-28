@@ -1,9 +1,12 @@
 import { Autorenew, CreateNewFolder, DoneAll, Folder, Group, GroupAdd } from '@mui/icons-material'
 import { Box, Divider, Grid, Typography } from '@mui/material'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import AdminNavBar from '../../components/admin/AdminNavBar'
 import AdminSideBar from '../../components/admin/AdminSideBar'
 import StatisticCard from '../../components/StatisticCard'
+import { AuthContext } from '../../contexts/AuthContext'
 
 const AdminHome = () => {
 
@@ -61,7 +64,16 @@ const AdminHome = () => {
         },
     ]
 
+    const { user } = React.useContext(AuthContext)
+    const navigate = useNavigate()
+
     const [open, setOpen] = React.useState(false)
+
+    React.useEffect(() => {
+        if (!Boolean(user) || user?.role !== 'admin') {
+            navigate('/')
+        }
+    }, [user, navigate])
 
     const getColor = (index) => {
         let value = index % 4

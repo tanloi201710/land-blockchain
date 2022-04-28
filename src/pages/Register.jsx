@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Avatar, Box, Typography, Button, Grid, CircularProgress } from '@mui/material'
+import { Avatar, Box, Typography, Button, Grid, CircularProgress, TextField } from '@mui/material'
 import { LockOutlined } from '@mui/icons-material'
 
 import background from '../images/login-register-background.jpg'
@@ -20,12 +20,14 @@ const Register = () => {
         rePassword: '',
         idCard: '',
         phoneNumber: '',
+        birthDay: '',
         fullNameValidate: '',
         emailValidate: '',
         passwordValidate: '',
         rePasswordValidate: '',
         idCardValidate: '',
         phoneNumberValidate: '',
+        birthDayValidate: '',
     }
 
     const initialError = {
@@ -59,15 +61,17 @@ const Register = () => {
         const checkRePassword = validateRePassword()
         const checkIdCard = validateIdCard()
         const checkPhoneNumber = validatePhoneNumber()
+        const checkBirthDay = validateBirthDay()
 
-        if (checkName && checkEmail && checkPassword && checkRePassword && checkIdCard && checkPhoneNumber) {
+        if (checkName && checkEmail && checkPassword && checkRePassword && checkIdCard && checkPhoneNumber && checkBirthDay) {
             // register
             const formData = {
                 email: data.email,
                 fullName: data.fullname,
                 password: data.password,
                 phoneNumber: data.phoneNumber,
-                idCard: data.idCard
+                idCard: data.idCard,
+                birthDay: data.birthDay
             }
             setLoading(true)
 
@@ -153,6 +157,16 @@ const Register = () => {
         if (idCard === '') helperText = 'CMND/CCCD Không được để trống'
 
         setData({ ...data, idCardValidate: helperText })
+
+        return helperText === ''
+    }
+
+    const validateBirthDay = () => {
+        let helperText = ''
+        const birthDay = data.birthDay
+        if (birthDay === '') helperText = 'Ngày sinh không được để trống'
+
+        setData({ ...data, birthDayValidate: helperText })
 
         return helperText === ''
     }
@@ -258,11 +272,26 @@ const Register = () => {
                             label="Số điện thoại"
                             name="phoneNumber"
                             type="tel"
+                            half
                             handleChange={handleChange}
                             error={data.phoneNumberValidate !== ''}
                             helperText={data.phoneNumberValidate}
                             onBlur={validatePhoneNumber}
                         />
+                        <Grid item sx={6}>
+                            <TextField
+                                label="Ngày sinh"
+                                name="birthDay"
+                                type="date"
+                                fullWidth
+                                InputLabelProps={{ shrink: true, required: true }}
+                                onChange={handleChange}
+                                error={data.birthDayValidate !== ''}
+                                helperText={data.birthDayValidate}
+                                onBlur={validateBirthDay}
+                            />
+                        </Grid>
+
                         <Grid item xs={12} sm={12}>
                             <Button
                                 fullWidth
