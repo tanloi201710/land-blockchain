@@ -6,7 +6,7 @@ const Footer = () => {
         <Box
             sx={{ position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)' }}
         >
-            <Typography variant="caption" color="text.secondary">TanLoi © 2022</Typography>
+            <Typography variant="caption" color="text.secondary">Land Management - TanLoi © 2022</Typography>
         </Box>
     )
 }

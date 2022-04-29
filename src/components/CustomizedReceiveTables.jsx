@@ -1,8 +1,9 @@
 import * as React from 'react'
-import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, CircularProgress } from '@mui/material'
+import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, CircularProgress, Tooltip, Typography } from '@mui/material'
 import { ConfirmFromReceiver } from '../api';
 import StyledTableRow from './StyledTableRow';
 import StyledTableCell from './StyledTableCell';
+import { Link } from 'react-router-dom';
 
 export default function CustomizedReceiveTables({ rows, setMessage, setError }) {
 
@@ -19,6 +20,15 @@ export default function CustomizedReceiveTables({ rows, setMessage, setError }) 
         }
 
         return 'Đã nhận đất'
+    }
+
+    const confirmedUsers = (row, userId) => {
+        if (typeof row.value.From === 'object') {
+            const user = row.value.From.find(user => Object.keys(user).toString() === userId)
+            return Object.values(user)[0]
+        } else {
+            return true
+        }
     }
 
     const ReceiveButton = ({ row }) => {
@@ -72,9 +82,24 @@ export default function CustomizedReceiveTables({ rows, setMessage, setError }) 
                             <StyledTableCell component="th" scope="row" sx={{ fontWeight: 500 }}>
                                 {row.key}
                             </StyledTableCell>
-                            <StyledTableCell align="right">{row.value.Land}</StyledTableCell>
+                            <StyledTableCell align="right">
+                                <Link to={`/detail/${row.value.Land}`} style={{ color: '#0288d1', fontWeight: 500 }}>
+                                    {row.value.Land}
+                                </Link>
+                            </StyledTableCell>
                             <StyledTableCell align="right">{typeof row.value.From === 'object'
-                                ? row.value.From.map((value) => Object.keys(value)).join(', ')
+                                ? row.value.From.map((value, index) => (
+                                    <Tooltip title={confirmedUsers(row, Object.keys(value)[0]) ? 'Đã xác nhận' : 'Chưa xác nhận'}>
+                                        <Typography
+                                            key={index}
+                                            color={confirmedUsers(row, Object.keys(value)[0]) ? 'text.primary' : 'text.secondary'}
+                                            component="span"
+                                            sx={{ fontSize: 14 }}
+                                        >
+                                            {Object.keys(value)[0]} &nbsp;
+                                        </Typography>
+                                    </Tooltip>
+                                ))
                                 : row.value.From}
                             </StyledTableCell>
                             <StyledTableCell align="right">{typeof row.value.To === 'object'

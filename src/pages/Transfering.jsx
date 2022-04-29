@@ -27,7 +27,8 @@ const Transfering = () => {
                 setError(result.data.message)
                 return
             }
-            setRows(result.data.trans.filter(item => item.TimeEnd === "-/-/-"))
+            setRows(result.data.trans.filter(item => item.value.TimeEnd === "-/-/-"))
+            console.log(result.data.trans)
         })()
     }, [])
 
@@ -40,7 +41,7 @@ const Transfering = () => {
             setError(result.data.message)
             return
         }
-        setRows(result.data.trans.filter(item => item.TimeEnd === "-/-/-"))
+        setRows(result.data.trans.filter(item => item.value.TimeEnd === "-/-/-"))
 
         setMessage('')
 

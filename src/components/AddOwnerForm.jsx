@@ -45,7 +45,7 @@ const AddOwnerForm = ({ handleClose, handleSubmit }) => {
             ...owner,
             userId: user.userId,
             fullname: user.fullname,
-            birthDate: user?.birthDate || '',
+            birthDate: user?.birthDay || '',
             idCard: user.idCard,
             phoneNumber: user?.phoneNumber.replace('+84', '0') || ''
         })

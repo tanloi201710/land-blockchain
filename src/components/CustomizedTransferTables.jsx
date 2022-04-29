@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, CircularProgress, Box } from '@mui/material'
+import { Button, Table, TableBody, TableContainer, TableHead, TableRow, Paper, CircularProgress, Box, Typography, Tooltip } from '@mui/material'
 import { confirmFromTransfer, cancelTransfer } from '../api';
 import { AuthContext } from '../contexts/AuthContext';
 import StyledTableRow from './StyledTableRow';
@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 export default function CustomizedTransferTables({ rows, setMessage, setError }) {
 
     const { user } = React.useContext(AuthContext)
-    console.log(user.userId)
+    console.log(rows)
 
     // Disable action or make out the status of transfer
     const disabled = (row) => {
@@ -24,6 +24,15 @@ export default function CustomizedTransferTables({ rows, setMessage, setError })
             }
         }
         return true
+    }
+
+    const confirmedUsers = (row, userId) => {
+        if (typeof row.value.From === 'object') {
+            const user = row.value.From.find(user => Object.keys(user).toString() === userId)
+            return Object.values(user)[0]
+        } else {
+            return true
+        }
     }
 
     const ConfirmButton = ({ row }) => {
@@ -121,7 +130,18 @@ export default function CustomizedTransferTables({ rows, setMessage, setError })
                                 </Link>
                             </StyledTableCell>
                             <StyledTableCell align="right">{typeof row.value.From === 'object'
-                                ? row.value.From.map((value) => Object.keys(value)).join(', ')
+                                ? row.value.From.map((value, index) => (
+                                    <Tooltip title={confirmedUsers(row, Object.keys(value)[0]) ? 'Đã xác nhận' : 'Chưa xác nhận'}>
+                                        <Typography
+                                            key={index}
+                                            color={confirmedUsers(row, Object.keys(value)[0]) ? 'text.primary' : 'text.secondary'}
+                                            component="span"
+                                            sx={{ fontSize: 14 }}
+                                        >
+                                            {Object.keys(value)[0]} &nbsp;
+                                        </Typography>
+                                    </Tooltip>
+                                ))
                                 : row.value.From}
                             </StyledTableCell>
                             <StyledTableCell align="right">{typeof row.value.To === 'object'

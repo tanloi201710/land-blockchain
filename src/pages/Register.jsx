@@ -278,7 +278,7 @@ const Register = () => {
                             helperText={data.phoneNumberValidate}
                             onBlur={validatePhoneNumber}
                         />
-                        <Grid item sx={6}>
+                        <Grid item sx={12} sm={6}>
                             <TextField
                                 label="Ngày sinh"
                                 name="birthDay"

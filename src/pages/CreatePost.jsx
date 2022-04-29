@@ -39,7 +39,7 @@ const CreatePost = ({ handleClose, setMessage, setError }) => {
 
         if (checkExistLand()) {
             handleClose()
-            setError(`Mảnh đất ${currentLand.key} đã được người đồng sỡ hữu rao bán!`)
+            setError(`Mảnh đất ${currentLand.key} đã được rao bán!`)
             return
         }
 

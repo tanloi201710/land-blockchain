@@ -126,7 +126,7 @@ const LandDetail = () => {
                                     <Typography variant='subtitle1'>Diện tich</Typography>   {/* Dien tich */}
                                 </Grid>
                                 <Grid item xs={8}>
-                                    <Typography variant='subtitle1'>{`${currentLand?.value.DienTich} m2`}</Typography>
+                                    <Typography variant='subtitle1'>{`${currentLand?.value.DienTich} `}m&#178;</Typography>
                                 </Grid>
                             </Grid>
 

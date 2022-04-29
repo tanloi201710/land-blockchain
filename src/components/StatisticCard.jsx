@@ -22,6 +22,7 @@ const StatisticCard = ({ icon, label, number, color }) => {
         transform: 'scale(1.6)',
         backgroundColor: color,
         color: 'white',
+        boxShadow: '0px 0px 18px -2px rgba(0,0,0,0.40)',
         zIndex: 100
     }
 
@@ -34,7 +35,7 @@ const StatisticCard = ({ icon, label, number, color }) => {
     }
 
     const styledLabel = {
-        color: 'lightgray'
+        color: 'white'
     }
 
     const styledNumber = {

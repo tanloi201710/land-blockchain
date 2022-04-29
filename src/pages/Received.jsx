@@ -31,6 +31,13 @@ const Received = () => {
     const handleCloseConfirm = async () => {
         await getHomePageData(user?.role, setLands, setNotifyList)
         setMessage('')
+            (async () => {
+                const result = await getReceiveLand()
+                console.log(result.data)
+                if (!result.data.error) {
+                    setRows(result.data.trans)
+                }
+            })()
     }
 
     return (

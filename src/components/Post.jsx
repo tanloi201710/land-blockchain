@@ -2,7 +2,6 @@ import { Chat, Info } from '@mui/icons-material'
 import { Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Tooltip, Typography } from '@mui/material'
 import { brown } from '@mui/material/colors'
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import { getLand } from '../api'
 import { AuthContext } from '../contexts/AuthContext'
 import { getUser } from '../firebase/search'
@@ -11,7 +10,6 @@ import { formatTimestamp } from '../firebase/time'
 const Post = ({ user, handleOpenChatBox, post, handleOpenPostDetails }) => {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const { lands } = React.useContext(AuthContext)
-    const navigate = useNavigate()
 
     const [currentUser, setCurrentUser] = React.useState({})
     const [currentLand, setCurrentLand] = React.useState(lands.find(land => land.key === post.land) || {})
@@ -24,7 +22,7 @@ const Post = ({ user, handleOpenChatBox, post, handleOpenPostDetails }) => {
     }, [post, setCurrentUser])
 
     React.useEffect(() => {
-        if (!Boolean(currentLand)) {
+        if (!Boolean(currentLand?.key)) {
             (async () => {
                 const result = await getLand(post.land)
                 if (!result.data.error) {
@@ -33,10 +31,11 @@ const Post = ({ user, handleOpenChatBox, post, handleOpenPostDetails }) => {
                 }
             })()
         }
-    }, [currentLand, setCurrentLand, post.land])
+    }, [currentLand?.key, setCurrentLand, post.land])
 
 
     console.log(post, currentUser)
+    console.log(currentLand)
     return (
         <Card sx={{ maxWidth: 345 }}>
             <CardHeader

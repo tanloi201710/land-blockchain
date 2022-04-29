@@ -35,13 +35,13 @@ const Waiting = () => {
             const result = await getTransfersAdmin()
             // console.log(result.data)
             if (!result.data.error) {
-                setAllTransfer(result.data.allTransfer.filter(item => item.TimeEnd === "-/-/-"))
+                setAllTransfer(result.data.allTransfer.filter(item => item.value.TimeEnd === "-/-/-"))
             }
 
             const result1 = await getSplitRequestAdmin()
 
             if (!result1.data.error) {
-                setAllSplitRequest(result1.data.splitRequest)
+                setAllSplitRequest(result1.data.splitRequest.filter(item => item.value.TimeEnd === "-/-/-"))
             }
         })()
     }, [])
@@ -62,13 +62,13 @@ const Waiting = () => {
         const result = await getTransfersAdmin()
         // console.log(result.data)
         if (!result.data.error) {
-            setAllTransfer(result.data.allTransfer)
+            setAllTransfer(result.data.allTransfer.filter(item => item.value.TimeEnd === "-/-/-"))
         }
 
         const result1 = await getSplitRequestAdmin()
 
         if (!result1.data.error) {
-            setAllSplitRequest(result1.data.splitRequest)
+            setAllSplitRequest(result1.data.splitRequest.filter(item => item.value.TimeEnd === "-/-/-"))
         }
 
     }

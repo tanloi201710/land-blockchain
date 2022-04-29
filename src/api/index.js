@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API = axios.create({ baseURL: 'http://172.21.96.76:5000/api' })
+const API = axios.create({ baseURL: 'http://172.21.102.226:5000/api' })
 
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('user')) {
@@ -65,3 +65,10 @@ export const confirmNewAsset = (formData) => API.post('/manager/updateStatusLand
 export const confirmTransferFromAdmin = (formData) => API.post('/manager/confirmTransfer', formData)
 
 export const confirmSplitAdmin = (formData) => API.post('/manager/confirmSplit', formData)
+
+
+// admin request
+
+export const getManagers = () => API.get('/admin/managers')
+
+export const deleteManager = (userId) => API.delete(`/admin/${userId}`)

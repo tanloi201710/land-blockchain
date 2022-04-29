@@ -251,13 +251,13 @@ const ProcessedDataBox = ({ keyLand, keySplit, data, requestData = {}, handleClo
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                zIndex: 10
+                zIndex: 99999
             }}
         >
             <Box
                 sx={{
                     width: 1000,
-                    maxHeight: 650,
+                    maxHeight: 700,
                     padding: 3,
                     borderRadius: 1,
                     backgroundColor: 'white',
@@ -314,7 +314,7 @@ const ProcessedDataBox = ({ keyLand, keySplit, data, requestData = {}, handleClo
 
                 <Typography variant="subtitle1" color="text.secondary" sx={{ fontWeight: 'bold', textAlign: 'center' }}>Thông tin được xử lý</Typography>
 
-                <Grid container spacing={4} sx={{ mt: 1, maxHeight: 250, overflowY: 'auto' }}>
+                <Grid container spacing={4} sx={{ mt: 1, maxHeight: 300, overflowY: 'auto' }}>
                     {(isUser() ? data : dataEdit).map((item, index) => (
                         <Grid item xs={6} key={index}>
                             <Grid container spacing={2}>

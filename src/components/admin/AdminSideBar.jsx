@@ -1,28 +1,9 @@
 import React from 'react'
-import { AdminPanelSettings, Assignment, Dashboard, Equalizer, Person } from '@mui/icons-material'
+import { AdminPanelSettings } from '@mui/icons-material'
 import { Badge, Box, Divider, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typography } from '@mui/material'
 
 import { useTheme } from '@mui/material/styles'
 
-
-const tabList = [
-    {
-        icon: Dashboard,
-        desc: 'Trang chủ'
-    },
-    {
-        icon: Person,
-        desc: 'Nhân viên'
-    },
-    {
-        icon: Equalizer,
-        desc: 'Thống kê'
-    },
-    {
-        icon: Assignment,
-        desc: 'Hoạt động'
-    },
-]
 
 const drawerWidthOpen = 240
 const paddingIconButton = 10
@@ -32,7 +13,7 @@ const drawerWidthClose = (paddingIconButton + marginIconButton) * 2 + iconFontSi
 
 
 
-const AdminSideBar = ({ open }) => {
+const AdminSideBar = ({ open, tabList, activeTab, handleChangeTab }) => {
 
     const drawerContent = (
         <>
@@ -63,7 +44,7 @@ const AdminSideBar = ({ open }) => {
                         paddingBottom: '3px',
                     }}
                 >
-                    QUẢN LÝ ĐẤT ĐAI
+                    LAND MANAGEMENT
                 </Typography>
                 <Box
                     sx={{
@@ -99,7 +80,9 @@ const AdminSideBar = ({ open }) => {
                                     '&:hover': {
                                         backgroundColor: '#26284687',
                                     },
+                                    backgroundColor: index === activeTab ? '#26284687' : 'transparent'
                                 }}
+                                onClick={() => handleChangeTab(index)}
                             >
                                 <ListItemIcon sx={{ minWidth: '46px' }}>
                                     <Badge

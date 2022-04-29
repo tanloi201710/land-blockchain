@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Grid, MenuItem, Paper, TextField } from '@mui/material'
+import { Box, Button, CircularProgress, Grid, MenuItem, Paper, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { splitLand } from '../api'
@@ -70,7 +70,10 @@ const SplitLand = () => {
             <NavBar />
             {message !== '' && <ConfirmBox message={message} handleConfirm={handleCloseConfirm} />}
             {error !== '' && <BasicAlerts serverity="error" message={error} onClose={() => setError('')} />}
-            <Box sx={{ width: '100vw', minHeight: 600, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 5 }}>
+                <Typography variant="h6">TÁCH THỬA ĐẤT</Typography>
+            </Box>
+            <Box sx={{ width: '100vw', minHeight: 550, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Paper sx={{ width: 600, p: 5 }}>
                     <Grid container spacing={2} >
                         <Grid item xs={12}>

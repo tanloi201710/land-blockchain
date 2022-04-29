@@ -33,7 +33,7 @@ const SplitRequest = () => {
                 setError(result.data.message)
                 return
             }
-            setRows(result.data.splitRequest.filter(item => item.TimeEnd === "-/-/-"))
+            setRows(result.data.splitRequest.filter(item => item.value.TimeEnd === "-/-/-"))
         })()
     }, [])
 
