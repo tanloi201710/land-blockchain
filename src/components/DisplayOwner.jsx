@@ -12,7 +12,7 @@ const DisplayOwner = ({ owner }) => {
                 sx={{ marginLeft: 5, display: 'flex', alignItems: 'center', gap: 2 }}
             >
                 <Typography variant='subtitle1'>Năm sinh:</Typography>               {/* Nam sinh */}
-                <Typography variant='subtitle1'>{owner?.birthDate || 2000}</Typography>
+                <Typography variant='subtitle1'>{owner?.birthDay || 2000}</Typography>
             </Box>
 
             <Box

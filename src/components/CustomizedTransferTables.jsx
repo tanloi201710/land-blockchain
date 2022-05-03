@@ -57,7 +57,7 @@ export default function CustomizedTransferTables({ rows, setMessage, setError })
 
 
         return (
-            <Button variant='contained' color='success' onClick={handleReceive} disabled={disabled(row)}>
+            <Button variant='contained' color='success' onClick={handleReceive} disabled={disabled(row) || processing}>
                 {processing ? <CircularProgress size={25} color='inherit' /> : 'Xác nhận'}
             </Button>
         )
@@ -96,7 +96,7 @@ export default function CustomizedTransferTables({ rows, setMessage, setError })
         }
 
         return (
-            <Button variant='contained' color='error' onClick={handleCancel} >
+            <Button variant='contained' color='error' onClick={handleCancel} disabled={processing} >
                 {processing ? <CircularProgress size={25} color='inherit' /> : 'Hủy chuyển'}
             </Button>
         )

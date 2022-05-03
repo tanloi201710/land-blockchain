@@ -11,11 +11,11 @@ import NoData from '../components/NoData'
 import Post from '../components/Post'
 import { AuthContext } from '../contexts/AuthContext'
 import CreatePost from './CreatePost'
-import { getPostsData } from '../contexts/actions'
+import { getHomePageData, getPostsData } from '../contexts/actions'
 import PostDetail from '../components/PostDetail'
 
 const Market = () => {
-    const { user, posts, setPosts } = useContext(AuthContext)
+    const { user, posts, setPosts, setLands, setNotifyList } = useContext(AuthContext)
 
     const [isCreatePost, setIsCreatePost] = useState(false)
     const [chatBox, setChatBox] = useState(false)
@@ -23,7 +23,8 @@ const Market = () => {
         isOpen: false,
         user: {},
         post: {},
-        land: {}
+        land: {},
+        handleContact: () => { setChatBox(true); setIsPostDetail({ ...isPostDetail, isOpen: false }) }
     })
     const [message, setMessage] = useState('')
     const [error, setError] = useState('')
@@ -48,6 +49,7 @@ const Market = () => {
         setMessage('')
         // refetch data
         await getPostsData(setPosts)
+        await getHomePageData(user?.role, setLands, setNotifyList)
     }
 
     const handleOpenPostDetails = (user, post, land) => {
@@ -70,7 +72,13 @@ const Market = () => {
                         posts.length > 0
                             ? posts.map((post, index) => (
                                 <Grid item xs={12} sm={6} md={4} key={index}>
-                                    <Post user={user} handleOpenChatBox={handleOpenChatBox} post={post} handleOpenPostDetails={handleOpenPostDetails} />
+                                    <Post
+                                        handleOpenChatBox={handleOpenChatBox}
+                                        post={post}
+                                        handleOpenPostDetails={handleOpenPostDetails}
+                                        setError={setError}
+                                        setMessage={setMessage}
+                                    />
                                 </Grid>
                             ))
                             : <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>

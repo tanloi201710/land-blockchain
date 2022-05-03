@@ -231,7 +231,7 @@ const ProcessedDataBox = ({ keyLand, keySplit, data, requestData = {}, handleClo
         return (
             <Button
                 variant='contained'
-                disabled={!disabledAction()}
+                disabled={!disabledAction() || processing}
                 onClick={handleSubmitSplitLand}
             >
                 {processing ? <CircularProgress size={25} color='inherit' /> : 'Hoàn tất'}

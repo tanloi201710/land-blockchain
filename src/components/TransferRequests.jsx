@@ -56,7 +56,12 @@ export default function TransferRequests({ rows, setMessage, setError }) {
 
 
         return (
-            <Button variant='contained' color='success' onClick={handleReceive} disabled={!row.value.ConfirmFromReceiver || row.value.ConfirmFromAdmin}>
+            <Button
+                variant='contained'
+                color='success'
+                onClick={handleReceive}
+                disabled={!row.value.ConfirmFromReceiver || row.value.ConfirmFromAdmin || processing}
+            >
                 {processing ? <CircularProgress size={25} color='inherit' /> : 'Duyệt'}
             </Button>
         )

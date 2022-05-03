@@ -61,7 +61,7 @@ export default function CustomizedSplitRequestTables({ rows, setMessage, setErro
 
 
         return (
-            <Button variant='contained' color='success' onClick={handleConfirm} disabled={handleDisableConfirm(row)}>
+            <Button variant='contained' color='success' onClick={handleConfirm} disabled={handleDisableConfirm(row) || processing}>
                 {processing ? <CircularProgress size={25} color='inherit' /> : 'Xác Nhận'}
             </Button>
         )

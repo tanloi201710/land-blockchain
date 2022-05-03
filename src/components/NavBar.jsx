@@ -412,7 +412,7 @@ const NavBar = () => {
                         open={openProfile}
                         onClose={handleCloseProfileMenu}
                     >
-                        <MenuItem onClick={() => navigate('/')} disableRipple>
+                        <MenuItem onClick={() => navigate('/account')} disableRipple>
                             <ListItemIcon>
                                 <AccountCircle />
                             </ListItemIcon>

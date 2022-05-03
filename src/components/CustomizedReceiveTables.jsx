@@ -54,7 +54,12 @@ export default function CustomizedReceiveTables({ rows, setMessage, setError }) 
         }
 
         return (
-            <Button variant='contained' color='success' onClick={handleReceive} disabled={getStatus(row) !== 'Chưa nhận đất' ? true : false}>
+            <Button
+                variant='contained'
+                color='success'
+                onClick={handleReceive}
+                disabled={(getStatus(row) !== 'Chưa nhận đất' ? true : false) || processing}
+            >
                 {processing ? <CircularProgress size={25} color='inherit' /> : 'Nhận'}
             </Button>
         )

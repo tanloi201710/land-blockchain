@@ -194,6 +194,7 @@ export default function CustomizedTransferStepper({ values, setValues, handleSub
                                                     <Chip
                                                         label={value.fullname}
                                                         onDelete={() => handleDelete(value.userId)}
+                                                        sx={{ fontWeight: 'bold' }}
                                                     />
                                                 </li>
                                             ))}
@@ -265,7 +266,7 @@ export default function CustomizedTransferStepper({ values, setValues, handleSub
                     </Box>
                     <Box>
 
-                        <Button onClick={handleSubmit} sx={{ mt: 1, mr: 1 }} variant='contained'>
+                        <Button onClick={handleSubmit} sx={{ mt: 1, mr: 1 }} variant='contained' disabled={processing}>
                             {processing ? <CircularProgress size={20} color='inherit' /> : 'Xác nhận'}
                         </Button>
                         <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }} variant='outlined'>

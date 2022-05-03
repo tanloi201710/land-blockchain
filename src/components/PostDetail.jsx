@@ -1,8 +1,10 @@
 import React from 'react'
 import { Box, Typography, IconButton, Grid, Button, Divider } from '@mui/material'
 import { Close } from '@mui/icons-material'
+import { currency } from '../format'
+import { Link } from 'react-router-dom'
 
-const PostDetail = ({ handleClose, user, post, land }) => {
+const PostDetail = ({ handleClose, user, post, land, handleContact }) => {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
 
     const row = (label, value, sx, color = 'text.primary') => (
@@ -84,7 +86,7 @@ const PostDetail = ({ handleClose, user, post, land }) => {
                                 {row('Người đăng bán', user.fullname, { fontWeight: 'bold' })}
                             </Grid>
                             <Grid item xs={6}>
-                                {row('Số điện thoại', user.phoneNumber, {})}
+                                {row('Số điện thoại', user.phoneNumber.replace('+84', '0'), {})}
                             </Grid>
                         </Grid>
                     </Box>
@@ -93,7 +95,12 @@ const PostDetail = ({ handleClose, user, post, land }) => {
                         <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>Thông tin thửa đất</Typography>
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
-                                {row('Mã đất', land.key, {})}
+                                {row(
+                                    'Mã đất',
+                                    <Link to={`/detail/${land.key}`} style={{ color: '#0288d1', fontWeight: 500 }}>{land.key}</Link>,
+                                    {}
+                                )
+                                }
                             </Grid>
                             <Divider />
                             <Grid item xs={6}>
@@ -125,13 +132,13 @@ const PostDetail = ({ handleClose, user, post, land }) => {
                                 sx={{ fontSize: 19, fontWeight: "bold" }}
                                 color={'error'}
                             >
-                                &nbsp;{post.price}
+                                &nbsp;{currency(post.price)}
                             </Typography>
                             <Typography
                                 variant="body1"
                                 component="span"
                             >
-                                &nbsp;VNĐ/m&#178;
+                                &nbsp;/m&#178;
                             </Typography>
 
                         </Box>
@@ -154,7 +161,7 @@ const PostDetail = ({ handleClose, user, post, land }) => {
                     </Box>
                     {/* buttons */}
                     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-                        <Button variant="contained" color="info">Liện hệ ngay</Button>
+                        <Button variant="contained" color="info" onClick={handleContact}>Liện hệ ngay</Button>
                     </Box>
                 </Box>
             </Box>

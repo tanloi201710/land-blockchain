@@ -30,7 +30,7 @@ export default function CustomizedNewAssetTables({ rows, setMessage, setError })
         }
 
         return (
-            <Button variant='contained' color='success' onClick={handleConfirm}>
+            <Button variant='contained' color='success' onClick={handleConfirm} disabled={processing}>
                 {processing ? <CircularProgress size={25} color='inherit' /> : 'Duyệt'}
             </Button>
         )

@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API = axios.create({ baseURL: 'http://172.21.102.226:5000/api' })
+const API = axios.create({ baseURL: 'http://172.21.102.83:5000/api' })
 
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('user')) {
@@ -33,6 +33,12 @@ export const confirmSplit = (formData) => API.post('/user/confirmSplit', formDat
 export const readNotifications = () => API.put('/user/readNotifications')
 
 export const createPost = (formData) => API.post('/user/createPost', formData)
+
+export const deletePost = (land) => API.delete(`/user/${land}`)
+
+export const checkPassword = (formData) => API.post('/user/checkPassword', formData)
+
+export const updateInfo = (formData) => API.post('/user/updateInfo', formData)
 
 // land request
 export const getLand = (key) => API.get(`/land/${key}`)

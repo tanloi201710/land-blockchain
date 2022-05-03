@@ -616,7 +616,7 @@ const AddLandCustom = ({
                         <Paper elevation={3} sx={{ p: 3 }}>
                             <Typography variant='button'>Xác nhận đăng ký đất mới</Typography>
                             <Box sx={{ mt: 2 }}>
-                                <Button onClick={handleSubmit} sx={{ mt: 1, mr: 1 }} variant='contained' disabled={!checkToNextStep}>
+                                <Button onClick={handleSubmit} sx={{ mt: 1, mr: 1 }} variant='contained' disabled={!checkToNextStep || isRegisting}>
                                     {isRegisting ? <CircularProgress size={20} color='inherit' /> : 'Xác nhận'}
                                 </Button>
                                 <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }} variant='outlined'>

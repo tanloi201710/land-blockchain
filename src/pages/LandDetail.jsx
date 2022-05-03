@@ -10,6 +10,7 @@ import { getUser } from '../firebase/search'
 import DisplayOwner from '../components/DisplayOwner'
 import StyledTableCell from '../components/StyledTableCell'
 import StyledTableRow from '../components/StyledTableRow'
+import { getLand } from '../api'
 
 const LandDetail = () => {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
@@ -17,7 +18,7 @@ const LandDetail = () => {
     const navigate = useNavigate()
 
     const { lands, user } = useContext(AuthContext)
-    const currentLand = lands.find(land => land.key === params.id)
+    const [currentLand, setCurrentLand] = useState(lands.find(land => land.key === params.id))
     const currentUsers = currentLand?.value.UserId
 
     const initialOwners = () => {
@@ -30,6 +31,21 @@ const LandDetail = () => {
 
     const [owners, setOwners] = useState(initialOwners)
 
+
+    useEffect(() => {
+        console.log('currentLand', params.id)
+        if (!Boolean(currentLand?.key)) {
+            (async () => {
+                const result = await getLand(params.id)
+                if (!result.data.error) {
+                    console.log(result.data.land)
+                    setCurrentLand(result.data.land)
+                }
+            })()
+        }
+    }, [currentLand?.key, setCurrentLand, params.id])
+
+    // console.log(lands.find(land => land.key === params.id))
 
     useEffect(() => {
         if (typeof currentUsers === 'object') {
