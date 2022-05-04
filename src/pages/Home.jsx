@@ -46,6 +46,7 @@ const Home = () => {
                     paddingY: 5,
                     display: 'flex',
                     gap: 5,
+                    minHeight: 'calc(100vh - 64px - 68px)'
                 }}
             >
 
@@ -53,7 +54,7 @@ const Home = () => {
                     {user?.role === 'user' ?
                         <>
                             <Typography variant="h6" sx={{ paddingBottom: 2 }}>ĐẤT CỦA BẠN</Typography>
-                            {lands.length > 0
+                            {lands?.length > 0
                                 ? <CustomizedTables rows={lands} user={user} />
                                 : <NoData />
                             }
@@ -61,7 +62,7 @@ const Home = () => {
                         : user?.role === 'manager' &&
                         <>
                             <Typography variant="h6" sx={{ paddingBottom: 2 }}>ĐẤT ĐANG QUẢN LÝ</Typography>
-                            {lands.length > 0
+                            {lands?.length > 0
                                 ? <CustomizedTables rows={lands} user={user} />
                                 : <NoData />
                             }

@@ -283,8 +283,8 @@ const LandDetail = () => {
                                         <TableRow>
                                             <StyledTableCell>STT</StyledTableCell>
                                             <StyledTableCell>Loại nhà ở</StyledTableCell>
-                                            <StyledTableCell>Diện tích xây dựng</StyledTableCell>
-                                            <StyledTableCell>Diện tích sàn</StyledTableCell>
+                                            <StyledTableCell>Diện tích xây dựng(m&#178;)</StyledTableCell>
+                                            <StyledTableCell>Diện tích sàn(m&#178;)</StyledTableCell>
                                             <StyledTableCell>Hình thức sỡ hữu</StyledTableCell>
                                             <StyledTableCell>Cấp(hạng) nhà ở</StyledTableCell>
                                             <StyledTableCell>Thời hạn sỡ hữu</StyledTableCell>
@@ -316,13 +316,13 @@ const LandDetail = () => {
                         <Typography variant='h6' gutterBottom>Công trình xây dựng khác</Typography>
                         {currentLand?.value.CongTrinhKhac.length > 0 ?
                             <TableContainer component={Paper}>
-                                <Table sx={{ minWidth: 1000 }}>
+                                <Table sx={{ minWidth: 900 }}>
                                     <TableHead>
                                         <TableRow>
                                             <StyledTableCell>STT</StyledTableCell>
                                             <StyledTableCell>Loại công trình</StyledTableCell>
-                                            <StyledTableCell>Diện tích xây dựng(m2)</StyledTableCell>
-                                            <StyledTableCell>Diện tích sàn(m2)</StyledTableCell>
+                                            <StyledTableCell>Diện tích xây dựng(m&#178;)</StyledTableCell>
+                                            <StyledTableCell>Diện tích sàn(m&#178;)</StyledTableCell>
                                             <StyledTableCell>Hình thức sỡ hữu</StyledTableCell>
                                             <StyledTableCell>Cấp công trình</StyledTableCell>
                                             <StyledTableCell>Thời hạn sỡ hữu</StyledTableCell>

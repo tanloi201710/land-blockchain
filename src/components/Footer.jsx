@@ -4,7 +4,7 @@ import React from 'react'
 const Footer = () => {
     return (
         <Box
-            sx={{ position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)' }}
+            sx={{ display: 'flex', justifyContent: 'center', marginY: 3 }}
         >
             <Typography variant="caption" color="text.secondary">Land Management - TanLoi © 2022</Typography>
         </Box>
