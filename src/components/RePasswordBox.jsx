@@ -28,6 +28,8 @@ const RePasswordBox = ({ oldPassword, setOldPassword, handleSubmit }) => {
                 <Typography variant='button' color='text.secondary' sx={{ fontWeight: 'bold', fontSize: 17 }}>Xác nhận mật khẩu</Typography>
                 <Divider />
                 <TextField
+                    sx={{ mt: 3 }}
+                    fullWidth
                     label='Mật khẩu cũ'
                     type='password'
                     value={oldPassword}

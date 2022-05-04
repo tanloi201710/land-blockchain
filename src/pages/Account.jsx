@@ -31,7 +31,8 @@ const Account = () => {
 
     const avatar = {
         width: 72,
-        height: 72
+        height: 72,
+        border: '1px solid rgba(0,0,0,0.2)'
     }
 
     const name = {
@@ -75,16 +76,29 @@ const Account = () => {
     }
 
     const handleChangeData = (event) => {
+        console.log(event.target.value)
         setDataEdit({ ...dataEdit, [event.target.name]: event.target.value })
     }
 
     const decodeBirthday = (birthDay) => {
-        const birthArray = birthDay.split('/')
-        const sortedBirthDay = [birthArray[2], birthArray[1], birthArray[0]]
-        return sortedBirthDay.join('-')
+        if (birthDay.includes('/')) {
+            const birthArray = birthDay.split('/')
+            const sortedBirthDay = [birthArray[2], birthArray[1], birthArray[0]]
+            return sortedBirthDay.join('-')
+        }
+        return birthDay
     }
 
-    console.log(decodeBirthday(user.birthDay))
+    const encodeBirthDay = (birthDay) => {
+        if (birthDay.includes('-')) {
+            const birthArray = birthDay.split('-')
+            const sortedBirthDay = [birthArray[2], birthArray[1], birthArray[0]]
+            return sortedBirthDay.join('/')
+        }
+        return birthDay
+    }
+
+    console.log(dataEdit.birthDay)
 
     const handleSave = (event) => {
         event.preventDefault()
@@ -92,10 +106,13 @@ const Account = () => {
     }
 
     const handleSubmit = async () => {
+        dataEdit.birthDay = encodeBirthDay(dataEdit.birthDay)
         const result = await checkPassword({ password: oldPassword })
         if (!result.data.error) {
             const result1 = await updateInfo(dataEdit)
             if (!result1.data.error) {
+                setOpenRepassword(false)
+                setOldPassword('')
                 setMessage(result1.data.message)
                 if (Boolean(result1.data?.user)) {
                     setUser(result1.data.user)
@@ -151,7 +168,7 @@ const Account = () => {
                     <Typography variant="h6" sx={{ textAlign: 'center' }} >Tài khoản</Typography>
                     <Box sx={accountHeader}>
                         <Box sx={avatarWrapper}>
-                            <Avatar alt={user.fullname} src={`${PF}images/avatar.jpeg`} sx={avatar} />
+                            <Avatar alt={user.fullname} src={`${PF}images/userOne.png`} sx={avatar} />
                             <Typography variant="body1" sx={name} >{user.fullname}</Typography>
                         </Box>
                         <Button variant="contained" onClick={() => handleChangeMode('seen')}>Xem</Button>
@@ -179,11 +196,11 @@ const SeenMode = ({ rightContent, leftContent, user }) => {
                 <Typography variant="subtitle1">Năm sinh</Typography>
             </Grid>
             <Grid item xs={6} sx={rightContent}>
-                <Typography variant="subtitle1">{user.userId}</Typography>
-                <Typography variant="subtitle1">{user.phoneNumber}</Typography>
-                <Typography variant="subtitle1">{user?.Address || 'Chưa cập nhật'}</Typography>
-                <Typography variant="subtitle1">{user.idCard}</Typography>
-                <Typography variant="subtitle1">{user.birthDay}</Typography>
+                <Typography variant="subtitle1" sx={rightContent}>{user.userId}</Typography>
+                <Typography variant="subtitle1" sx={rightContent}>{user.phoneNumber}</Typography>
+                <Typography variant="subtitle1" sx={rightContent}>{user?.address || 'Chưa cập nhật'}</Typography>
+                <Typography variant="subtitle1" sx={rightContent}>{user.idCard}</Typography>
+                <Typography variant="subtitle1" sx={rightContent}>{user.birthDay}</Typography>
             </Grid>
         </Grid>
     )
@@ -214,8 +231,8 @@ const EditMode = ({ dataEdit, handleChangeData, handleSave, decodeBirthday }) =>
                 <TextField
                     fullWidth
                     label='Địa chỉ'
-                    name='Address'
-                    value={dataEdit?.Address}
+                    name='address'
+                    value={dataEdit?.address}
                     onChange={(event) => handleChangeData(event)}
                 />
             </Grid>
