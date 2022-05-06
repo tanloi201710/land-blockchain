@@ -2,22 +2,11 @@ import { Close } from '@mui/icons-material'
 import { Box, Button, IconButton, Typography } from '@mui/material'
 import React from 'react'
 
+import BoxContainer from './BoxContainer'
+
 const ActionConfirmBox = ({ message, handleClose, handleConfirm }) => {
     return (
-        <Box
-            sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100vw',
-                height: '100vh',
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                zIndex: 10
-            }}
-        >
+        <BoxContainer>
             <Box
                 sx={{
                     width: 450,
@@ -50,7 +39,7 @@ const ActionConfirmBox = ({ message, handleClose, handleConfirm }) => {
                     </Box>
                 </Box>
             </Box>
-        </Box>
+        </BoxContainer>
     )
 }
 

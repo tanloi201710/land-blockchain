@@ -1,22 +1,10 @@
 import React from 'react'
 import { Box, Button, Divider, Typography } from '@mui/material'
+import BoxContainer from './BoxContainer'
 
 const ConfirmBox = ({ message, handleConfirm }) => {
     return (
-        <Box
-            sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100vw',
-                height: '100vh',
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                zIndex: 10
-            }}
-        >
+        <BoxContainer>
             <Box
                 sx={{
                     width: 500,
@@ -33,7 +21,7 @@ const ConfirmBox = ({ message, handleConfirm }) => {
 
                 </Box>
             </Box>
-        </Box>
+        </BoxContainer>
     )
 }
 

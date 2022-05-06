@@ -2,6 +2,7 @@ import { Close } from '@mui/icons-material'
 import { Box, Button, Grid, IconButton, MenuItem, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { cap, hinhThucNhan, nhaO } from '../data'
+import BoxContainer from './BoxContainer'
 
 const AddHouseBox = ({ handleClose, handleSubmit }) => {
     const initialHouse = {
@@ -24,20 +25,7 @@ const AddHouseBox = ({ handleClose, handleSubmit }) => {
     }
 
     return (
-        <Box
-            sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100vw',
-                height: '100vh',
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                zIndex: 10
-            }}
-        >
+        <BoxContainer>
             <Box
                 sx={{
                     width: 600,
@@ -152,7 +140,7 @@ const AddHouseBox = ({ handleClose, handleSubmit }) => {
                     </Grid>
                 </Grid>
             </Box>
-        </Box>
+        </BoxContainer>
     )
 }
 

@@ -9,6 +9,7 @@ import StatisticCard from '../../components/StatisticCard'
 import ManageStaffs from './ManageStaffs'
 import { AuthContext } from '../../contexts/AuthContext'
 import ActionConfirmBox from '../../components/ActionConfirmBox'
+import BasicAlerts from '../../components/Alert'
 
 const AdminHome = () => {
 
@@ -90,11 +91,13 @@ const AdminHome = () => {
 
     const [open, setOpen] = React.useState(false)
     const [activeTab, setActiveTab] = React.useState(0)
+    const [error, setError] = React.useState('')
     const [actionConfirm, setActionConfirm] = React.useState({
         isOpen: false,
         message: '',
         handleConfirm: () => { },
     })
+
 
     const handleChangeTab = (tab) => {
         setActiveTab(tab)
@@ -136,9 +139,9 @@ const AdminHome = () => {
         setActionConfirm({ ...actionConfirm, isOpen: false })
     }
 
-    const handleOpenActionConfirm = () => {
-        setActionConfirm({ ...actionConfirm, isOpen: true })
-    }
+    // const handleOpenActionConfirm = () => {
+    //     setActionConfirm({ ...actionConfirm, isOpen: true })
+    // }
 
     const sideBarWidth = open ? 68 : 240
 
@@ -199,6 +202,7 @@ const AdminHome = () => {
     return (
         <Box>
             <Box sx={{ display: 'flex', width: '100vw', height: '100vh', backgroundColor: '#f6f7f9' }}>
+                {error !== '' && <BasicAlerts serverity="error" message={error} onClose={() => setError('')} />}
                 <AdminSideBar open={open} tabList={tabList} activeTab={activeTab} handleChangeTab={handleChangeTab} />
 
                 <Box sx={{ minWidth: `calc(100vw - ${sideBarWidth}px)` }}>

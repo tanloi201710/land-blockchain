@@ -1,22 +1,10 @@
 import { Box, Button, Divider, TextField, Typography } from '@mui/material'
 import React from 'react'
+import BoxContainer from './BoxContainer'
 
 const RePasswordBox = ({ oldPassword, setOldPassword, handleSubmit }) => {
     return (
-        <Box
-            sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100vw',
-                height: '100vh',
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                zIndex: 10
-            }}
-        >
+        <BoxContainer>
             <Box
                 sx={{
                     width: 500,
@@ -39,7 +27,7 @@ const RePasswordBox = ({ oldPassword, setOldPassword, handleSubmit }) => {
                     <Button variant='contained' color='info' onClick={handleSubmit} >OK</Button>
                 </Box>
             </Box>
-        </Box>
+        </BoxContainer>
     )
 }
 

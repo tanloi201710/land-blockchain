@@ -110,7 +110,7 @@ const Register = () => {
         let helperText = ''
         const email = data.email
         if (email === '') helperText = 'Email không được để trống'
-        else if (!emailValidator.test(email)) helperText = 'Email sai, Vd: example@gmail.com'
+        else if (!emailValidator.test(email)) helperText = 'Email phải có dạng: example@gmail.com'
 
         setData({ ...data, emailValidate: helperText })
 
