@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API = axios.create({ baseURL: 'http://172.21.107.168:5000/api' })
+const API = axios.create({ baseURL: 'http://172.21.103.144:5000/api' })
 
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('user')) {
@@ -39,6 +39,10 @@ export const deletePost = (land) => API.delete(`/user/${land}`)
 export const checkPassword = (formData) => API.post('/user/checkPassword', formData)
 
 export const updateInfo = (formData) => API.post('/user/updateInfo', formData)
+
+export const getWallet = () => API.get('/user/wallet')
+
+export const transferToken = (formData) => API.post('/user/transferToken', formData)
 
 // land request
 export const getLand = (key) => API.get(`/land/${key}`)

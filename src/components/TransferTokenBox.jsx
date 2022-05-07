@@ -1,11 +1,13 @@
 import { Close } from '@mui/icons-material'
-import { Box, Button, CircularProgress, Grid, IconButton, List, ListItemButton, ListItemText, TextField, Typography } from '@mui/material'
-import React, { useContext, useState } from 'react'
+import { Box, Button, CircularProgress, Grid, IconButton, InputAdornment, List, ListItemButton, ListItemText, TextField, Typography } from '@mui/material'
+import React from 'react'
 import { AuthContext } from '../contexts/AuthContext'
+import BoxContainer from './BoxContainer'
 import { getAllUser } from '../firebase/search'
 
-const AddOwnerForm = ({ handleClose, handleSubmit }) => {
-    const initialOwner = {
+const TransferTokenBox = ({ handleClose, handleSubmit }) => {
+
+    const initialReceiver = {
         userId: '',
         fullname: '',
         birthDate: '',
@@ -13,15 +15,16 @@ const AddOwnerForm = ({ handleClose, handleSubmit }) => {
         phoneNumber: ''
     }
 
-    const { user } = useContext(AuthContext)
+    const { user } = React.useContext(AuthContext)
 
-    const [owner, setOwner] = useState(initialOwner)
-    const [users, setUsers] = useState([])
-    const [fetching, setFetching] = useState(false)
+    const [receiver, setReceiver] = React.useState(initialReceiver)
+    const [users, setUsers] = React.useState([])
+    const [amount, setAmount] = React.useState(0)
+    const [fetching, setFetching] = React.useState(false)
 
 
     const handleChange = async (event) => {
-        setOwner({ ...owner, [event.target.name]: event.target.value })
+        setReceiver({ ...receiver, [event.target.name]: event.target.value })
         if (event.target.value.length > 1) {
             setFetching(true)
             const dataUsers = await getAllUser()
@@ -34,15 +37,15 @@ const AddOwnerForm = ({ handleClose, handleSubmit }) => {
         }
     }
 
-    const handleAddOwner = () => {
-        handleSubmit(owner)
+    const handleTranferToken = () => {
+        handleSubmit(receiver, amount)
         handleClose()
     }
 
     const handleChooseUser = (user) => {
         setUsers([])
-        setOwner({
-            ...owner,
+        setReceiver({
+            ...receiver,
             userId: user.userId,
             fullname: user.fullname,
             birthDate: user?.birthDay || '',
@@ -51,26 +54,16 @@ const AddOwnerForm = ({ handleClose, handleSubmit }) => {
         })
     }
 
+    const abledAction = () => {
+        return parseInt(amount) !== 0 && receiver.fullname !== ''
+    }
 
     return (
-        <Box
-            sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100vw',
-                height: '100vh',
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                zIndex: 10
-            }}
-        >
+        <BoxContainer>
             <Box
                 sx={{
                     width: 500,
-                    height: 450,
+                    height: 530,
                     padding: 3,
                     borderRadius: 1,
                     backgroundColor: 'white'
@@ -88,7 +81,7 @@ const AddOwnerForm = ({ handleClose, handleSubmit }) => {
                         <Close />
                     </IconButton>
                 </Box>
-                <Typography variant="button" >Thêm chủ sở hữu</Typography>
+                <Typography variant="button" >Chuyển tiền</Typography>
                 <Grid container spacing={2} sx={{ marginTop: 2, position: 'relative' }}>
 
                     <Grid item xs={12} component="form" autoComplete="off">
@@ -97,7 +90,7 @@ const AddOwnerForm = ({ handleClose, handleSubmit }) => {
                             required
                             name='userId'
                             label="Email/userId"
-                            value={owner.userId}
+                            value={receiver.userId}
                             onChange={handleChange}
                         />
                         {(fetching || users.length > 0) &&
@@ -125,7 +118,7 @@ const AddOwnerForm = ({ handleClose, handleSubmit }) => {
                             disabled
                             name='fullname'
                             label="Họ tên"
-                            value={owner.fullname}
+                            value={receiver.fullname}
                         />
                     </Grid>
                     <Grid item xs={6}>
@@ -134,7 +127,7 @@ const AddOwnerForm = ({ handleClose, handleSubmit }) => {
                             disabled
                             name='idCard'
                             label="CMND/CCCD"
-                            value={owner.idCard}
+                            value={receiver.idCard}
                         />
                     </Grid>
                     <Grid item xs={6}>
@@ -143,7 +136,7 @@ const AddOwnerForm = ({ handleClose, handleSubmit }) => {
                             disabled
                             name='birthDate'
                             label='Năm sinh'
-                            value={owner.birthDate}
+                            value={receiver.birthDate}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -152,17 +145,37 @@ const AddOwnerForm = ({ handleClose, handleSubmit }) => {
                             disabled
                             name='phoneNumber'
                             label='Số điện thoại'
-                            value={owner.phoneNumber}
+                            value={receiver.phoneNumber}
                         />
                     </Grid>
+
                     <Grid item xs={12}>
-                        <Button variant='contained' onClick={handleAddOwner}>Thêm</Button>
+                        <TextField
+                            fullWidth
+                            label='Số coin muốn chuyển'
+                            type="number"
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">LTK</InputAdornment>
+                            }}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Button
+                            variant='contained'
+                            onClick={handleTranferToken}
+                            disabled={!abledAction()}
+                        >
+                            Chuyển
+                        </Button>
                     </Grid>
                 </Grid>
 
             </Box>
-        </Box>
+        </BoxContainer>
     )
 }
 
-export default AddOwnerForm
+export default TransferTokenBox

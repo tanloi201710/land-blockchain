@@ -375,6 +375,7 @@ const NavBar = () => {
                                 size="large"
                                 aria-label='user wallet'
                                 color='inherit'
+                                onClick={() => navigate('/wallet')}
                             >
                                 <MonetizationOn fontSize='inherit' />
                             </IconButton>
