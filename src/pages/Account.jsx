@@ -76,7 +76,6 @@ const Account = () => {
     }
 
     const handleChangeData = (event) => {
-        console.log(event.target.value)
         setDataEdit({ ...dataEdit, [event.target.name]: event.target.value })
     }
 
@@ -98,7 +97,6 @@ const Account = () => {
         return birthDay
     }
 
-    console.log(dataEdit.birthDay)
 
     const handleSave = (event) => {
         event.preventDefault()
@@ -171,8 +169,22 @@ const Account = () => {
                             <Avatar alt={user.fullname} src={`${PF}images/userOne.png`} sx={avatar} />
                             <Typography variant="body1" sx={name} >{user.fullname}</Typography>
                         </Box>
-                        <Button variant="contained" onClick={() => handleChangeMode('seen')}>Xem</Button>
-                        <Button variant="contained" onClick={() => handleChangeMode('edit')}>Chỉnh sửa</Button>
+                        <Button
+                            variant="contained"
+                            onClick={() => handleChangeMode('seen')}
+                            color="info"
+                            disabled={mode === 'seen'}
+                        >
+                            Xem
+                        </Button>
+                        <Button
+                            variant="contained"
+                            onClick={() => handleChangeMode('edit')}
+                            color="warning"
+                            disabled={mode === 'edit'}
+                        >
+                            Chỉnh sửa
+                        </Button>
                     </Box>
                     <Box sx={accountContent}>
                         {getContent()}
@@ -197,10 +209,10 @@ const SeenMode = ({ rightContent, leftContent, user }) => {
             </Grid>
             <Grid item xs={6} sx={rightContent}>
                 <Typography variant="subtitle1" sx={rightContent}>{user.userId}</Typography>
-                <Typography variant="subtitle1" sx={rightContent}>{user.phoneNumber}</Typography>
+                <Typography variant="subtitle1" sx={rightContent}>{user.phoneNumber.replace('+84', '0')}</Typography>
                 <Typography variant="subtitle1" sx={rightContent}>{user?.address || 'Chưa cập nhật'}</Typography>
-                <Typography variant="subtitle1" sx={rightContent}>{user.idCard}</Typography>
-                <Typography variant="subtitle1" sx={rightContent}>{user.birthDay}</Typography>
+                <Typography variant="subtitle1" sx={rightContent}>{user?.idCard || 'Chưa cập nhật'}</Typography>
+                <Typography variant="subtitle1" sx={rightContent}>{user?.birthDay || 'Chưa cập nhật'}</Typography>
             </Grid>
         </Grid>
     )
@@ -215,7 +227,7 @@ const EditMode = ({ dataEdit, handleChangeData, handleSave, decodeBirthday }) =>
                     label='Email'
                     name='userId'
                     value={dataEdit.userId}
-                    onChange={(event) => handleChangeData(event)}
+                    disabled
                 />
             </Grid>
             <Grid item xs={6}>
@@ -223,7 +235,7 @@ const EditMode = ({ dataEdit, handleChangeData, handleSave, decodeBirthday }) =>
                     fullWidth
                     label='Số điện thoại'
                     name='phoneNumber'
-                    value={dataEdit.phoneNumber}
+                    value={dataEdit.phoneNumber.replace('+84', '0')}
                     onChange={(event) => handleChangeData(event)}
                 />
             </Grid>
@@ -239,10 +251,10 @@ const EditMode = ({ dataEdit, handleChangeData, handleSave, decodeBirthday }) =>
             <Grid item xs={6}>
                 <TextField
                     fullWidth
-                    disabled
                     label='Số CMND/CCCD'
                     name='idCard'
                     value={dataEdit.idCard}
+                    onChange={(event) => handleChangeData(event)}
                 />
             </Grid>
             <Grid item xs={6}>
@@ -252,7 +264,7 @@ const EditMode = ({ dataEdit, handleChangeData, handleSave, decodeBirthday }) =>
                     type='date'
                     name='birthDay'
                     InputLabelProps={{ shrink: true }}
-                    value={decodeBirthday(dataEdit.birthDay)}
+                    value={decodeBirthday(dataEdit?.birthDay || '0/0/0')}
                     onChange={(event) => handleChangeData(event)}
                 />
             </Grid>

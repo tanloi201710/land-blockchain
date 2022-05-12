@@ -35,7 +35,7 @@ const ActionConfirmBox = ({ message, handleClose, handleConfirm }) => {
 
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
                         <Button variant="outlined" onClick={handleClose} >Hủy</Button>
-                        <Button variant="contained" color="inherit" onClick={handleConfirm}>Xác nhận</Button>
+                        <Button variant="contained" onClick={handleConfirm}>Xác nhận</Button>
                     </Box>
                 </Box>
             </Box>

@@ -1,15 +1,15 @@
 import { ContentCopy } from '@mui/icons-material'
-import { Box, Button, IconButton, Paper, TextField, Tooltip, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, IconButton, Paper, TextField, Tooltip, Typography } from '@mui/material'
 import React from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 import { getWallet, transferToken } from '../api'
 import NavBar from '../components/NavBar'
-import Footer from '../components/Footer';
-import BasicAlerts from '../components/Alert';
-import { AuthContext } from '../contexts/AuthContext';
-import TransferTokenBox from '../components/TransferTokenBox';
+import Footer from '../components/Footer'
+import BasicAlerts from '../components/Alert'
+import TransferTokenBox from '../components/TransferTokenBox'
+import ConfirmBox from '../components/ConfirmBox'
 
 const Wallet = () => {
 
@@ -78,13 +78,15 @@ const Wallet = () => {
     const [isTransferTokenBox, setIsTransferTokenBox] = React.useState(false)
     const [error, setError] = React.useState('')
     const [message, setMessage] = React.useState('')
+    const [fetching, setFetching] = React.useState(false)
 
     // hooks
-    const { user } = React.useContext(AuthContext)
 
     React.useEffect(() => {
         (async () => {
+            setFetching(true)
             const result = await getWallet()
+            setFetching(false)
             if (!result.data.error) {
                 setBalance(result.data.balance)
                 setClipboard(prev => ({ ...prev, value: result.data.accountIdToken }))
@@ -107,7 +109,7 @@ const Wallet = () => {
 
     const handleTransferToken = async (to, amount) => {
         const formData = {
-            from: user.userId,
+            from: clipboard.value,
             to,
             amount
         }
@@ -120,11 +122,25 @@ const Wallet = () => {
         }
     }
 
+    const handleCloseConfirm = () => {
+        (async () => {
+            setFetching(true)
+            const result = await getWallet()
+            setFetching(false)
+            if (!result.data.error) {
+                setBalance(result.data.balance)
+                setClipboard(prev => ({ ...prev, value: result.data.accountIdToken }))
+            }
+        })()
+
+        setMessage('');
+    }
+
     return (
         <Box sx={container}>
             <NavBar />
             {error !== '' && <BasicAlerts serverity="error" message={error} onClose={() => setError('')} />}
-            {message !== '' && <BasicAlerts serverity="success" message={message} onClose={() => setMessage('')} />}
+            {message !== '' && <ConfirmBox message={message} handleConfirm={handleCloseConfirm} />}
             <Box
                 sx={{
                     paddingX: 8,
@@ -143,50 +159,55 @@ const Wallet = () => {
                             elevation={3}
                             sx={cardWrapper}
                         >
-                            <Box sx={cardHeader}>
-                                <Typography variant="body1">Land Token</Typography>
-                            </Box>
-                            <Box sx={cardContent}>
-                                <Box>
-                                    <Typography sx={cardBalance} variant="h1" component="span">{balance}</Typography>
-                                    &nbsp;&nbsp;
-                                    <Typography variant="button" component="span">LTK</Typography>
-                                </Box>
-                                <Box sx={exchangeToken}>
-                                    <Typography variant="button">1LTK = 1.000.000 VNĐ</Typography>
-                                    <Typography variant="button">Nội bộ</Typography>
-                                </Box>
-                            </Box>
-                            <Box sx={cardAccountId}>
-                                <TextField
-                                    label="Địa chỉ ví tiền"
-                                    value={clipboard.value}
-                                    disabled
-                                    sx={{ minWidth: 350 }}
-                                />
-                                {clipboard.copied
-                                    ? <Typography variant="subtitle1" component="span" color="lightgreen">✔ Đã copy</Typography>
-                                    :
-                                    <CopyToClipboard text={clipboard?.value}
-                                        onCopy={() => setClipboard({ ...clipboard, copied: true })}
+                            {fetching
+                                ? <CircularProgress />
+                                : <>
+                                    <Box sx={cardHeader}>
+                                        <Typography variant="body1">Land Token</Typography>
+                                    </Box>
+                                    <Box sx={cardContent}>
+                                        <Box>
+                                            <Typography sx={cardBalance} variant="h1" component="span">{balance}</Typography>
+                                            &nbsp;&nbsp;
+                                            <Typography variant="button" component="span">LTK</Typography>
+                                        </Box>
+                                        <Box sx={exchangeToken}>
+                                            <Typography variant="button">1LTK = 1.000.000.000 VNĐ</Typography>
+                                            <Typography variant="button">Nội bộ</Typography>
+                                        </Box>
+                                    </Box>
+                                    <Box sx={cardAccountId}>
+                                        <TextField
+                                            label="Địa chỉ ví tiền"
+                                            value={clipboard.value}
+                                            disabled
+                                            sx={{ minWidth: 350 }}
+                                        />
+                                        {clipboard.copied
+                                            ? <Typography variant="subtitle1" component="span" color="lightgreen">✔ Đã copy</Typography>
+                                            :
+                                            <CopyToClipboard text={clipboard?.value}
+                                                onCopy={() => setClipboard({ ...clipboard, copied: true })}
+                                            >
+                                                <span>
+                                                    <Tooltip title="Sao chép địa chỉ">
+                                                        <IconButton sx={{ color: 'white' }} disabled={clipboard.value === ''}>
+                                                            <ContentCopy />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </span>
+                                            </CopyToClipboard>
+                                        }
+                                    </Box>
+                                    <Button
+                                        variant="outlined"
+                                        sx={{ color: 'white' }}
+                                        onClick={() => setIsTransferTokenBox(true)}
                                     >
-                                        <span>
-                                            <Tooltip title="Sao chép địa chỉ">
-                                                <IconButton sx={{ color: 'white' }} disabled={clipboard.value === ''}>
-                                                    <ContentCopy />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </span>
-                                    </CopyToClipboard>
-                                }
-                            </Box>
-                            <Button
-                                variant="outlined"
-                                sx={{ color: 'white' }}
-                                onClick={() => setIsTransferTokenBox(true)}
-                            >
-                                Chuyển tiền
-                            </Button>
+                                        Chuyển tiền
+                                    </Button>
+                                </>
+                            }
                         </Paper>
                     </ThemeProvider>
                 </Box>

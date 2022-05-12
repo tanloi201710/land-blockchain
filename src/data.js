@@ -86,3 +86,13 @@ export const congTrinh = [
     'Công trình hạ tầng kỹ thuật',
     'Công trình quốc phòng, an ninh'
 ]
+
+// filter
+
+export const trangThai = [
+    'Tất cả',
+    'Đã duyệt',
+    'Chưa duyệt',
+    'Đang chuyển',
+    'Đang tách'
+]

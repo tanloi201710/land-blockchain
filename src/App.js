@@ -19,6 +19,8 @@ import SplitRequest from './pages/SplitRequest'
 import AdminHome from './pages/admin/AdminHome'
 import Account from './pages/Account'
 import Wallet from './pages/Wallet'
+import Recharge from './pages/Recharge'
+import Statistical from './pages/Statistical'
 
 function App() {
   const { user, setLands, setNotifyList, setPosts } = useContext(AuthContext)
@@ -53,6 +55,8 @@ function App() {
         <Route path='/admin' element={<AdminHome />} />
         <Route path='/account' element={<Account />} />
         <Route path='/wallet' element={<Wallet />} />
+        <Route path='/recharge' element={<Recharge />} />
+        <Route path='/statistical' element={<Statistical />} />
       </Routes>
     </Router>
   );

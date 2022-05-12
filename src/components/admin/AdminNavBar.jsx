@@ -73,7 +73,7 @@ const AdminNavBar = ({ curentLabel, auth, sideBarWidth, toogleSideBar, open }) =
                             }}
                             keepMounted
                             transformOrigin={{
-                                vertical: 'bottom',
+                                vertical: 'top',
                                 horizontal: 'right',
                             }}
                             open={Boolean(anchorEl)}

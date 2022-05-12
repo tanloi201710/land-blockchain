@@ -192,15 +192,20 @@ const NavBar = () => {
                 <Link to='/' style={{ textDecoration: 'none' }}>
                     <Typography variant="h6" className="activeHover" sx={{ fontWeight: 'bold', color: '#fff' }} >LAND MANAGEMENT</Typography>
                 </Link>
-                <Search>
-                    <SearchIconWrapper>
-                        <SearchIcon />
-                    </SearchIconWrapper>
-                    <StyledInputBase
-                        placeholder="Tìm kiếm…"
-                        inputProps={{ 'aria-label': 'search' }}
-                    />
-                </Search>
+                {user.role !== 'user' ?
+                    <Search>
+                        <SearchIconWrapper>
+                            <SearchIcon />
+                        </SearchIconWrapper>
+                        <StyledInputBase
+                            placeholder="Tìm kiếm…"
+                            inputProps={{ 'aria-label': 'search' }}
+                        />
+                    </Search>
+                    : <Box sx={{ width: 30 }}>
+
+                    </Box>
+                }
                 <Box sx={{ display: 'flex', gap: 2.5 }}>
                     <Link
                         to={'/'}
@@ -279,16 +284,16 @@ const NavBar = () => {
                                 <Typography variant="button" className={location.pathname === '/waiting' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Chờ duyệt</Typography>
                             </Link>
                             <Link
-                                to={'/'}
+                                to={'/recharge'}
                                 style={{ textDecoration: 'none' }}
                             >
-                                <Typography variant="button" className="activeHover" sx={{ color: 'white' }}>Nạp tiền</Typography>
+                                <Typography variant="button" className={location.pathname === '/recharge' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Nạp tiền</Typography>
                             </Link>
                             <Link
-                                to={'/'}
+                                to={'/statistical'}
                                 style={{ textDecoration: 'none' }}
                             >
-                                <Typography variant="button" className="activeHover" sx={{ color: 'white' }}>Thống kê</Typography>
+                                <Typography variant="button" className={location.pathname === '/statistical' ? 'active activeHover' : 'activeHover'} sx={{ color: 'white' }}>Thống kê</Typography>
                             </Link>
                         </>
                     }
