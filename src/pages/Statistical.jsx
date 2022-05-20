@@ -1,5 +1,5 @@
-import { ChangeCircle, Flip, NewReleases } from '@mui/icons-material'
-import { Box, Button, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Table, TableBody, TableContainer, TableHead, TablePagination, TableRow, TextField } from '@mui/material'
+import { AccountCircle, ChangeCircle, ViewCompact } from '@mui/icons-material'
+import { Box, Button, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, Paper, Table, TableBody, TableContainer, TableHead, TablePagination, TableRow, TextField } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import Container from '../components/Container'
@@ -7,15 +7,31 @@ import NavBar from '../components/NavBar'
 import StyledTableCell from '../components/StyledTableCell'
 import StyledTableRow from '../components/StyledTableRow'
 import { AuthContext } from '../contexts/AuthContext'
-import { trangThai } from '../data'
+import { days, month, trangThai, year } from '../data'
 import { getAllUser } from '../firebase/search'
 
 const Statistical = () => {
 
-    const [selectedTab, setselectedTab] = React.useState(0)
-    const [users, setUsers] = React.useState([])
+    const initFilterOptions = {
+        keySearch: '',
+        statusSearch: 'Tất cả',
+        daySearch: '',
+        monthSearch: '',
+        yearSearch: ''
+    }
+
+    const inputTimeStyle = {
+        minWidth: 90
+    }
 
     const { lands } = React.useContext(AuthContext)
+
+    const [selectedTab, setselectedTab] = React.useState(0)
+    const [users, setUsers] = React.useState([])
+    const [filterOptions, setFilterOptions] = React.useState(initFilterOptions)
+    const [displayLands, setDisplayLands] = React.useState([...lands])
+    const [displayUsers, setDisplayUsers] = React.useState([...users])
+
 
     React.useEffect(() => {
         (async () => {
@@ -24,40 +40,53 @@ const Statistical = () => {
         })()
     }, [])
 
+    React.useEffect(() => {
+        if (filterOptions.keySearch !== "") {
+            switch (selectedTab) {
+                case 0:
+                    setDisplayLands(lands.filter(land => land.key.toLowerCase().includes(filterOptions.keySearch)))
+                    break
+
+                case 1:
+                    setDisplayUsers(users.filter(user => user.userId.toLowerCase().includes(filterOptions.keySearch)))
+                    break
+
+                default:
+                    break
+            }
+
+        }
+    })
+
     const handleSelectTab = (event, index) => {
         setselectedTab(index)
     }
+
+    const handleFilter = () => { }
 
     const getTabContent = () => {
         switch (selectedTab) {
             case 0:
                 return (
                     <>
-                        <Box>
-                            <Grid container spacing={3}>
-                                <Grid item xs={4}>
-                                    <TextField
-                                        select
-                                        label="Trạng thái"
-                                    >
-                                        {trangThai.map((value, index) => (
-                                            <MenuItem key={index}>
-                                                {value}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-                                </Grid>
-                                <Grid item xs={4}>
-
-                                </Grid>
-                            </Grid>
+                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', marginBottom: 2 }}>
+                            <Typography variant="button">Tổng: </Typography>
+                            <Typography sx={{ fontSize: 20, fontWeight: 'bold' }}>{lands.length}</Typography>
                         </Box>
-                        <StatisticalTable type="land" rows={lands} />
+                        <StatisticalTable type="land" rows={displayLands} />
                     </>
                 )
 
             case 1:
-                return <StatisticalTable type="user" rows={users} />
+                return (
+                    <>
+                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', marginBottom: 2 }}>
+                            <Typography variant="button">Tổng: </Typography>
+                            <Typography sx={{ fontSize: 20, fontWeight: 'bold' }}>{users.length}</Typography>
+                        </Box>
+                        <StatisticalTable type="user" rows={displayUsers} />
+                    </>
+                )
 
             // case 2:
             //     return <CustomizedSplitRequestTables rows={allSplitRequest} setMessage={setMessage} setError={setError} handleOpenDataProcesed={handleOpenDataProcesed} />
@@ -90,7 +119,7 @@ const Statistical = () => {
                                 onClick={(event) => handleSelectTab(event, 0)}
                             >
                                 <ListItemIcon>
-                                    <NewReleases color='error' />
+                                    <ViewCompact color='success' />
                                 </ListItemIcon>
                                 <ListItemText primary={'Đất'} />
                             </ListItemButton>
@@ -101,7 +130,7 @@ const Statistical = () => {
                                 onClick={(event) => handleSelectTab(event, 1)}
                             >
                                 <ListItemIcon>
-                                    <ChangeCircle color='info' />
+                                    <AccountCircle color='info' />
                                 </ListItemIcon>
                                 <ListItemText primary={'Người dùng'} />
                             </ListItemButton>
@@ -112,7 +141,7 @@ const Statistical = () => {
                                 onClick={(event) => handleSelectTab(event, 2)}
                             >
                                 <ListItemIcon>
-                                    <Flip color='success' />
+                                    <ChangeCircle color='warning' />
                                 </ListItemIcon>
                                 <ListItemText primary={'Giao dịch'} />
                             </ListItemButton>
@@ -122,6 +151,80 @@ const Statistical = () => {
                 <Box
                     sx={{ flex: 4 }}
                 >
+                    <Box sx={{ display: 'flex', gap: 2, marginBottom: 1, alignItems: 'center' }}>
+                        <TextField
+                            label={`Tìm theo ${selectedTab === 0 ? 'mã đất' : selectedTab === 1 ? 'email' : 'mã giao dịch'}`}
+                            variant="filled"
+                            value={filterOptions.keySearch}
+                            onChange={(e) => setFilterOptions({ ...filterOptions, keySearch: e.target.value })}
+                        />
+                        {selectedTab === 0 &&
+                            <TextField
+                                label="Trạng thái đất"
+                                select
+                                sx={{ minWidth: 250 }}
+                                value={filterOptions.statusSearch}
+                                onChange={(e) => setFilterOptions({ ...filterOptions, statusSearch: e.target.value })}
+                            >
+                                {trangThai.map((tt, index) => (
+                                    <MenuItem key={index} value={tt}>
+                                        {tt}
+                                    </MenuItem>
+                                ))}
+
+                            </TextField>
+                        }
+                        <Box sx={{ transform: 'translateY(-14px)' }}>
+                            <Typography gutterBottom>Thời gian đăng ký/yêu cầu</Typography>
+                            <Box sx={{ display: 'flex', gap: 1 }}>
+                                <TextField
+                                    label="Ngày"
+                                    sx={inputTimeStyle}
+                                    select
+                                    value={filterOptions.daySearch}
+                                    onChange={(e) => setFilterOptions({ ...filterOptions, daySearch: e.target.value })}
+                                >
+                                    {days.map((day, i) => (
+                                        <MenuItem value={day} key={i}>
+                                            {day}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                                <TextField
+                                    label="Tháng"
+                                    sx={inputTimeStyle}
+                                    select
+                                    value={filterOptions.monthSearch}
+                                    onChange={(e) => setFilterOptions({ ...filterOptions, monthSearch: e.target.value })}
+                                >
+                                    {month.map((mon, i) => (
+                                        <MenuItem value={mon} key={i}>
+                                            {mon}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                                <TextField
+                                    label="Năm"
+                                    sx={inputTimeStyle}
+                                    select
+                                    value={filterOptions.yearSearch}
+                                    onChange={(e) => setFilterOptions({ ...filterOptions, yearSearch: e.target.value })}
+                                >
+                                    {year.map((y, i) => (
+                                        <MenuItem value={y} key={i}>
+                                            {y}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Box>
+
+                        </Box>
+
+                        <Button onClick={handleFilter} variant="contained" color="success" sx={{ height: 40 }}>
+                            Lọc
+                        </Button>
+                    </Box>
+
                     {getTabContent()}
                 </Box>
             </Box>

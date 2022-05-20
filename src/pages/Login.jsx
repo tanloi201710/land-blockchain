@@ -136,12 +136,12 @@ const Login = () => {
                             </Button>
                         </Grid>
                         <Grid item xs>
-                            <Link
+                            {/* <Link
                                 to={'/register'}
                                 style={{ textDecoration: 'none' }}
                             >
                                 <Typography variant="body2" component="p" sx={{ color: 'info.light' }}>Quên mật khẩu</Typography>
-                            </Link>
+                            </Link> */}
                         </Grid>
                         <Grid item>
                             <Link

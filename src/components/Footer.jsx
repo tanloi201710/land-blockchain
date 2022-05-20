@@ -6,7 +6,7 @@ const Footer = () => {
         <Box
             sx={{ display: 'flex', justifyContent: 'center', marginY: 3 }}
         >
-            <Typography variant="caption" color="text.secondary">Land Management - TanLoi © 2022</Typography>
+            <Typography variant="caption" color="text.secondary">Land Management © 2022</Typography>
         </Box>
     )
 }

@@ -192,7 +192,7 @@ const NavBar = () => {
                 <Link to='/' style={{ textDecoration: 'none' }}>
                     <Typography variant="h6" className="activeHover" sx={{ fontWeight: 'bold', color: '#fff' }} >LAND MANAGEMENT</Typography>
                 </Link>
-                {user.role !== 'user' ?
+                {/* {user.role !== 'user' ?
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon />
@@ -202,10 +202,11 @@ const NavBar = () => {
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </Search>
-                    : <Box sx={{ width: 30 }}>
+                    
+                } */}
+                <Box sx={{ width: 30 }}>
 
-                    </Box>
-                }
+                </Box>
                 <Box sx={{ display: 'flex', gap: 2.5 }}>
                     <Link
                         to={'/'}
