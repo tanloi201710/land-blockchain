@@ -244,9 +244,6 @@ const NavBar = () => {
                                 <MenuItem onClick={() => navigate('/transferLand')} disableRipple>
                                     Chuyển quyền sử dụng đất
                                 </MenuItem>
-                                <MenuItem onClick={handleCloseRegistersMenu} disableRipple>
-                                    Chỉnh sửa thông tin đất
-                                </MenuItem>
                                 <MenuItem onClick={() => navigate('/splitLand')} disableRipple>
                                     Tách thửa đất
                                 </MenuItem>

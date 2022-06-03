@@ -10,62 +10,13 @@ import ManageStaffs from './ManageStaffs'
 import { AuthContext } from '../../contexts/AuthContext'
 import ActionConfirmBox from '../../components/ActionConfirmBox'
 import BasicAlerts from '../../components/Alert'
+import { getAllSplit, getAllTransfer } from '../../api'
+import { getAllUser } from '../../firebase/search'
 
 const AdminHome = () => {
 
-    const userListCard = [
-        {
-            icon: <Group color="inherit" fontSize="large" />,
-            label: 'Tổng',
-            number: 12
-        },
-        {
-            icon: <GroupAdd color="inherit" fontSize="large" />,
-            label: 'Mới',
-            number: 2
-        }
-    ]
 
-    const landListCard = [
-        {
-            icon: <Folder color="inherit" fontSize="large" />,
-            label: 'Tổng',
-            number: 10
-        },
-        {
-            icon: <Autorenew color="inherit" fontSize="large" />,
-            label: 'Chờ duyệt',
-            number: 3
-        },
-        {
-            icon: <DoneAll color="inherit" fontSize="large" />,
-            label: 'Đã duyệt',
-            number: 4
-        },
-    ]
 
-    const requestListCard = [
-        {
-            icon: <CreateNewFolder color="inherit" fontSize="large" />,
-            label: 'Đăng ký mới',
-            number: 10
-        },
-        {
-            icon: <Autorenew color="inherit" fontSize="large" />,
-            label: 'Chuyển đất',
-            number: 3
-        },
-        {
-            icon: <Flip color="inherit" fontSize="large" />,
-            label: 'Tách thửa',
-            number: 4
-        },
-        {
-            icon: <Edit color="inherit" fontSize="large" />,
-            label: 'Chỉnh sửa',
-            number: 4
-        },
-    ]
 
     const tabList = [
         {
@@ -86,17 +37,22 @@ const AdminHome = () => {
         },
     ]
 
-    const { user } = React.useContext(AuthContext)
+    const { user, lands } = React.useContext(AuthContext)
     const navigate = useNavigate()
 
     const [open, setOpen] = React.useState(false)
     const [activeTab, setActiveTab] = React.useState(0)
     const [error, setError] = React.useState('')
+    const [transfers, setTransfers] = React.useState([])
+    const [splitRequest, setSplitRequest] = React.useState([])
+    const [users, setUsers] = React.useState([])
     const [actionConfirm, setActionConfirm] = React.useState({
         isOpen: false,
         message: '',
         handleConfirm: () => { },
     })
+
+
 
 
     const handleChangeTab = (tab) => {
@@ -108,6 +64,71 @@ const AdminHome = () => {
             navigate('/')
         }
     }, [user, navigate])
+
+    React.useEffect(() => {
+        (async () => {
+            const result1 = await getAllTransfer()
+            const result2 = await getAllSplit()
+            const result3 = await getAllUser()
+
+            if (!result1.error && !result2.error) {
+                setTransfers(result1.data.allTransfer)
+                setSplitRequest(result2.data.splitRequest)
+                setUsers(result3)
+            }
+        })()
+    }, [setTransfers, setSplitRequest])
+
+
+    const userListCard = [
+        {
+            icon: <Group color="inherit" fontSize="large" />,
+            label: 'Tổng',
+            number: users?.length
+        },
+        {
+            icon: <GroupAdd color="inherit" fontSize="large" />,
+            label: 'Mới',
+            number: users.filter(user => user.Date.split('/')[0] === (new Date()).getDate()).length
+        }
+    ]
+
+    const landListCard = [
+        {
+            icon: <Folder color="inherit" fontSize="large" />,
+            label: 'Tổng',
+            number: lands.length
+        },
+        {
+            icon: <Autorenew color="inherit" fontSize="large" />,
+            label: 'Chờ duyệt',
+            number: lands.filter(land => land.value.Status === 'Chưa duyệt').length
+        },
+        {
+            icon: <DoneAll color="inherit" fontSize="large" />,
+            label: 'Đã duyệt',
+            number: lands.filter(land => land.value.Status === 'Đã duyệt').length
+        },
+    ]
+
+    const requestListCard = [
+        {
+            icon: <CreateNewFolder color="inherit" fontSize="large" />,
+            label: 'Đăng ký mới',
+            number: splitRequest.length
+        },
+        {
+            icon: <Autorenew color="inherit" fontSize="large" />,
+            label: 'Chuyển đất',
+            number: transfers.length
+        },
+        {
+            icon: <Flip color="inherit" fontSize="large" />,
+            label: 'Tách thửa',
+            number: splitRequest.length
+        }
+    ]
+
 
     const getColor = (init, index) => {
         let value = (index + init) % 4

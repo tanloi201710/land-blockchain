@@ -49,14 +49,14 @@ export default function CustomizedTables({ rows, user }) {
                                 <StyledTableCell align="right">{`${row.value.Status}`}</StyledTableCell>
                                 {user?.role === 'user' &&
                                     <StyledTableCell align="right">
-                                        <Tooltip title='Chỉnh sửa thông tin'>
+                                        {/* <Tooltip title='Chỉnh sửa thông tin'>
                                             <span>
                                                 <IconButton disabled={disabledAction(row)}>
                                                     <ModeEdit />
                                                 </IconButton>
 
                                             </span>
-                                        </Tooltip>
+                                        </Tooltip> */}
                                         <Tooltip title='Tách thửa'>
                                             <span>
                                                 <IconButton color='warning' disabled={disabledAction(row)} onClick={() => navigate('/splitLand', { state: row })}>
